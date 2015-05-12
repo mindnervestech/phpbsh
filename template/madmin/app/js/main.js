@@ -443,8 +443,7 @@ App.config(function($stateProvider, $urlRouterProvider) {
             resolve: { 
                 loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
                      return $ocLazyLoad.load({
-                        files: ['vendors/jquery-tablesorter/themes/blue/style-custom.css',
-                                'vendors/jquery-tablesorter/jquery.tablesorter.js',
+                        files: [
                                 'vendors/DataTables/media/css/jquery.dataTables.css',
                                 'vendors/DataTables/extensions/TableTools/css/dataTables.tableTools.min.css',
                                 'vendors/DataTables/media/css/dataTables.bootstrap.css',
@@ -1397,6 +1396,11 @@ App.controller('ChartsChartJsController', function ($scope, $routeParams){
 App.controller('OrdersTableCtrl',function($scope, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){
 	var vm = this;
     vm.orders = [];
+    var search_html;
+    search_html = '<div class="input-group input-group-sm mbs"><span class="input-group-btn">';
+    search_html += "_INPUT_";
+    search_html += '<span class="input-group-btn"><button type="button" data-toggle="dropdown" class="btn btn-success dropdown-toggle">Search</button></span></div>';
+
     vm.dtOptions = DTOptionsBuilder.newOptions()
       .withBootstrap()
       .withOption('order', [[1, 'asc']])
@@ -1408,7 +1412,6 @@ App.controller('OrdersTableCtrl',function($scope, DTOptionsBuilder, DTColumnDefB
               "xls",
               "pdf",
               'print'
-              
           ] 
       )
       //.withDOM('<"row"<"col-md-8 col-sm-12"<"inline-controls"l>><"col-md-4 col-sm-12"<"pull-right"f>>>t<"row"<"col-md-4 col-sm-12"<"inline-controls"l>><"col-md-4 col-sm-12"<"inline-controls text-center"i>><"col-md-4 col-sm-12"p>>')
@@ -1418,7 +1421,8 @@ App.controller('OrdersTableCtrl',function($scope, DTOptionsBuilder, DTColumnDefB
         "oPaginate": {
           "sPage":    "Page",
           "sPageOf":  "of"
-        }
+        },
+        "sSearch": search_html
       })
       .withPaginationType('input')
       //.withScroller()
