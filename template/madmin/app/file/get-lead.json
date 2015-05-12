@@ -1,0 +1,15 @@
+[
+{
+	"id":1,
+	"country":"USA",
+	"gender":"Male",
+	"username":"jagbirs"
+}
+,
+{
+	"id":2,
+	"country":"USA",
+	"gender":"Female",
+	"username":"rinki"
+}
+]
