@@ -5,32 +5,181 @@
               <div class="panel-body pan">
                 <form action="#">
                   <div class="form-actions top pll prl">
+                  <div class="row">
+                  	<div class="col-md-4">
                     <button type="submit" class="btn btn-primary">Save</button>&nbsp;
                     <button type="button" class="btn btn-green">Cancel</button>
+                    </div>
+                    
+                    <div class="col-md-4">
+	                    <div class="form-group">
+	                      <label for="inputUsername" class="control-label">Status</label>
+	                      <div class="input-icon">
+	                        <select class="form-control">
+	                        	<option value="Assigned">Assigned</option>
+	                        	<option value="Callback">Callback</option>
+	                        	<option value="Contacted">Contacted</option>
+	                        	<option value="Escalated">Escalated</option>
+	                        	<option value="Interested">Interested</option>
+	                        	<option value="Lost">Lost</option>
+	                        	<option value="Non Contactable">Non Contactable</option>
+	                        	<option value="Not Interested">Not Interested</option>
+	                        	<option value="Quote Sent">Quote Sent</option>
+	                        	<option value="Tried Contacted">Tried Contacted</option>
+	                        	<option value="Won">Won</option>
+	                        </select>
+	                      </div>
+	                    </div>
+                    </div>
+                    
+                    	<div class="col-md-4">
+	                    <div class="form-group mbn">
+	                      <label for="inputContent" class="control-label">Reason</label>
+	                      <textarea id="inputContent" rows="2" class="form-control"></textarea>
+	                    </div>
+	                    </div>
+                    </div>
                   </div>
                   <div class="form-body pal">
+                  <div class="row">
+                   <div class="col-md-4">
                     <div class="form-group">
-                      <label for="inputUsername" class="control-label">Username <span class='require'>*</span></label>
+                      <label for="inputUsername" class="control-label">Lead Number</label>
+                      <div class="input-icon"><!-- <i class="fa fa-user"></i> -->
+                        <input id="inputUsername" type="text" placeholder="Lead Number" value="110515001" style="cursor: auto;" class="form-control" readonly="readonly"/>
+                      </div>
+                    </div>
+                   </div> 
+                   <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="inputEmail" class="control-label">Assigned Date</label>
+                      <div class="input-icon"><!-- <span class="input-group-addon"><i class="fa fa-envelope"></i> --></span>
+                        <input type="text" placeholder="Assigned Date" value="11 May 2015" style="cursor: auto;" class="form-control" readonly="readonly"/>
+                      </div>
+                    </div>
+                    </div>
+                    <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="inputEmail" class="control-label">Product Name</label>
+                      <div class="input-icon"><!-- <span class="input-group-addon"><i class="fa fa-envelope"></i> --></span>
+                        <input type="text" placeholder="Product Name" value="Dishwasher" style="cursor: auto;" class="form-control" readonly="readonly"/>
+                      </div>
+                    </div>
+                    </div>
+                    </div>
+                    
+                    <div class="row">
+                    <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="inputEmail" class="control-label">Contact Name</label>
                       <div class="input-icon"><i class="fa fa-user"></i>
-                        <input id="inputUsername" type="text" placeholder="Username" class="form-control"/>
+                        <input type="text" placeholder="Contact Name" value="Nivedita Parulkar" style="cursor: auto;" class="form-control" readonly="readonly"/>
                       </div>
                     </div>
+                    </div>
+                   <div class="col-md-4">
                     <div class="form-group">
-                      <label for="inputEmail" class="control-label">Email <span class='require'>*</span></label>
-                      <div class="input-group"><span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-                        <input type="text" placeholder="Email Address" class="form-control"/>
+                      <label for="inputUsername" class="control-label">Email</label>
+                      <div class="input-icon"><i class="fa fa-envelope"></i>
+                        <input id="inputUsername" type="text" placeholder="Email" style="cursor: auto;" value="nivedita.parulkar@bshg.com" class="form-control" readonly="readonly"/>
                       </div>
                     </div>
+                   </div> 
+                   <div class="col-md-4">
                     <div class="form-group">
-                      <label for="inputAddress" class="control-label">Address <span class='require'>*</span></label>
-                      <div class="input-icon right"><i class="fa fa-location-arrow"></i>
-                        <input type="text" placeholder="Address" class="form-control"/>
+                      <label for="inputEmail" class="control-label">Contact Number</label>
+                      <div class="input-icon"><!-- <span class="input-group-addon"><i class="fa fa-envelope"></i> --></span>
+                        <input type="text" placeholder="Contact Number" value="9999999999" style="cursor: auto;" class="form-control" readonly="readonly"/>
                       </div>
                     </div>
-                    <div class="form-group mbn">
-                      <label for="inputContent" class="control-label">Content</label>
-                      <textarea id="inputContent" rows="3" class="form-control"></textarea>
                     </div>
+                    </div>
+                    
+                    <div class="row">
+                    <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="inputEmail" class="control-label">State</label>
+                      <div class="input-icon"><!-- <span class="input-group-addon"><i class="fa fa-envelope"></i> --></span>
+                        <input type="text" placeholder="State" value="Maharashtra" style="cursor: auto;" class="form-control" readonly="readonly"/>
+                      </div>
+                    </div>
+                    </div>
+                   <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="inputUsername" class="control-label">City</label>
+                      <div class="input-icon"><!-- <i class="fa fa-user"></i> -->
+                        <input id="inputUsername" type="text" placeholder="City" value="Pune" style="cursor: auto;" class="form-control" readonly="readonly"/>
+                      </div>
+                    </div>
+                   </div> 
+                   <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="inputEmail" class="control-label">Pincode</label>
+                      <div class="input-icon"><!-- <span class="input-group-addon"><i class="fa fa-envelope"></i> --></span>
+                        <input type="text" placeholder="Pincode" value="411040" style="cursor: auto;" class="form-control" readonly="readonly"/>
+                      </div>
+                    </div>
+                    </div>
+                    </div>
+                    
+                    <div class="row">
+                    <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="inputEmail" class="control-label">Type</label>
+                      <div class="input-icon"><!-- <span class="input-group-addon"><i class="fa fa-envelope"></i> --></span>
+                        <input type="text" placeholder="Type" value="Free Standing" style="cursor: auto;" class="form-control" readonly="readonly"/>
+                      </div>
+                    </div>
+                    </div>
+                   <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="inputUsername" class="control-label">Campaign Name</label>
+                      <div class="input-icon"><!-- <i class="fa fa-user"></i> -->
+                        <input id="inputUsername" type="text" value="ICM_Dishwasher" style="cursor: auto;" placeholder="Campaign Name" class="form-control" readonly="readonly"/>
+                      </div>
+                    </div>
+                   </div> 
+                   <div class="col-md-4">
+	                    <div class="form-group">
+	                      <label for="inputUsername" class="control-label">Categorization</label>
+	                      <div class="input-icon">
+	                        <select class="form-control" disabled="disabled" style="cursor: auto;">
+	                        	<option value="Hot">Hot</option>
+	                        	<option value="Warm">Warm</option>
+	                        </select>
+	                      </div>
+	                    </div>
+                    </div>
+                   
+                    </div>
+                    
+                    <div class="row">
+                   <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="inputEmail" class="control-label">Area of Interest 1</label>
+                      <div class="input-icon"><!-- <span class="input-group-addon"><i class="fa fa-envelope"></i> --></span>
+                        <input type="text" placeholder="Area of Interest 1" style="cursor: auto;" value="after_sale_services" class="form-control" readonly="readonly"/>
+                      </div>
+                    </div>
+                    </div>
+                    <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="inputEmail" class="control-label">Area of Interest 2</label>
+                      <div class="input-icon"><!-- <span class="input-group-addon"><i class="fa fa-envelope"></i> --></span>
+                        <input type="text" placeholder="Area of Interest 2" style="cursor: auto;" value="scheme_and_discount" class="form-control" readonly="readonly"/>
+                      </div>
+                    </div>
+                    </div> 
+                   <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="inputEmail" class="control-label">Remarks</label>
+                      <div class="input-icon"><!-- <span class="input-group-addon"><i class="fa fa-envelope"></i> --></span>
+                      	<textarea rows="2" class="form-control" disabled="disabled" style="cursor: auto;">sales consultant call back required</textarea>
+                      </div>
+                    </div>
+                    </div>
+                    </div>
+                    
                   </div>
                   <div class="form-actions pll prl">
                     <button type="submit" class="btn btn-primary">Save</button>&nbsp;

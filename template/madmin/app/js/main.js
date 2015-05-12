@@ -459,6 +459,29 @@ App.config(function($stateProvider, $urlRouterProvider) {
                 }]
             }
         })
+        .state('manage-users', {
+            url: "/manage-users", 
+            templateUrl: 'templates/states/manage-users.html',
+            controller: 'TableAdvancedController', 
+            resolve: { 
+                loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+                     return $ocLazyLoad.load({
+                        files: [
+                                'vendors/DataTables/media/css/jquery.dataTables.css',
+                                'vendors/DataTables/extensions/TableTools/css/dataTables.tableTools.min.css',
+                                'vendors/DataTables/media/css/dataTables.bootstrap.css',
+                                'vendors/DataTables/media/js/jquery.dataTables.js',
+                                'vendors/DataTables/media/js/dataTables.bootstrap.js',
+                                'vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js',
+                                
+                                'vendors/DataTables/extensions/Pagination/input.js',
+                                'vendors/DataTables/extensions/ColumnFilter/jquery.dataTables.columnFilter.js',
+                               
+                                ]
+                     });
+                }]
+            }
+        })
         .state('edit-leads', {
             url: "/edit-leads", 
             templateUrl: 'templates/states/edit-leads.html',
@@ -1396,21 +1419,20 @@ App.controller('ChartsChartJsController', function ($scope, $routeParams){
 App.controller('OrdersTableCtrl',function($scope, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){
 	var vm = this;
     vm.orders = [];
+    vm.leadHistory = [];
     var search_html;
-    search_html = '<div class="input-group input-group-sm mbs"><span class="input-group-btn">';
+    search_html = '<div class="input-group input-group-sm mbs">';
     search_html += "_INPUT_";
-    search_html += '<span class="input-group-btn"><button type="button" data-toggle="dropdown" class="btn btn-success dropdown-toggle">Search</button></span></div>';
+    search_html += '</div>';
 
     vm.dtOptions = DTOptionsBuilder.newOptions()
       .withBootstrap()
-      .withOption('order', [[1, 'asc']])
+      .withOption('order', [[0, 'asc']])
       .withTableTools('/template/madmin/app/vendors/DataTables/extensions/TableTools/swf/copy_csv_xls_pdf.swf')
       .withTableToolsButtons(
            [
-              "copy",
               "csv",
               "xls",
-              "pdf",
               'print'
           ] 
       )
@@ -1432,7 +1454,7 @@ App.controller('OrdersTableCtrl',function($scope, DTOptionsBuilder, DTColumnDefB
 
 
     vm.dtColumnDefs = [
-      DTColumnDefBuilder.newColumnDef(0).notSortable(),
+      //DTColumnDefBuilder.newColumnDef(0).notSortable(),
       DTColumnDefBuilder.newColumnDef(4).notSortable()
     ];
 
@@ -1456,6 +1478,77 @@ App.controller('OrdersTableCtrl',function($scope, DTOptionsBuilder, DTColumnDefB
       
     });
     
+    $resource('/template/madmin/app/file/lead-history.json').query().$promise.then(function(histories) {
+        vm.history = histories;
+        
+      });
+    
+});
+App.controller('UsersTableCtrl',function($scope, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){
+	var vm = this;
+    vm.users = [];
+    vm.leadHistory = [];
+    var search_html;
+    search_html = '<div class="input-group input-group-sm mbs">';
+    search_html += "_INPUT_";
+    search_html += '</div>';
+
+    vm.dtOptions = DTOptionsBuilder.newOptions()
+      .withBootstrap()
+      .withOption('order', [[0, 'asc']])
+      .withTableTools('/template/madmin/app/vendors/DataTables/extensions/TableTools/swf/copy_csv_xls_pdf.swf')
+      .withTableToolsButtons(
+           [
+              "csv",
+              "xls",
+              'print'
+          ] 
+      )
+      //.withDOM('<"row"<"col-md-8 col-sm-12"<"inline-controls"l>><"col-md-4 col-sm-12"<"pull-right"f>>>t<"row"<"col-md-4 col-sm-12"<"inline-controls"l>><"col-md-4 col-sm-12"<"inline-controls text-center"i>><"col-md-4 col-sm-12"p>>')
+      .withLanguage({
+        "sLengthMenu": 'View _MENU_ records',
+        "sInfo":  'Found _TOTAL_ records',
+        "oPaginate": {
+          "sPage":    "Page",
+          "sPageOf":  "of"
+        },
+        "sSearch": search_html
+      })
+      .withPaginationType('input')
+      //.withScroller()
+      //.withOption("sScrollY", false)
+      //.withOption("sScrollX")
+      .withColumnFilter();
+
+
+    vm.dtColumnDefs = [
+      //DTColumnDefBuilder.newColumnDef(0).notSortable(),
+      DTColumnDefBuilder.newColumnDef(4).notSortable()
+    ];
+
+    vm.selectedAll = false;
+
+    vm.selectAll = function () {
+
+      if ($scope.selectedAll) {
+        $scope.selectedAll = false;
+      } else {
+        $scope.selectedAll = true;
+      }
+
+      angular.forEach(vm.orders, function(order) {
+        order.selected = $scope.selectedAll;
+      });
+    };
+
+    $resource('/template/madmin/app/file/get-users.json').query().$promise.then(function(users) {
+      vm.users = users;
+    });
+    
+    $resource('/template/madmin/app/file/lead-history.json').query().$promise.then(function(histories) {
+        vm.history = histories;
+        
+      });
     
 });
 App.controller('ChartsFlotChartController', function ($scope, $routeParams){
@@ -7946,12 +8039,12 @@ App.controller('MainController', function ($scope, $routeParams){
 
         var style_rand = style_list[Math.floor(Math.random() * (style_list.length))];
         var msg_rand = msg_list[Math.floor(Math.random() * (msg_list.length))];
-        setTimeout(function(){
+        /*setTimeout(function(){
             $.notific8(msg_rand, {
                 theme: style_rand,
                 life: 4000
             });
-        }, 5000);
+        }, 5000);*/
 
     }, 50);
 });
@@ -8104,6 +8197,16 @@ App.controller('TableAdvancedController', function ($scope, $routeParams){
         });
         //END CHECKBOX TABLE
     };
+    
+    $scope.hideTab = function() {
+    	$('#userTab').hide();
+    }
+    
+    $scope.showTab = function() {
+    	$('#userTab').removeAttr("style");
+    	$('#viewUserTab').click();
+    }
+    
 });
 
 ;(function ($, window, undefined) {

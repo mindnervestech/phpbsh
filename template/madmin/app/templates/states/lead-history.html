@@ -1,38 +1,26 @@
-<div class="row">
+<div class="row" data-ng-controller="OrdersTableCtrl as showCase">
 <table class="table table-hover table-advanced table-bordered">
       <thead class="primary">
         <tr>
-          <th>#</th>
-          <th>Username</th>
-          <th>Age</th>
+          <th style="width:5%;">#</th>
+          <th>Date</th>
           <th>Status</th>
+          <th>Reason</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>1</td>
-          <td>Henry</td>
-          <td>23</td>
-          <td><span class="label label-sm label-default">Approved</span></td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td>John</td>
-          <td>45</td>
-          <td><span class="label label-sm label-default">Pending</span></td>
-        </tr>
-        <tr>
-          <td>3</td>
-          <td>Larry</td>
-          <td>30</td>
-          <td><span class="label label-sm label-default">Suspended</span></td>
-        </tr>
-        <tr>
-          <td>4</td>
-          <td>Lahm</td>
-          <td>15</td>
-          <td><span class="label label-sm label-default">Blocked</span></td>
+        <tr data-ng-repeat="data in showCase.history">
+          <td>{{data.number}}</td>
+          <td>{{data.date}}</td>
+          <td>{{data.status}}</td>
+          <td>{{data.reason}}</td>
         </tr>
       </tbody>
     </table>
-  </div>  
+  </div>
+  
+<style>
+.page-content {
+	min-height:300px;
+}
+</style>  

@@ -4,14 +4,10 @@
     <ul id="tableadvancedTab" ng-tab="" class="nav nav-tabs">
       
       <li class="active"><a href="#lead-grid-tab" data-toggle="tab"><i class="fa fa-table"></i> My Leads</a></li>
-      <li><a href="#lead-create-form" data-toggle="tab"><i class="fa fa-file-text-o"></i> Create Leads</a></li>
     </ul>
     <div id="tableadvancedTabContent" class="tab-content">
       <div id="lead-grid-tab" class="tab-pane fade in active">
         <ng-include src="'templates/states/_manage-leads/manage-leads-table.html'" onload="table_advanced_update()"></ng-include>
-      </div>
-      <div id="lead-create-form" class="tab-pane fade">
-        <ng-include src="'templates/states/_manage-leads/new-lead.html'"></ng-include>
       </div>
     </div>
   </div>
