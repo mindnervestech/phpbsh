@@ -426,7 +426,7 @@ App.config(function($stateProvider, $urlRouterProvider) {
         .state('table-advanced', {
             url: "/table-advanced", 
             templateUrl: 'templates/states/table-advanced.html',
-            controller: 'TableAdvancedController', 
+            controller: 'ManageController', 
             resolve: { 
                 loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
                      return $ocLazyLoad.load({
@@ -439,7 +439,7 @@ App.config(function($stateProvider, $urlRouterProvider) {
         .state('manage-leads', {
             url: "/manage-leads", 
             templateUrl: 'templates/states/manage-leads.html',
-            controller: 'TableAdvancedController', 
+            controller: 'ManageController', 
             resolve: { 
                 loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
                      return $ocLazyLoad.load({
@@ -450,7 +450,6 @@ App.config(function($stateProvider, $urlRouterProvider) {
                                 'vendors/DataTables/media/js/jquery.dataTables.js',
                                 'vendors/DataTables/media/js/dataTables.bootstrap.js',
                                 'vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js',
-                                
                                 'vendors/DataTables/extensions/Pagination/input.js',
                                 'vendors/DataTables/extensions/ColumnFilter/jquery.dataTables.columnFilter.js',
                                
@@ -462,7 +461,7 @@ App.config(function($stateProvider, $urlRouterProvider) {
         .state('manage-users', {
             url: "/manage-users", 
             templateUrl: 'templates/states/manage-users.html',
-            controller: 'TableAdvancedController', 
+            controller: 'ManageController', 
             resolve: { 
                 loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
                      return $ocLazyLoad.load({
@@ -473,10 +472,50 @@ App.config(function($stateProvider, $urlRouterProvider) {
                                 'vendors/DataTables/media/js/jquery.dataTables.js',
                                 'vendors/DataTables/media/js/dataTables.bootstrap.js',
                                 'vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js',
-                                
                                 'vendors/DataTables/extensions/Pagination/input.js',
                                 'vendors/DataTables/extensions/ColumnFilter/jquery.dataTables.columnFilter.js',
-                               
+                                ]
+                     });
+                }]
+            }
+        })
+        .state('manage-roles', {
+            url: "/manage-roles", 
+            templateUrl: 'templates/states/manage-roles.html',
+            controller: 'ManageController', 
+            resolve: { 
+                loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+                     return $ocLazyLoad.load({
+                        files: [
+                                'vendors/DataTables/media/css/jquery.dataTables.css',
+                                'vendors/DataTables/extensions/TableTools/css/dataTables.tableTools.min.css',
+                                'vendors/DataTables/media/css/dataTables.bootstrap.css',
+                                'vendors/DataTables/media/js/jquery.dataTables.js',
+                                'vendors/DataTables/media/js/dataTables.bootstrap.js',
+                                'vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js',
+                                'vendors/DataTables/extensions/Pagination/input.js',
+                                'vendors/DataTables/extensions/ColumnFilter/jquery.dataTables.columnFilter.js',
+                                ]
+                     });
+                }]
+            }
+        })
+        .state('manage-dealers', {
+            url: "/manage-dealers", 
+            templateUrl: 'templates/states/manage-dealers.html',
+            controller: 'ManageController', 
+            resolve: { 
+                loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+                     return $ocLazyLoad.load({
+                        files: [
+                                'vendors/DataTables/media/css/jquery.dataTables.css',
+                                'vendors/DataTables/extensions/TableTools/css/dataTables.tableTools.min.css',
+                                'vendors/DataTables/media/css/dataTables.bootstrap.css',
+                                'vendors/DataTables/media/js/jquery.dataTables.js',
+                                'vendors/DataTables/media/js/dataTables.bootstrap.js',
+                                'vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js',
+                                'vendors/DataTables/extensions/Pagination/input.js',
+                                'vendors/DataTables/extensions/ColumnFilter/jquery.dataTables.columnFilter.js',
                                 ]
                      });
                 }]
@@ -485,7 +524,7 @@ App.config(function($stateProvider, $urlRouterProvider) {
         .state('edit-leads', {
             url: "/edit-leads", 
             templateUrl: 'templates/states/edit-leads.html',
-            controller: 'TableAdvancedController', 
+            controller: 'ManageController', 
             resolve: { 
                 loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
                      return $ocLazyLoad.load({
@@ -1416,7 +1455,7 @@ App.controller('ChartsChartJsController', function ($scope, $routeParams){
     });
     //END PORTLET
 });
-App.controller('OrdersTableCtrl',function($scope, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){
+App.controller('ManageLeadsTableCtrl',function($scope, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){
 	var vm = this;
     vm.orders = [];
     vm.leadHistory = [];
@@ -1484,6 +1523,83 @@ App.controller('OrdersTableCtrl',function($scope, DTOptionsBuilder, DTColumnDefB
       });
     
 });
+
+App.controller('ManageRolesTableCtrl',function($scope, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){
+	var vm = this;
+    vm.roles = [];
+    var search_html;
+    search_html = '<div class="input-group input-group-sm mbs">';
+    search_html += "_INPUT_";
+    search_html += '</div>';
+
+    vm.dtOptions = DTOptionsBuilder.newOptions()
+      .withBootstrap()
+      .withOption('order', [[0, 'asc']])
+      .withTableTools('/template/madmin/app/vendors/DataTables/extensions/TableTools/swf/copy_csv_xls_pdf.swf')
+      .withTableToolsButtons(
+           [
+              "csv",
+              "xls",
+              'print'
+          ] 
+      )
+      //.withDOM('<"row"<"col-md-8 col-sm-12"<"inline-controls"l>><"col-md-4 col-sm-12"<"pull-right"f>>>t<"row"<"col-md-4 col-sm-12"<"inline-controls"l>><"col-md-4 col-sm-12"<"inline-controls text-center"i>><"col-md-4 col-sm-12"p>>')
+      .withLanguage({
+        "sLengthMenu": 'View _MENU_ records',
+        "sInfo":  'Found _TOTAL_ records',
+        "oPaginate": {
+          "sPage":    "Page",
+          "sPageOf":  "of"
+        },
+        "sSearch": search_html
+      })
+      .withPaginationType('input')
+      //.withScroller()
+      //.withOption("sScrollY", false)
+      //.withOption("sScrollX")
+      .withColumnFilter();
+
+    vm.selectedAll = false;
+
+    vm.selectAll = function () {
+
+      if ($scope.selectedAll) {
+        $scope.selectedAll = false;
+      } else {
+        $scope.selectedAll = true;
+      }
+
+      angular.forEach(vm.orders, function(order) {
+        order.selected = $scope.selectedAll;
+      });
+    };
+    
+    $resource('/template/madmin/app/file/get-roles.json').query().$promise.then(function(roles) {
+      vm.roles = roles;
+      console.log(roles);
+    });
+    
+    $scope.hideRoleTab = function() {
+    	$('#roleTab').hide();
+    }
+    
+    $scope.showRoleTab = function() {
+    	$('#roleTab').removeAttr("style");
+    	$('#viewRoleTab').click();
+    }
+    
+    $scope.createRole = function() {
+    	$('#roleDetailsTab').click();
+    	$('#roleTab').hide();
+    }
+    
+    $scope.editRole = function() {
+    	$('#roleDetailsTab').click();
+    	$('#roleTab').hide();
+    }
+    
+});
+
 App.controller('UsersTableCtrl',function($scope, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){
 	var vm = this;
     vm.users = [];
@@ -1550,7 +1666,116 @@ App.controller('UsersTableCtrl',function($scope, DTOptionsBuilder, DTColumnDefBu
         
       });
     
+    $scope.hideUserTab = function() {
+    	$('#userTab').hide();
+    }
+    
+    $scope.showUserTab = function() {
+    	$('#userTab').removeAttr("style");
+    	$('#viewUserTab').click();
+    }
+    
+    $scope.createUser = function() {
+    	$('#userDetailsTab').click();
+    	$('#userTab').hide();
+    }
+    
+    $scope.editUser = function() {
+    	$('#userDetailsTab').click();
+    	$('#userTab').hide();
+    }
+    
 });
+
+App.controller('DealersTableCtrl',function($scope, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){
+	var vm = this;
+    vm.users = [];
+    vm.leadHistory = [];
+    var search_html;
+    search_html = '<div class="input-group input-group-sm mbs">';
+    search_html += "_INPUT_";
+    search_html += '</div>';
+
+    vm.dtOptions = DTOptionsBuilder.newOptions()
+      .withBootstrap()
+      .withOption('order', [[0, 'asc']])
+      .withTableTools('/template/madmin/app/vendors/DataTables/extensions/TableTools/swf/copy_csv_xls_pdf.swf')
+      .withTableToolsButtons(
+           [
+              "csv",
+              "xls",
+              'print'
+          ] 
+      )
+      //.withDOM('<"row"<"col-md-8 col-sm-12"<"inline-controls"l>><"col-md-4 col-sm-12"<"pull-right"f>>>t<"row"<"col-md-4 col-sm-12"<"inline-controls"l>><"col-md-4 col-sm-12"<"inline-controls text-center"i>><"col-md-4 col-sm-12"p>>')
+      .withLanguage({
+        "sLengthMenu": 'View _MENU_ records',
+        "sInfo":  'Found _TOTAL_ records',
+        "oPaginate": {
+          "sPage":    "Page",
+          "sPageOf":  "of"
+        },
+        "sSearch": search_html
+      })
+      .withPaginationType('input')
+      //.withScroller()
+      //.withOption("sScrollY", false)
+      //.withOption("sScrollX")
+      .withColumnFilter();
+
+
+    vm.dtColumnDefs = [
+      //DTColumnDefBuilder.newColumnDef(0).notSortable(),
+      DTColumnDefBuilder.newColumnDef(4).notSortable()
+    ];
+
+    vm.selectedAll = false;
+
+    vm.selectAll = function () {
+
+      if ($scope.selectedAll) {
+        $scope.selectedAll = false;
+      } else {
+        $scope.selectedAll = true;
+      }
+
+      angular.forEach(vm.orders, function(order) {
+        order.selected = $scope.selectedAll;
+      });
+    };
+
+    $resource('/template/madmin/app/file/get-dealers.json').query().$promise.then(function(users) {
+      vm.users = users;
+    });
+    
+    $resource('/template/madmin/app/file/lead-history.json').query().$promise.then(function(histories) {
+        vm.history = histories;
+        
+      });
+    
+    $scope.hideDealerTab = function() {
+    	$('#dealerTab').hide();
+    }
+    
+    $scope.showDealerTab = function() {
+    	$('#dealerTab').removeAttr("style");
+    	$('#viewDealerTab').click();
+    }
+    
+    $scope.createDealer = function() {
+    	$('#dealerDetailsTab').click();
+    	$('#dealerTab').hide();
+    }
+    
+    $scope.editDealer = function() {
+    	$('#dealerDetailsTab').click();
+    	$('#dealerTab').hide();
+    }
+    
+});
+
+
+
 App.controller('ChartsFlotChartController', function ($scope, $routeParams){
     setTimeout(function(){
         var d1_1 = [["Jan", 200],["Feb", 201],["Mar", 199],["Apr", 187],["May", 193],["Jun", 192],["Jul", 206],["Aug", 186],["Sep", 206]];
@@ -8165,7 +8390,7 @@ App.controller('TableActionController', function($scope, $routeParams){
         //END CHECKBOX TABLE
     };
 });
-App.controller('TableAdvancedController', function ($scope, $routeParams){
+App.controller('ManageController', function ($scope, $routeParams){
     $scope.table_advanced_update = function(){
         $(".tablesorter").tablesorter({
             headers: {
@@ -8197,15 +8422,6 @@ App.controller('TableAdvancedController', function ($scope, $routeParams){
         });
         //END CHECKBOX TABLE
     };
-    
-    $scope.hideTab = function() {
-    	$('#userTab').hide();
-    }
-    
-    $scope.showTab = function() {
-    	$('#userTab').removeAttr("style");
-    	$('#viewUserTab').click();
-    }
     
 });
 

@@ -1,0 +1,23 @@
+[
+{
+	"name":"Nivedita Parulkar",
+	"email":"nivedita.parulkar@bshg.com",
+	"contactNumber":"9999999999",
+	"pincode":"111111",
+	"rsm":"RSM1"
+},
+{
+	"name":"Bhavya Shah",
+	"email":"bhavya.shah@bshg.com",
+	"contactNumber":"8888888888",
+	"pincode":"222222",
+	"rsm":"RSM2"
+},
+{
+	"name":"Subraman K",
+	"email":"subraman.k@bshg.com",
+	"contactNumber":"7777777777",
+	"pincode":"333333",
+	"rsm":"RSM3"
+}
+]

@@ -1,4 +1,4 @@
-App.controller('TableAdvancedController', function ($scope, $routeParams){
+App.controller('ManageController', function ($scope, $routeParams){
     $scope.table_advanced_update = function(){
         $(".tablesorter").tablesorter({
             headers: {
