@@ -1,0 +1,180 @@
+<html>
+<head>
+<link rel="stylesheet" href="/template/madmin/app/vendors/bootstrap/css/bootstrap.min.css"/>
+<link type="text/css" rel="stylesheet" href="/template/madmin/app/vendors/DataTables/media/css/dataTables.bootstrap.css"/>    
+<link1 type="text/css" rel="stylesheet" href="/template/madmin/app/vendors/DataTables/media/css/jquery.dataTables.css"/>
+<link type="text/css" rel="stylesheet" href="/template/madmin/app/vendors/DataTables/extensions/TableTools/css/dataTables.tableTools.min.css"/>
+
+
+    
+<script src="/template/madmin/app/vendors/jquery-1.10.2.min.js"></script>
+<script src="/template/madmin/app/js/libs/angular.js"></script>
+<script src="/template/madmin/app/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<script src="/template/madmin/app/vendors/DataTables/media/js/jquery.dataTables.js"></script>
+<script src="/template/madmin/app/vendors/DataTables/media/js/dataTables.bootstrap.js"></script>
+<script src="/template/madmin/app/vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
+<script src="/template/madmin/app/vendors/DataTables/extensions/Pagination/input.js"></script>
+<script src="/template/madmin/app/vendors/DataTables/extensions/ColumnFilter/jquery.dataTables.columnFilter.js"></script>
+
+<!-- <script src="/template/madmin/app/vendors/angular-datatables/dist/angular-datatables.js"></script>
+<script src="/template/madmin/app/vendors/angular-datatables/dist/plugins/bootstrap/angular-datatables.bootstrap.min.js"></script>
+<script src="/template/madmin/app/vendors/angular-datatables/dist/plugins/colreorder/angular-datatables.colreorder.min.js"></script>
+<script src="/template/madmin/app/vendors/angular-datatables/dist/plugins/columnfilter/angular-datatables.columnfilter.min.js"></script>
+<script src="/template/madmin/app/vendors/angular-datatables/dist/plugins/colvis/angular-datatables.colvis.min.js"></script>
+<script src="/template/madmin/app/vendors/angular-datatables/dist/plugins/fixedcolumns/angular-datatables.fixedcolumns.min.js"></script>
+<script src="/template/madmin/app/vendors/angular-datatables/dist/plugins/fixedheader/angular-datatables.fixedheader.min.js"></script>
+<script src="/template/madmin/app/vendors/angular-datatables/dist/plugins/scroller/angular-datatables.scroller.min.js"></script>
+<script src="/template/madmin/app/vendors/angular-datatables/dist/plugins/tabletools/angular-datatables.tabletools.min.js"></script>
+ -->
+<script type="text/javascript" src="/template/reports/vendor/export/tableExport.js"></script>
+<script type="text/javascript" src="/template/reports/vendor/export/jquery.base64.js"></script>
+<script type="text/javascript" src="/template/reports/vendor/export/html2canvas.js"></script>
+<script type="text/javascript" src="/template/reports/vendor/jspdf/libs/sprintf.js"></script>
+<script type="text/javascript" src="/template/reports/vendor/jspdf/jspdf.js"></script>
+<script type="text/javascript" src="/template/reports/vendor/jspdf/libs/base64.js"></script>
+
+<script src="/template/reports/scripts/app.js"></script>
+
+
+</head>
+
+
+<body ng-app="datatableApp" ng-controller="datatableCtrl">
+
+<!-- Tab Panel 1 Start -->
+
+<div role="tabpanel">
+	  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#custom-search" aria-controls="custom-search" role="tab" data-toggle="tab">Search</a></li>
+    <li role="presentation"><a href="#saved-search" aria-controls="saved-search" role="tab" data-toggle="tab">Saved Search</a></li>
+    <li role="presentation"><a href="#ad-hoc-search" aria-controls="ad-hoc-search" role="tab" data-toggle="tab">Ad-Hoc</a></li>
+    
+  </ul>
+
+  <!--   -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="custom-search">
+		<form class="form-inline">
+		  <div class="form-group">
+		    <label for="exampleInputName2">Name</label>
+		    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">
+		  </div>
+		  <div class="form-group">
+		    <label for="exampleInputEmail2">Email</label>
+		    <input type="email" class="form-control" id="exampleInputEmail2" placeholder="jane.doe@example.com">
+		  </div>
+		  <button type="submit" class="btn btn-default">Send invitation</button>
+		</form>
+    </div>
+    <!--  -->
+    <div role="tabpanel" class="tab-pane" id="saved-search">
+    	<table id="rpt_save-search"
+		class="table table-hover table-striped table-bordered" 
+	 	>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        	<tr>
+                <td>Customer</th>
+                <td>This is Customer Report</th>
+                <td>
+                  <a href="#">Run</a> &nbsp;
+                  <a href="#">Delete</a> &nbsp;
+                  <a href="#">Edit</a> &nbsp;
+                </td>
+            </tr>
+            
+            <tr>
+                <td>Zone-Sales</th>
+                <td>This is Zone Wise Sales  Report</th>
+                <td>
+                  <a href="#">Run</a> &nbsp;
+                  <a href="#">Delete</a> &nbsp;
+                  <a href="#">Edit</a> &nbsp;
+                </td>
+            </tr>
+        </tbody>
+ 
+        
+    </table>		
+    </div>
+    <!--  -->
+    <div role="tabpanel" class="tab-pane" id="ad-hoc-search">
+    			Need to develop
+    </div>
+    
+  </div>
+</div><!-- Tab Panel 1 End -->
+
+
+<!-- Tab Panel 2 start -->
+<div role="tabpanel">
+	<!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#table-view" aria-controls="table-view" role="tab" data-toggle="tab">Table View</a></li>
+    <li role="presentation"><a href="#pivot-view" aria-controls="pivot-view" role="tab" data-toggle="tab">Pivot View</a></li>
+    <li role="presentation"><a href="#chart-view" aria-controls="chart-view" role="tab" data-toggle="tab">Chart View</a></li>
+  </ul>
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="table-view">
+			
+		<div class="btn-group">
+			<button class="btn btn-warning btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bars"></i> Export Table Data</button>
+			<ul class="dropdown-menu " role="menu">
+				<li><a href="#" onclick="$('#rpt_table').tableExport({type:'excel',escape:'false'});"> <img src="/template/reports/vendor/export/icons/xls.png" width="24px"> XLS</a></li>
+				<li><a href="#" onclick="$('#rpt_table').tableExport({type:'doc',escape:'false'});"> <img src="/template/reports/vendor/export/icons/word.png" width="24px"> Word</a></li>
+				<li><a href="#" onclick="$('#rpt_table').tableExport({type:'pdf',pdfFontSize:'7',escape:'false'});"> <img src="/template/reports/vendor/export/icons/pdf.png" width="24px"> PDF</a></li>
+				<li><a href="#" onclick="$('#rpt_table').tableExport({type:'csv',escape:'false'});"> <img src="/template/reports/vendor/export/icons/csv.png" width="24px"> CSV</a></li>
+				<li><a href="#" onclick="$('#rpt_table').tableExport({type:'xml',escape:'false'});"> <img src="/template/reports/vendor/export/icons/xml.png" width="24px"> XML</a></li>
+				<li class="divider"></li>
+				<!-- <li><a href="#" onclick="$('#rpt_table').tableExport({type:'powerpoint',escape:'false'});"> <img src="/template/reports/vendor/export/icons/ppt.png" width="24px"> PowerPoint</a></li>
+				 -->
+				<!-- <li><a href="#" onclick="$('#rpt_table').tableExport({type:'json',escape:'false'});"> <img src="/template/reports/vendor/export/icons/json.png" width="24px"> JSON</a></li>
+				<li><a href="#" onclick="$('#rpt_table').tableExport({type:'json',escape:'false',ignoreColumn:'[2,3]'});"> <img src="/template/reports/vendor/export/icons/json.png" width="24px"> JSON (ignoreColumn)</a></li>
+				<li><a href="#" onclick="$('#rpt_table').tableExport({type:'json',escape:'true'});"> <img src="/template/reports/vendor/export/icons/json.png" width="24px"> JSON (with Escape)</a></li>
+				<li class="divider"></li>
+				<li><a href="#" onclick="$('#rpt_table').tableExport({type:'sql'});"> <img src="/template/reports/vendor/export/icons/sql.png" width="24px"> SQL</a></li>
+				 --><!-- <li class="divider"></li>
+				<li><a href="#" onclick="$('#rpt_table').tableExport({type:'txt',escape:'false'});"> <img src="/template/reports/vendor/export/icons/txt.png" width="24px"> TXT</a></li>
+				<li class="divider"></li>				
+				 -->
+			</ul>
+		</div>
+	
+		<!-- DataTable Container -->
+		<table id="rpt_table"
+		class="table table-hover table-striped table-bordered" 
+		 my-datatable aa-data="reportData" aa-columns="dtColumns" >
+	        <thead>
+	            <tr>
+	                <th generate-datatable ng-repeat="col in dtColumns" ng-bind="col.name"></th>
+	            </tr>
+	        </thead>
+	    </table>    
+    </div><!-- table-view end here -->
+    
+    <div role="tabpanel" class="tab-pane" id="pivot-view">
+    
+    </div>
+    
+    <div role="tabpanel" class="tab-pane" id="chart-view">
+    
+    </div>
+    
+    </div>
+  
+</div>
+
+<!-- Tab Panel 2 End -->
+
+
+</body>
+
+
+</html>
