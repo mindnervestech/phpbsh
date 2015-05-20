@@ -1,3 +1,4 @@
+var stateBeforeLogin = 'index';
 "use strict";
 var App = angular.module('MAdmin', ['ngRoute', 'ui.bootstrap', 'ui.router', 'oc.lazyLoad','angular-flot','datatables','ngResource',
                                     'datatables.bootstrap',
@@ -7,8 +8,96 @@ var App = angular.module('MAdmin', ['ngRoute', 'ui.bootstrap', 'ui.router', 'oc.
                                     'datatables.scroller',
                                     'datatables.columnfilter',
                                     'ngTagsInput',]);
-App.config(function($stateProvider, $urlRouterProvider) {
-  //
+App.factory("Auth", ["$http", "$q", "$window","$rootScope","$state" ,
+                     function ($http, $q, $window,$rootScope,$state) {
+    var userInfo = {};
+    userInfo.isLoggedIn= false;
+    
+    function validate(data){
+    	if(data == 403) {
+    		$state.go('login');
+    	}
+    	return false;
+	}
+    
+    function logout() {
+    	var deferred = $q.defer();
+    	$http.get('/webapp/j_spring_security_logout',{withCredentials : true}).success(function(data){
+    		userInfo = {
+                    accessToken: '',
+                    isLoggedIn: false
+                };
+    		deferred.resolve(userInfo);
+    		$window.sessionStorage["userInfo"] = JSON.stringify(userInfo);
+    		
+    	});
+    }
+    
+    function login(email, password) {
+        var deferred = $q.defer();
+        $http({
+        	method:'POST',
+        	withCredentials: true,
+        	url:"/webapp/api/login",
+        	headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        	data: "j_username=" + email + "&j_password=" + password
+        })
+        
+        //$http.post("/webapp/api/login", { j_username: email, j_password: password })
+            .then(function (result) {
+            	
+                if(result.data.loggedIn === true) {
+                	$rootScope.SessionId = result.data.accessToken;
+                    //$cookieStore.put('sessionId', login.sessionId);
+                    userInfo = {
+                        accessToken: result.data.accessToken,
+                        isLoggedIn: true,
+                        permissions: result.data.payload
+                    };
+                    $window.sessionStorage["userInfo"] = JSON.stringify(userInfo);
+                    
+                    deferred.resolve(userInfo);
+                    $state.go(stateBeforeLogin);
+                }
+                else {
+                	userInfo = {
+                            isLoggedIn: true
+                        };
+                    deferred.reject(result.data.error);
+                }
+            }, function (error) {
+                deferred.reject(error);
+            });
+
+        return deferred.promise;
+    }
+    
+    function getUserInfo() {
+    	var userInfoFromSession = $window.sessionStorage["userInfo"];
+    	if(userInfoFromSession) {
+    		return JSON.parse($window.sessionStorage["userInfo"]);//userInfo;
+    	} else {
+    		return {
+                isLoggedIn: false
+            };
+    	}
+    }
+    
+    return {
+        login: login,
+        getUserInfo: getUserInfo,
+        logout:logout,
+        validate:validate,
+        setStateBeforeLogin : function(stateBefore) {
+        	stateBeforeLogin = stateBefore;
+        }
+    };
+}]);
+
+App.config(['$stateProvider', '$urlRouterProvider', 
+            function($stateProvider, $urlRouterProvider) {
+  
+	
     // For any unmatched url, redirect to /state1
     $urlRouterProvider.otherwise("/index");
     //
@@ -35,6 +124,16 @@ App.config(function($stateProvider, $urlRouterProvider) {
                      });
                 }]
             }
+        })
+        .state('login', {
+            url: "/login", 
+            templateUrl: 'templates/states/login.html',
+            controller: 'LoginController'
+        })
+        .state('logout', {
+        	url: "/login", 
+            templateUrl: 'templates/states/login.html',
+            controller: 'LoginController'	
         })
         .state('layout-left-sidebar', {
           url:"/layout-left-sidebar",
@@ -441,6 +540,7 @@ App.config(function($stateProvider, $urlRouterProvider) {
             url: "/manage-leads", 
             templateUrl: 'templates/states/manage-leads.html',
             controller: 'ManageController', 
+            data : {requireLogin : true },
             resolve: { 
                 loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
                      return $ocLazyLoad.load({
@@ -1125,6 +1225,88 @@ App.config(function($stateProvider, $urlRouterProvider) {
         })
         
     ;
+}]);
+
+App.run(function($rootScope, $state, $location, Auth) {
+	$rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState) {
+	    
+		if(toState.name == "logout") {
+			Auth.logout();
+		}
+		
+	      var shouldLogin = toState.data !== undefined
+	                    && toState.data.requireLogin 
+	                    && !Auth.getUserInfo().isLoggedIn ;
+	      //console.log(Auth.getUserInfo());
+	      // NOT authenticated - wants any private stuff
+	      if(shouldLogin)
+	      {
+	    	Auth.setStateBeforeLogin( toState.name);
+	        $state.go('login');
+	        event.preventDefault();
+	        return;
+	      }
+	      
+	      console.log(fromState.name);
+	      console.log(toState.name);
+	      // authenticated (previously) comming not to root main
+	      if(Auth.getUserInfo().isLoggedIn && false) 
+	      {
+	        var shouldGoToMain = fromState.name === ""
+	                          && toState.name !== "index" ;
+	          
+	        if (shouldGoToMain)
+	        {
+	            $state.go('index');
+	            event.preventDefault();
+	        } 
+	        return;
+	      }
+	      
+	      // UNauthenticated (previously) comming not to root public 
+	      var shouldGoToPublic = fromState.name === ""
+	                        && toState.name !== "public"
+	                        && toState.name !== "login" ;
+	        
+	      if(shouldGoToPublic)
+	      {
+	          $state.go('login');
+	          console.log('p')
+	          event.preventDefault();
+	      } 
+	      
+	      // unmanaged
+	    });
+});
+
+App.controller('LoginController',function ($scope, $rootScope, $location, $http, Auth) {
+	
+	//$('body').addClass('bounceInLeft');
+	//$("body>.default-page").hide();
+    //$("body>.extra-page").html($(".page-content").html()).show();
+	
+	$(".page-header-topbar").hide();
+    $(".page-title-breadcrumb").hide();
+    $("#sidebar").hide();
+    
+	$scope.login = {};
+    $scope.login.j_username = '';
+    $scope.login.j_password = '';
+
+    $scope.loginUser = function() {
+    	Auth.login($scope.login.j_username, $scope.login.j_password);
+    }
+    
+    $scope.resetError = function() {
+        $scope.error = false;
+        $scope.errorMessage = '';
+    }
+
+    $scope.setError = function(message) {
+        $scope.error = true;
+        $scope.errorMessage = message;
+        $rootScope.SessionId = '';
+    }
 });
 
 App.controller('AppController', function ($scope, $rootScope, $routeParams, $location){
@@ -1210,7 +1392,13 @@ App.controller('AppController', function ($scope, $rootScope, $routeParams, $loc
     };
 
     $scope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams){
-        $scope.header.animation = 'fadeInUp';
+    	
+    	$(".page-header-topbar").show();
+        $(".page-title-breadcrumb").show();
+        $("#sidebar").show();
+    
+    	
+    	$scope.header.animation = 'fadeInUp';
         setTimeout(function(){
             $scope.header.animation = '';
         }, 100);
@@ -1224,6 +1412,7 @@ App.controller('AppController', function ($scope, $rootScope, $routeParams, $loc
             $("body>.extra-page").hide();
         }
         else{
+        	
             window.scrollTo(0,0);
         }
 		
