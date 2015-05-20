@@ -658,7 +658,10 @@ App.config(['$stateProvider', '$urlRouterProvider',
                 loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
                      return $ocLazyLoad.load({
                         files: ['vendors/jquery-tablesorter/themes/blue/style-custom.css',
-                                'vendors/jquery-tablesorter/jquery.tablesorter.js']
+                                'vendors/jquery-tablesorter/jquery.tablesorter.js',
+                                'vendors/moment/moment.js',
+                                'vendors/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js',
+                                'vendors/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css',]
                      });
                 }]
             }
@@ -1739,6 +1742,88 @@ App.controller('ManageLeadsTableCtrl',function($scope, DTOptionsBuilder, DTColum
         vm.history = histories;
         
       });
+    
+    $scope.dispositoion2=[];
+    $scope.dispositoion1=[
+	               { 
+	            	   id: 1, 
+	            	   name: 'New',
+	            	   dispositoion2:[
+		   	               { 
+		   	            	   id: 1,
+		   	            	   name: 'Nothing' , 
+		   	            	   action: 'Nothing'
+		   	               }
+		   	          ]
+	               },{ 
+	            	   id: 2, 
+	            	   name: 'Contacted',
+	            	   dispositoion2:[
+		   	               { 
+		   	            	   name: 'Call Back' , 
+		   	            	   action: 1
+		   	               },{ 
+		   	            	   name: 'Quote Sent' , 
+		   	            	   action: 1
+		   	               },{ 
+		   	            	   name: 'Visiting Store' , 
+		   	            	   action: 1
+		   	               },{ 
+		   	            	   name: 'Lost' , 
+		   	            	   action: 0
+		   	               },{ 
+		   	            	   name: 'Won' , 
+		   	            	   action: 0
+		   	               }
+		   	          ]
+	               },{ 
+	            	   id: 3, 
+	            	   name: 'Tried Contacted',
+	            	   dispositoion2:[
+	            	       { 
+		   	            	   name: 'Tried Contacted' , 
+		   	            	   action: 0
+		   	               },{ 
+		   	            	   name: 'Lost' , 
+		   	            	   action: 0
+		   	               }
+		   	          ]
+	               },{ 
+	            	   id: 4, 
+	            	   name: 'Escalated',
+	            	   dispositoion2:[
+		   	               { 
+		   	            	   id: 1,
+		   	            	   name: 'Nothing' , 
+		   	            	   action: 'Nothing'
+		   	               }
+		   	          ]
+	               }
+           ];
+    
+    
+	$scope.selectDropdown1 = function(data){
+		$scope.dispositoion2 = data.dispositoion2;
+	};
+	
+	$scope.selectDropdown2 = function(data){
+		if(data.action == 0){
+			console.log(data.action);
+			$("#reason").show();
+			$("#date").hide();
+		} else {
+			if(data.action == 1){
+				console.log(data.action);
+				$("#reason").hide();
+				$("#date").show();
+			} else {
+				console.log(data.action);
+				$("#reason").hide();
+				$("#date").hide();
+			}
+		}
+	};
+	
     
 });
 
