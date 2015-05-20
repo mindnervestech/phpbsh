@@ -1,4 +1,4 @@
-var App = angular.module('MAdmin', ['ngRoute', 'ui.bootstrap', 'ui.router', 'oc.lazyLoad',]);
+var App = angular.module('MAdmin', ['ngRoute', 'ui.bootstrap', 'ui.router', 'oc.lazyLoad','ngTagsInput',]);
 App.config(function($stateProvider, $urlRouterProvider) {
   //
     // For any unmatched url, redirect to /state1

@@ -1,7 +1,7 @@
 <div class="row">
           <div class="col-lg-12">
             <div class="panel panel-red">
-              <div class="panel-heading">Create User</div>
+              <div class="panel-heading">Create Dealer </div>
               <div class="panel-body pan">
                 <form ng-submit="createDealer()" class="horizontal-form">
                   <div class="form-body pal">
@@ -39,8 +39,10 @@
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label for="inputBirthday" class="control-label">Birthday</label>
-                          <input id="inputBirthday" type="text" placeholder="dd/mm/yyyy" class="form-control"/>
+                          <label for="inputPinCodes" class="control-label">Pin-Codes</label>
+                          <tags-input ng-model="pin" display-property="pin" add-from-autocomplete-only="true">
+						      <auto-complete source="loadPin($query)"></auto-complete>
+						  </tags-input>
                         </div>
                       </div>
                        <div class="col-md-6">

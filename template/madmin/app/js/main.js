@@ -5,7 +5,8 @@ var App = angular.module('MAdmin', ['ngRoute', 'ui.bootstrap', 'ui.router', 'oc.
                                     'datatables.colvis',
                                     'datatables.tabletools',
                                     'datatables.scroller',
-                                    'datatables.columnfilter']);
+                                    'datatables.columnfilter',
+                                    'ngTagsInput',]);
 App.config(function($stateProvider, $urlRouterProvider) {
   //
     // For any unmatched url, redirect to /state1
@@ -516,6 +517,34 @@ App.config(function($stateProvider, $urlRouterProvider) {
                                 'vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js',
                                 'vendors/DataTables/extensions/Pagination/input.js',
                                 'vendors/DataTables/extensions/ColumnFilter/jquery.dataTables.columnFilter.js',
+                                ]
+                     });
+                }]
+            }
+        })
+        .state('product-mapping', {
+            url: "/product-mapping", 
+            templateUrl: 'templates/states/product-mapping.html',
+            controller: 'ProductMappingCtrl', 
+            resolve: { 
+                loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+                     return $ocLazyLoad.load({
+                        files: [
+								'vendors/select2/select2-madmin.css',
+								'vendors/bootstrap-select/bootstrap-select.min.css',
+								'vendors/multi-select/css/multi-select-madmin.css',
+								'vendors/select2/select2.min.js',
+								'vendors/bootstrap-select/bootstrap-select.min.js',
+								'vendors/multi-select/js/jquery.multi-select.js',
+                                'vendors/DataTables/media/css/jquery.dataTables.css',
+                                'vendors/DataTables/extensions/TableTools/css/dataTables.tableTools.min.css',
+                                'vendors/DataTables/media/css/dataTables.bootstrap.css',
+                                'vendors/DataTables/media/js/jquery.dataTables.js',
+                                'vendors/DataTables/media/js/dataTables.bootstrap.js',
+                                'vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js',
+                                'vendors/DataTables/extensions/Pagination/input.js',
+                                'vendors/DataTables/extensions/ColumnFilter/jquery.dataTables.columnFilter.js',
+                                'vendors/multi-select/css/multi-select-madmin.css',
                                 ]
                      });
                 }]
@@ -1687,9 +1716,10 @@ App.controller('UsersTableCtrl',function($scope, DTOptionsBuilder, DTColumnDefBu
     
 });
 
-App.controller('DealersTableCtrl',function($scope, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){
+App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){
 	var vm = this;
     vm.users = [];
+    vm.pincode = [];
     vm.leadHistory = [];
     var search_html;
     search_html = '<div class="input-group input-group-sm mbs">';
@@ -1753,6 +1783,13 @@ App.controller('DealersTableCtrl',function($scope, DTOptionsBuilder, DTColumnDef
         
       });
     
+    
+    $scope.loadPin = function(query) {
+    	console.log(query);
+    	return $http.get('/template/madmin/app/file/get-pincodes.json');
+    };
+   
+    
     $scope.hideDealerTab = function() {
     	$('#dealerTab').hide();
     }
@@ -1774,6 +1811,36 @@ App.controller('DealersTableCtrl',function($scope, DTOptionsBuilder, DTColumnDef
     
 });
 
+App.controller('ProductMappingCtrl', function ($scope, $routeParams, $resource){
+	setTimeout(function(){
+        $('#pre-selected-options').multiSelect();
+    },500);
+	
+	$scope.brands=[
+	               { id: 2, name: 'BOSCH' },
+	               { id: 1, name: 'Semens' }
+	               ];
+	$scope.categories = [];
+	$scope.selectBrand = function(brand){
+		$resource('/template/madmin/app/file/get-catgry'+brand.id+'.json').query().$promise.then(function(categories) {
+			$scope.categories = categories;
+			console.log($scope.categories);
+			$('#product-list').hide();
+	    });
+	};
+	
+	$scope.products = [];
+	$scope.selectCategory = function(category){
+		console.log(category);
+		$('#product-list').show();
+		/*$resource('/template/madmin/app/file/get-prod'+category.id%2+'.json').query().$promise.then(function(products) {
+			$scope.products = products;
+			console.log($scope.products);
+			
+	    });*/
+	};
+    
+});
 
 
 App.controller('ChartsFlotChartController', function ($scope, $routeParams){
