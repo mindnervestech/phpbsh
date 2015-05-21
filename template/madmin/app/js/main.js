@@ -540,7 +540,7 @@ App.config(['$stateProvider', '$urlRouterProvider',
             url: "/manage-leads", 
             templateUrl: 'templates/states/manage-leads.html',
             controller: 'ManageController', 
-            data : {requireLogin : true },
+            data : {},
             resolve: { 
                 loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
                      return $ocLazyLoad.load({
@@ -1781,7 +1781,7 @@ App.controller('ManageLeadsTableCtrl',function($scope, DTOptionsBuilder, DTColum
 	            	   name: 'Tried Contacted',
 	            	   dispositoion2:[
 	            	       { 
-		   	            	   name: 'Tried Contacted' , 
+		   	            	   name: 'Not Contacted' , 
 		   	            	   action: 0
 		   	               },{ 
 		   	            	   name: 'Lost' , 
@@ -1801,8 +1801,11 @@ App.controller('ManageLeadsTableCtrl',function($scope, DTOptionsBuilder, DTColum
 	               }
            ];
     
-    
 	$scope.selectDropdown1 = function(data){
+		$('#desposition2').show();
+		if(data.dispositoion2[0].name == 'Nothing'){
+			$('#desposition2').hide();
+		}
 		$scope.dispositoion2 = data.dispositoion2;
 	};
 	
