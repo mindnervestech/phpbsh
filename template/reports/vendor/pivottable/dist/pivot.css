@@ -5,7 +5,7 @@ table.pvtTable {
     border-collapse: collapse;
 }
 table.pvtTable tr th, table.pvtTable tr th {
-    background-color: #e6EEEE;
+    background-color: #F9F2F9;
     border: 1px solid #CDCDCD;
     font-size: 8pt;
     padding: 5px;
@@ -30,10 +30,14 @@ table.pvtTable tr td {
 
 .pvtAxisContainer, .pvtVals {
     border: 1px solid gray;
-    background: #EEE;
+    background: #F3FFFF;
     padding: 5px;
     min-width: 20px;
     min-height: 20px;
+    font-size: 12px;
+}
+.pvtRenderer {
+	font-size: 12px;
 }
 .pvtAxisContainer li {
     padding: 8px 6px;
@@ -49,8 +53,9 @@ table.pvtTable tr td {
 }
 
 .pvtAxisContainer li span.pvtAttr {
-    background: #F3F3F3;
-    border: 1px solid #DEDEDE;
+    background: #8E9BF4;
+    color:rgb(245, 239, 239);
+    font-size: 14px;
     padding: 2px 5px;
     white-space:nowrap;
     -webkit-border-radius: 5px;

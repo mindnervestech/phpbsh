@@ -1,15 +1,15 @@
 /* Set the defaults for DataTables initialisation */
 var search_html;
-search_html = '<div class="input-group input-group-sm mbs"><span class="input-group-btn"><button type="button" data-toggle="dropdown" class="btn btn-danger dropdown-toggle">Filter&nbsp;<span class="caret"></span></button><ul class="dropdown-menu"><li><a href="#"><i class="fa fa-tint"></i>&nbsp;Newest</a></li><li><a href="#"><i class="fa fa-star"></i>&nbsp;Rating</a></li><li><a href="#"><i class="fa fa-money"></i>&nbsp;Price</a></li><li><a href="#"><i class="fa fa-user"></i>&nbsp;Sales</a></li></ul></span>';
+search_html = '<div class="input-group input-group-sm mbs"><span class="input-group-btn">';
 search_html += "_INPUT_";
-search_html += '<span class="input-group-btn"><button type="button" data-toggle="dropdown" class="btn btn-success dropdown-toggle">Search</button></span></div>';
+search_html += '';
 $.extend( true, $.fn.dataTable.defaults, {
 	"sDom":
 		"<'row'<'col-md-5'l><'col-md-4'T><'col-md-3'f>>"+
 		"t"+
 		"<'row'<'col-md-6'l><'col-md-6'p>r>",
 	"oLanguage": {
-		"sLengthMenu": "View _MENU_ records | Found total 100 records",
+		"sLengthMenu": "View _MENU_ records",
 		"sSearch": search_html
 	}
 } );
