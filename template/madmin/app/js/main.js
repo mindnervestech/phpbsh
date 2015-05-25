@@ -569,6 +569,12 @@ App.config(['$stateProvider', '$urlRouterProvider',
                 loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
                      return $ocLazyLoad.load({
                         files: [
+								'vendors/select2/select2-madmin.css',
+								'vendors/bootstrap-select/bootstrap-select.min.css',
+								'vendors/multi-select/css/multi-select-madmin.css',
+								'vendors/select2/select2.min.js',
+								'vendors/bootstrap-select/bootstrap-select.min.js',
+								'vendors/multi-select/js/jquery.multi-select.js',
                                 'vendors/DataTables/media/css/jquery.dataTables.css',
                                 'vendors/DataTables/extensions/TableTools/css/dataTables.tableTools.min.css',
                                 'vendors/DataTables/media/css/dataTables.bootstrap.css',
@@ -1954,15 +1960,34 @@ App.controller('ManageRolesTableCtrl',function($scope, DTOptionsBuilder, DTColum
     
 });
 
-App.controller('UsersTableCtrl',function($scope, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){
+App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){
 	var vm = this;
     vm.users = [];
+    vm.user;
     vm.leadHistory = [];
+    $scope.userData = {};
     var search_html;
     search_html = '<div class="input-group input-group-sm mbs">';
     search_html += "_INPUT_";
     search_html += '</div>';
 
+    setTimeout(function(){
+        $('#pre-selected-options').multiSelect();
+    },500);
+    
+    $scope.init = function() {
+    	$http({method:'GET',url:'/webapp/api/business/getDetailsForUser'})
+		.success(function(data) {
+			console.log(data);
+			$scope.zoneList = data.zoneList;
+			$scope.stateList = data.stateList;
+			$scope.districtList = data.districtList;
+			$scope.roleList = data.roleList;
+			$scope.productList = data.productList;
+			vm.users = data.userList;
+		});
+    }
+    
     vm.dtOptions = DTOptionsBuilder.newOptions()
       .withBootstrap()
       .withOption('order', [[0, 'asc']])
@@ -1974,7 +1999,10 @@ App.controller('UsersTableCtrl',function($scope, DTOptionsBuilder, DTColumnDefBu
               'print'
           ] 
       )
-      //.withDOM('<"row"<"col-md-8 col-sm-12"<"inline-controls"l>><"col-md-4 col-sm-12"<"pull-right"f>>>t<"row"<"col-md-4 col-sm-12"<"inline-controls"l>><"col-md-4 col-sm-12"<"inline-controls text-center"i>><"col-md-4 col-sm-12"p>>')
+      // .withDOM('<"row"<"col-md-8 col-sm-12"<"inline-controls"l>><"col-md-4
+		// col-sm-12"<"pull-right"f>>>t<"row"<"col-md-4
+		// col-sm-12"<"inline-controls"l>><"col-md-4 col-sm-12"<"inline-controls
+		// text-center"i>><"col-md-4 col-sm-12"p>>')
       .withLanguage({
         "sLengthMenu": 'View _MENU_ records',
         "sInfo":  'Found _TOTAL_ records',
@@ -1985,14 +2013,14 @@ App.controller('UsersTableCtrl',function($scope, DTOptionsBuilder, DTColumnDefBu
         "sSearch": search_html
       })
       .withPaginationType('input')
-      //.withScroller()
-      //.withOption("sScrollY", false)
-      //.withOption("sScrollX")
+      // .withScroller()
+      // .withOption("sScrollY", false)
+      // .withOption("sScrollX")
       .withColumnFilter();
 
 
     vm.dtColumnDefs = [
-      //DTColumnDefBuilder.newColumnDef(0).notSortable(),
+      // DTColumnDefBuilder.newColumnDef(0).notSortable(),
       DTColumnDefBuilder.newColumnDef(4).notSortable()
     ];
 
@@ -2011,30 +2039,52 @@ App.controller('UsersTableCtrl',function($scope, DTOptionsBuilder, DTColumnDefBu
       });
     };
 
-    $resource('/template/madmin/app/file/get-users.json').query().$promise.then(function(users) {
+    /*$resource('/template/madmin/app/file/get-users.json').query().$promise.then(function(users) {
       vm.users = users;
-    });
+    });*/
     
     $resource('/template/madmin/app/file/lead-history.json').query().$promise.then(function(histories) {
         vm.history = histories;
         
       });
     
+    $scope.selectAllFun = function() {
+            $('#pre-selected-options').multiSelect('select_all');
+    }
+    
+    $scope.deselectAll = function() {
+    	 $('#pre-selected-options').multiSelect('deselect_all');
+    }	
+        
+    
     $scope.hideUserTab = function() {
     	$('#userTab').hide();
     }
     
-    $scope.showUserTab = function() {
+    $scope.showUserTab = function(user) {
+    	
+    	vm.user = user;
     	$('#userTab').removeAttr("style");
     	$('#viewUserTab').click();
     }
     
+    
     $scope.createUser = function() {
+    	
+    	$scope.userData.productList = $scope.productList;
+    	$http({method:'POST',url:'/webapp/api/business/saveUser',data:$scope.userData}).success(function(data) {
+    		vm.users = data;
+    	});
     	$('#userDetailsTab').click();
     	$('#userTab').hide();
     }
     
-    $scope.editUser = function() {
+    $scope.editUser = function(user) {
+    	
+    	$http({method:'POST',url:'/webapp/api/business/updateUser',data:user}).success(function(data) {
+			console.log('success');
+			vm.users = data;
+    	});
     	$('#userDetailsTab').click();
     	$('#userTab').hide();
     }
@@ -2044,13 +2094,29 @@ App.controller('UsersTableCtrl',function($scope, DTOptionsBuilder, DTColumnDefBu
 App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){
 	var vm = this;
     vm.users = [];
+    vm.dealer;
     vm.pincode = [];
     vm.leadHistory = [];
+    $scope.dealerData = {};
+    $scope.dealerDetails = {};
+    $scope.isPin = false;
     var search_html;
     search_html = '<div class="input-group input-group-sm mbs">';
     search_html += "_INPUT_";
     search_html += '</div>';
 
+    $scope.init = function() {
+    	$http({method:'GET',url:'/webapp/api/business/getZones'})
+		.success(function(data) {
+			console.log(data);
+			$scope.zoneList = data.zoneList;
+			$scope.stateList = data.stateList;
+			$scope.territoryList = data.territoryList;
+			$scope.districtList = data.districtList;
+			vm.users = data.dealerList;
+		});
+    }
+    
     vm.dtOptions = DTOptionsBuilder.newOptions()
       .withBootstrap()
       .withOption('order', [[0, 'asc']])
@@ -2062,7 +2128,10 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
               'print'
           ] 
       )
-      //.withDOM('<"row"<"col-md-8 col-sm-12"<"inline-controls"l>><"col-md-4 col-sm-12"<"pull-right"f>>>t<"row"<"col-md-4 col-sm-12"<"inline-controls"l>><"col-md-4 col-sm-12"<"inline-controls text-center"i>><"col-md-4 col-sm-12"p>>')
+      // .withDOM('<"row"<"col-md-8 col-sm-12"<"inline-controls"l>><"col-md-4
+		// col-sm-12"<"pull-right"f>>>t<"row"<"col-md-4
+		// col-sm-12"<"inline-controls"l>><"col-md-4 col-sm-12"<"inline-controls
+		// text-center"i>><"col-md-4 col-sm-12"p>>')
       .withLanguage({
         "sLengthMenu": 'View _MENU_ records',
         "sInfo":  'Found _TOTAL_ records',
@@ -2073,14 +2142,14 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
         "sSearch": search_html
       })
       .withPaginationType('input')
-      //.withScroller()
-      //.withOption("sScrollY", false)
-      //.withOption("sScrollX")
+      // .withScroller()
+      // .withOption("sScrollY", false)
+      // .withOption("sScrollX")
       .withColumnFilter();
 
 
     vm.dtColumnDefs = [
-      //DTColumnDefBuilder.newColumnDef(0).notSortable(),
+      // DTColumnDefBuilder.newColumnDef(0).notSortable(),
       DTColumnDefBuilder.newColumnDef(4).notSortable()
     ];
 
@@ -2099,9 +2168,10 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
       });
     };
 
-    $resource('/template/madmin/app/file/get-dealers.json').query().$promise.then(function(users) {
-      vm.users = users;
-    });
+    /*
+	 * $resource('/template/madmin/app/file/get-dealers.json').query().$promise.then(function(users) {
+	 * vm.users = users; });
+	 */
     
     $resource('/template/madmin/app/file/lead-history.json').query().$promise.then(function(histories) {
         vm.history = histories;
@@ -2110,8 +2180,7 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     
     
     $scope.loadPin = function(query) {
-    	console.log(query);
-    	return $http.get('/template/madmin/app/file/get-pincodes.json');
+    	return $http.get('/webapp/api/business/getPincodes');
     };
    
     
@@ -2119,20 +2188,37 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     	$('#dealerTab').hide();
     }
     
-    $scope.showDealerTab = function() {
+    $scope.showDealerTab = function(user) {
+    	vm.dealer = user;
     	$('#dealerTab').removeAttr("style");
     	$('#viewDealerTab').click();
     }
     
-    $scope.createDealer = function() {
+    
+    $scope.updateDealer = function(dealer) {
+    
+    	$http({method:'POST',url:'/webapp/api/business/updateDealer',data:dealer}).success(function(data) {
+			console.log('success');
+    	});	
     	$('#dealerDetailsTab').click();
     	$('#dealerTab').hide();
     }
     
-    $scope.editDealer = function() {
+    $scope.createDealer = function() {
+    	
+    	if($scope.dealerData.pins == "" || angular.isUndefined($scope.dealerData.pins)) {
+    		$scope.isPin = true;
+    	} else {
+    		$scope.isPin = false;
+	    	$http({method:'POST',url:'/webapp/api/business/saveDealer',data:$scope.dealerData}).success(function(data) {
+				console.log('success');
+	    	});	
+    	}
     	$('#dealerDetailsTab').click();
     	$('#dealerTab').hide();
     }
+    
+    
     
 });
 

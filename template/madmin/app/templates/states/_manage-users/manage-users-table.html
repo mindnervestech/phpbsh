@@ -28,11 +28,11 @@
                     
                     <td>{{ user.name }}</td>
                     <td>{{ user.email }}</td>
-                    <td>{{ user.contactNumber }}</td>
-                    <td>{{ user.role }}</td>
-                    <td>{{ user.region }}</td>
+                    <td>{{ user.phone }}</td>
+                    <td>{{ user.roleName }}</td>
+                    <td>{{ user.zoneName }}</td>
                     <td>
-                      <a class="btn btn-xs btn-default" data-ng-click="showUserTab()"><i class="fa fa-eye"></i> View</a>
+                      <a class="btn btn-xs btn-default" ng-click="showUserTab(user)"><i class="fa fa-eye"></i> View</a>
                     </td>
                   </tr>
                   </tbody>	        

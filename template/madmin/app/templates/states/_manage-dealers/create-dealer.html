@@ -1,17 +1,43 @@
-<div class="row">
+<div class="row" ng-init="init()">
           <div class="col-lg-12">
             <div class="panel panel-red">
               <div class="panel-heading">Create Dealer </div>
               <div class="panel-body pan">
                 <form ng-submit="createDealer()" class="horizontal-form">
                   <div class="form-body pal">
-                    <h3>Personal</h3>
+                    
                     <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group has-success">
+                          <label for="inputFirstName" class="control-label">Dealer Code <span class='require'>*</span></label>
+                          <div class="input-icon">
+                            <input id="inputFirstName" type="text" placeholder="Dealer Code" ng-model="dealerData.code" class="form-control" required/>
+                          </div>
+                        </div>
+                      </div>
                       <div class="col-md-6">
                         <div class="form-group has-success">
-                          <label for="inputFirstName" class="control-label">Name <span class='require'>*</span></label>
+                          <label for="inputFirstName" class="control-label">Dealer Name <span class='require'>*</span></label>
                           <div class="input-icon"><i class="fa fa-user"></i>
-                            <input id="inputFirstName" type="text" placeholder="Name" class="form-control"/>
+                            <input id="inputFirstName" type="text" placeholder="Dealer Name" ng-model="dealerData.name" class="form-control" required/>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group has-success">
+                          <label for="inputFirstName" class="control-label">Customer Group <span class='require'>*</span></label>
+                          <div class="input-icon">
+                            <input id="inputFirstName" type="text" placeholder="Customer Group" ng-model="dealerData.customerGroup" class="form-control" required/>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group has-success">
+                          <label for="inputFirstName" class="control-label">Phone <span class='require'>*</span></label>
+                          <div class="input-icon">
+                            <input id="inputFirstName" type="text" placeholder="Phone" ng-model="dealerData.phone" class="form-control" required/>
                           </div>
                         </div>
                       </div>
@@ -21,17 +47,16 @@
                         <div class="form-group">
                           <label for="inputEmail" class="control-label">Email <span class='require'>*</span></label>
                           <div class="input-icon"><i class="fa fa-envelope"></i>
-                            <input type="text" placeholder="Email Address" class="form-control"/>
+                            <input type="email" placeholder="Email Address" ng-model="dealerData.email" class="form-control" required/>
                           </div>
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label for="selPSM" class="control-label">RSM <span class='require'>*</span></label>
-                          <select id="selPSM" class="form-control">
-                            <option value="">RSM1</option>
-                            <option value="">RSM2</option>
-                            <option value="">RSM3</option>
+                          <label for="selPSM" class="control-label">Zone <span class='require'>*</span></label>
+                          <select id="selPSM" ng-model="dealerData.zone" class="form-control" required>
+                          	<option value="">Select Zone</option>
+                            <option ng-repeat="zone in zoneList" value="{{zone.id}}" >{{zone.name}}</option>
                           </select>
                         </div>
                       </div>
@@ -39,73 +64,78 @@
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label for="inputPinCodes" class="control-label">Pin-Codes</label>
-                          <tags-input ng-model="pin" display-property="pin" add-from-autocomplete-only="true">
-						      <auto-complete source="loadPin($query)"></auto-complete>
-						  </tags-input>
-                        </div>
-                      </div>
-                       <div class="col-md-6">
-                        <div class="form-group">
-                          <label for="inputllPhone" class="control-label">Landline Number 1</label>
-                          <input id="inputllPhone" type="text" placeholder="" value="000-0000000" class="form-control"/>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <label for="inputPhone1" class="control-label">Contact Number 1</label>
-                          <input id="inputPhone1" type="text" placeholder="" value="8888888888" class="form-control"/>
+                          <label for="selPSM" class="control-label">Territory <span class='require'>*</span></label>
+                          <select id="selPSM" ng-model="dealerData.territory" class="form-control" required>
+                            <option value="">Select Territory</option>
+                            <option ng-repeat="t in territoryList" value="{{t.id}}" >{{t.name}}</option>
+                          </select>
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label for="inputPhone2" class="control-label">Contact Number 2</label>
-                          <input id="inputPhone2" type="text" placeholder="" value="8888888888" class="form-control"/>
+                          <label for="selPSM" class="control-label">RSM <span class='require'>*</span></label>
+                          <select id="selPSM" ng-model="dealerData.rsm" class="form-control" required>
+                            <option value="">Select RSM</option>
+                            <option value="RSM1">RSM1</option>
+                            <option value="RSM2">RSM2</option>
+                            <option value="RSM3">RSM3</option>
+                          </select>
                         </div>
                       </div>
                     </div>
-                    <h3>Address</h3>
                     <div class="row">
                       <div class="col-md-12">
                         <div class="form-group">
-                          <label for="inputStreet" class="control-label">Street <span class='require'>*</span></label>
-                          <input id="inputStreet" type="text" placeholder="" class="form-control"/>
+                          <label for="inputPinCodes" class="control-label">Pin-Codes <span class='require'>*</span></label>
+                          <tags-input ng-model="dealerData.pins" display-property="pin" add-from-autocomplete-only="true" min-tags="1">
+						      <auto-complete source="loadPin($query)"></auto-complete>
+						  </tags-input>
+						  <p style="color: red;" ng-show="isPin"><b>*Please enter pins</b></p>
+                        </div>
+                      </div>
+                    </div>
+                   
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label for="inputStreet" class="control-label">Address Line <span class='require'>*</span></label>
+                          <textarea rows="1" cols="" ng-model="dealerData.address" class="form-control" required></textarea>
                         </div>
                       </div>
                     </div>
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label for="inputFirstName" class="control-label">District</label>
-                          <input id="inputDistrict" type="text" placeholder="" class="form-control"/>
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <label for="inputCity" class="control-label">City <span class='require'>*</span></label>
-                          <input id="inputCity" type="text" placeholder="" class="form-control"/>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <label for="inputPostCode" class="control-label">Post Code</label>
-                          <input id="inputPostCode" type="text" placeholder="" class="form-control"/>
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <label for="selCountry" class="control-label">Country</label>
-                          <select id="selCountry" class="form-control">
-                            <option value="">Select a Country</option>
-                            <option value="">United States</option>
-                            <option value="">England</option>
-                            <option value="">France</option>
-                            <option value="">Spain</option>
+                          <label for="selPSM" class="control-label">State <span class='require'>*</span></label>
+                          <select id="selPSM" ng-model="dealerData.state" class="form-control" required>
+                           <option value="">Select state</option>
+                            <option ng-repeat="state in stateList" value="{{state.id}}" >{{state.name}}</option>
                           </select>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="selPSM" class="control-label">District <span class='require'>*</span></label>
+                          <select id="selPSM" ng-model="dealerData.district" class="form-control" required>
+                            <option value="">Select District</option>
+                            <option ng-repeat="district in districtList" value="{{district.id}}" >{{district.name}}</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group has-success">
+                          <label for="inputFirstName" class="control-label">Sub District <span class='require'>*</span></label>
+                          <div class="input-icon">
+                            <input id="inputFirstName" type="text" ng-model="dealerData.subdist" placeholder="Sub District" class="form-control" required/>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="inputPostCode" class="control-label">Zip Code <span class='require'>*</span></label>
+                          <input id="inputPostCode" type="text" ng-model="dealerData.zipCode" placeholder="Zip Code" class="form-control" required/>
                         </div>
                       </div>
                     </div>
