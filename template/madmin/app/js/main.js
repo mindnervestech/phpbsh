@@ -553,7 +553,9 @@ App.config(['$stateProvider', '$urlRouterProvider',
                                 'vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js',
                                 'vendors/DataTables/extensions/Pagination/input.js',
                                 'vendors/DataTables/extensions/ColumnFilter/jquery.dataTables.columnFilter.js',
-                               
+					        'vendors/moment/moment.js',
+					        'vendors/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js',
+					        'vendors/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css',
                                 ]
                      });
                 }]
@@ -1678,12 +1680,30 @@ App.controller('ChartsChartJsController', function ($scope, $routeParams){
 });
 App.controller('ManageLeadsTableCtrl',function($scope, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){
 	var vm = this;
-    vm.orders = [];
-    vm.leadHistory = [];
-    var search_html;
-    search_html = '<div class="input-group input-group-sm mbs">';
-    search_html += "_INPUT_";
-    search_html += '</div>';
+	vm.orders = [];
+	vm.leadHistory = [];
+	vm.lead = {};
+	var search_html;
+	search_html = '<div class="input-group input-group-sm mbs">';
+	search_html += "_INPUT_";
+	search_html += '</div>';
+	$scope.editLeadTab = function(id) {
+
+			$('#myLeads').hide();
+			$('#gotoManage').show();
+			$('#leadDetails').show();
+			$('#leadHistory').show();
+			$('#leadDetailsTab').click();
+	}
+
+	$scope.manageLeadTab = function() {
+		console.log("manageLeadTab");
+		$('#myLeads').show();
+		$('#gotoManage').hide();
+		$('#leadDetails').hide();
+		$('#leadHistory').hide();
+		$('#myLeadsTab').click();
+	}
 
     vm.dtOptions = DTOptionsBuilder.newOptions()
       .withBootstrap()
@@ -1733,6 +1753,24 @@ App.controller('ManageLeadsTableCtrl',function($scope, DTOptionsBuilder, DTColum
       });
     };
 
+	getDisposition1 = function(name){
+		angular.forEach( $scope.dispositoion1, function(dispo) {
+			if(dispo.name == name){
+				$scope.dropdown = dispo;
+				$scope.selectDropdown1(dispo);
+			}
+		});
+	}
+
+	getDisposition2 = function(name){
+		angular.forEach( $scope.dropdown, function(dispo) {
+			if(dispo.name == name){
+				$scope.selectDropdown2(dispo);
+				$scope.category = dispo;
+			}
+		});
+	}
+
     $resource('/template/madmin/app/file/get-lead.json').query().$promise.then(function(orders) {
       vm.orders = orders;
       
@@ -1742,10 +1780,10 @@ App.controller('ManageLeadsTableCtrl',function($scope, DTOptionsBuilder, DTColum
         vm.history = histories;
         
       });
-    
-    $scope.dispositoion2=[];
-    $scope.dispositoion1=[
-	               { 
+	$scope.dropdown = {};
+	$scope.dispositoion2=[];
+	$scope.dispositoion1=[
+	                      /*{ 
 	            	   id: 1, 
 	            	   name: 'New',
 	            	   dispositoion2:[
@@ -1755,40 +1793,40 @@ App.controller('ManageLeadsTableCtrl',function($scope, DTOptionsBuilder, DTColum
 		   	            	   action: 'Nothing'
 		   	               }
 		   	          ]
-	               },{ 
+	               },*/{ 
 	            	   id: 2, 
 	            	   name: 'Contacted',
 	            	   dispositoion2:[
-		   	               { 
-		   	            	   name: 'Call Back' , 
-		   	            	   action: 1
-		   	               },{ 
-		   	            	   name: 'Quote Sent' , 
-		   	            	   action: 1
-		   	               },{ 
-		   	            	   name: 'Visiting Store' , 
-		   	            	   action: 1
-		   	               },{ 
-		   	            	   name: 'Lost' , 
-		   	            	   action: 0
-		   	               },{ 
-		   	            	   name: 'Won' , 
-		   	            	   action: 0
-		   	               }
-		   	          ]
+	            	                  { 
+	            	                	  name: 'Call Back' , 
+	            	                	  action: 1
+	            	                  },{ 
+	            	                	  name: 'Quote Sent' , 
+	            	                	  action: 1
+	            	                  },{ 
+	            	                	  name: 'Visiting Store' , 
+	            	                	  action: 1
+	            	                  },{ 
+	            	                	  name: 'Lost' , 
+	            	                	  action: 0
+	            	                  },{ 
+	            	                	  name: 'Won' , 
+	            	                	  action: 0
+	            	                  }
+	            	                  ]
 	               },{ 
 	            	   id: 3, 
 	            	   name: 'Tried Contacted',
 	            	   dispositoion2:[
-	            	       { 
-		   	            	   name: 'Not Contacted' , 
-		   	            	   action: 0
-		   	               },{ 
-		   	            	   name: 'Lost' , 
-		   	            	   action: 0
-		   	               }
-		   	          ]
-	               },{ 
+	            	                  { 
+	            	                	  name: 'Not Contacted' , 
+	            	                	  action: 0
+	            	                  },{ 
+	            	                	  name: 'Lost' , 
+	            	                	  action: 0
+	            	                  }
+	            	                  ]
+	               }/*,{ 
 	            	   id: 4, 
 	            	   name: 'Escalated',
 	            	   dispositoion2:[
@@ -1798,18 +1836,25 @@ App.controller('ManageLeadsTableCtrl',function($scope, DTOptionsBuilder, DTColum
 		   	            	   action: 'Nothing'
 		   	               }
 		   	          ]
-	               }
-           ];
-    
+	               }*/
+	               ];
+
+
 	$scope.selectDropdown1 = function(data){
+		vm.lead.disposition1 = data.name;
 		$('#desposition2').show();
-		if(data.dispositoion2[0].name == 'Nothing'){
+		$("#reason").hide();
+		$("#date").hide();
+		/*if(data.dispositoion2[0].name == 'Nothing'){
 			$('#desposition2').hide();
-		}
+		}*/
 		$scope.dispositoion2 = data.dispositoion2;
 	};
-	
+
 	$scope.selectDropdown2 = function(data){
+		vm.lead.disposition2 = data.name;
+		$("#reason").hide();
+		$("#date").hide();
 		if(data.action == 0){
 			console.log(data.action);
 			$("#reason").show();
@@ -1819,15 +1864,18 @@ App.controller('ManageLeadsTableCtrl',function($scope, DTOptionsBuilder, DTColum
 				console.log(data.action);
 				$("#reason").hide();
 				$("#date").show();
-			} else {
-				console.log(data.action);
-				$("#reason").hide();
-				$("#date").hide();
-			}
+			} 
 		}
 	};
-	
-    
+
+	$scope.updateLead = function(){
+		console.log(vm.lead);
+		$http({method:'POST',url:'/webapp/api/business/updateLead',data: vm.lead}).success(function(response) {
+			console.log(response);
+		});
+	}
+
+
 });
 
 App.controller('ManageRolesTableCtrl',function($scope, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){

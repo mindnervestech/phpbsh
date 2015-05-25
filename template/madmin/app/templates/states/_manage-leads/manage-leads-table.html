@@ -37,7 +37,7 @@
                     <td>{{ order.product }}</td>
                     <td>{{ order.status }}</td>
                     <td>
-                      <a ui-sref="edit-leads" class="btn btn-xs btn-default"><i class="fa fa-eye"></i> Edit</a>
+                      <a class="btn btn-xs btn-default"  data-ng-click="editLeadTab(order.id)" ><i class="fa fa-eye"></i> Edit</a>
                       
                     </td>
                   </tr>
