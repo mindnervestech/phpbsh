@@ -54,7 +54,7 @@
                       <div class="col-md-6">
                         <div class="form-group">
                           <label for="inputBirthday" class="control-label">Role</label>
-                          <select id="selPSM" ng-model="userData.role" class="form-control" required>
+                          <select id="selPSM" ng-model="userData.roleName" class="form-control" required>
                           	<option value="">Select Role</option>
                             <option ng-repeat="role in roleList" value="{{role.roleId}}" >{{role.name}}</option>
                           </select>
@@ -63,7 +63,7 @@
                       <div class="col-md-6">
                         <div class="form-group">
                           <label for="inputPhone" class="control-label">Zone</label>
-                          <select id="selPSM" ng-model="userData.zone" class="form-control" required>
+                          <select id="selPSM" ng-model="userData.zoneName" class="form-control" required>
                           	<option value="">Select Zone</option>
                             <option ng-repeat="zone in zoneList" value="{{zone.id}}" >{{zone.name}}</option>
                           </select>
@@ -76,8 +76,8 @@
               <div class="col-md-6">
 	              	<div class="btn-group btn-group-sm mbm"><a id="select-all" class="btn btn-white" ng-click="selectAllFun()">select all</a><a id="deselect-all" class="btn btn-white" ng-click="deselectAll()">deselect all</a>
 	             	</div>
-	                <select id="pre-selected-options" multiple="multiple">
-	                 <option ng-repeat="product in productList" value="{{product.name}}">{{product.name}}</option>
+	                <select id="pre-selected-options" multiple="multiple" data-ng-model="userData.productlist">
+	                 <option ng-repeat="product in productList" value="{{product.id}}">{{product.name}}</option>
 	                </select>
             	</div>                                
                                                 

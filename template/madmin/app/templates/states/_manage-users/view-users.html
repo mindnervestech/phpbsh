@@ -3,7 +3,7 @@
             <div class="panel panel-red">
               <div class="panel-heading">View User</div>
               <div class="panel-body pan">
-                <form ng-submit="editUser(showCase.user)" class="horizontal-form">
+                <form data-ng-submit="editUser(showCase.user)" class="horizontal-form">
                   <div class="form-body pal">
                     <h3>Personal</h3>
                     <div class="row">
@@ -76,8 +76,8 @@
               <div class="col-md-6">
 	              	<div class="btn-group btn-group-sm mbm"><a id="select-all" class="btn btn-white" ng-click="selectAllFun()">select all</a><a id="deselect-all" class="btn btn-white" ng-click="deselectAll()">deselect all</a>
 	             	</div>
-	                <select id="pre-selected-options" multiple="multiple">
-	                 <option ng-repeat="product in productList" value="{{product.id}}">{{product.name}}</option>
+	                <select id="pre-selected-options1" multiple="multiple" data-ng-model="showCase.user.productList">
+	                 <option ng-repeat="product in showCase.user.products" value="{{product.id}}" data-ng-selected="{{product.selected}}">{{product.name}}</option>
 	                </select>
             	</div>                                
                                                 

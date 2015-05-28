@@ -29,7 +29,7 @@
                     <td>{{ user.name }}</td>
                     <td>{{ user.email }}</td>
                     <td>{{ user.phone }}</td>
-                    <td><a data-ng-repeat="pin in user.pinsList" class="label " style="float:left; margin: 2px; background: gray;border-radius: 0px !important;font-size: 11px; font-weight:700;">{{pin }}</a></td>
+                    <td><a data-ng-repeat="pin in user.pins" class="label " style="float:left; margin: 2px; background: gray;border-radius: 0px !important;font-size: 11px; font-weight:700;">{{pin.pin}}</a></td>
                     <td>{{ user.rsm }}</td>
                     <td>
                       <a class="btn btn-xs btn-default" ng-click="showDealerTab(user)"><i class="fa fa-eye"></i> View</a>

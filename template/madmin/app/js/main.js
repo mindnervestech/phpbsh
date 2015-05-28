@@ -539,9 +539,9 @@ App.config(['$stateProvider', '$urlRouterProvider',
         .state('manage-leads', {
             url: "/manage-leads", 
             templateUrl: 'templates/states/manage-leads.html',
-            controller: 'ManageController', 
+            controller: 'ManageLeadsTableCtrl as showCase', 
             data : {},
-            resolve: { 
+            resolve: {
                 loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
                      return $ocLazyLoad.load({
                         files: [
@@ -653,6 +653,94 @@ App.config(['$stateProvider', '$urlRouterProvider',
                                 'vendors/DataTables/extensions/Pagination/input.js',
                                 'vendors/DataTables/extensions/ColumnFilter/jquery.dataTables.columnFilter.js',
                                 'vendors/multi-select/css/multi-select-madmin.css',
+                                ]
+                     });
+                }]
+            }
+        })
+        .state('dealer-config', {
+            url: "/dealer-config", 
+            templateUrl: 'templates/states/dealer-config.html',
+            controller: 'DealerConfigCtrl', 
+            resolve: { 
+                loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+                     return $ocLazyLoad.load({
+                        files: ['vendors/jquery-tablesorter/themes/blue/style-custom.css',
+                                'vendors/jquery-tablesorter/jquery.tablesorter.js',
+                                'vendors/DataTables/media/css/jquery.dataTables.css',
+                                'vendors/DataTables/extensions/TableTools/css/dataTables.tableTools.min.css',
+                                'vendors/DataTables/media/css/dataTables.bootstrap.css',
+                                'vendors/DataTables/media/js/jquery.dataTables.js',
+                                'vendors/DataTables/media/js/dataTables.bootstrap.js',
+                                'vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js',
+                                'vendors/DataTables/extensions/Pagination/input.js',
+                                'vendors/DataTables/extensions/ColumnFilter/jquery.dataTables.columnFilter.js',
+                                'vendors/jquery-toastr/toastr.min.css',
+                                'vendors/jquery-toastr/toastr.min.js'
+                               ]
+                     });
+                }]
+            }
+        })
+        .state('general-config', {
+            url: "/general-config", 
+            templateUrl: 'templates/states/general-config.html',
+            controller: 'GeneralConfigCtrl', 
+            resolve: { 
+                loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+                     return $ocLazyLoad.load({
+                        files: ['vendors/jquery-tablesorter/themes/blue/style-custom.css',
+                                'vendors/jquery-toastr/toastr.min.css',
+                                'vendors/jquery-toastr/toastr.min.js']
+                     });
+                }]
+            }
+        })
+        .state('escalated-leads', {
+            url: "/escalated-leads", 
+            templateUrl: 'templates/states/escalated-leads.html',
+            controller: 'EscalatedLeadsCtrl', 
+            data : {},
+            resolve: { 
+                loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+                     return $ocLazyLoad.load({
+                        files: [
+                                'vendors/DataTables/media/css/jquery.dataTables.css',
+                                'vendors/DataTables/extensions/TableTools/css/dataTables.tableTools.min.css',
+                                'vendors/DataTables/media/css/dataTables.bootstrap.css',
+                                'vendors/DataTables/media/js/jquery.dataTables.js',
+                                'vendors/DataTables/media/js/dataTables.bootstrap.js',
+                                'vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js',
+                                'vendors/DataTables/extensions/Pagination/input.js',
+                                'vendors/DataTables/extensions/ColumnFilter/jquery.dataTables.columnFilter.js',
+					        'vendors/moment/moment.js',
+					        'vendors/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js',
+					        'vendors/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css',
+                                ]
+                     });
+                }]
+            }
+        })
+        .state('follow-up-leads', {
+            url: "/follow-up-leads", 
+            templateUrl: 'templates/states/manage-leads.html',
+            controller: 'FollowUpLeadsCtrl  as showCase', 
+            data : {},
+            resolve: { 
+                loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+                     return $ocLazyLoad.load({
+                        files: [
+                                'vendors/DataTables/media/css/jquery.dataTables.css',
+                                'vendors/DataTables/extensions/TableTools/css/dataTables.tableTools.min.css',
+                                'vendors/DataTables/media/css/dataTables.bootstrap.css',
+                                'vendors/DataTables/media/js/jquery.dataTables.js',
+                                'vendors/DataTables/media/js/dataTables.bootstrap.js',
+                                'vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js',
+                                'vendors/DataTables/extensions/Pagination/input.js',
+                                'vendors/DataTables/extensions/ColumnFilter/jquery.dataTables.columnFilter.js',
+					        'vendors/moment/moment.js',
+					        'vendors/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js',
+					        'vendors/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css',
                                 ]
                      });
                 }]
@@ -1238,6 +1326,35 @@ App.config(['$stateProvider', '$urlRouterProvider',
     ;
 }]);
 
+App.factory('MyHttpInterceptor', function ($q) {
+	   return {
+	     request: function (config) {
+	                 $('#loading-id').show();
+	                 return config || $q.when(config);           
+	     },
+
+	     requestError: function (rejection) {
+	                 $('#loading-id').hide();
+	         return $q.reject(rejection);
+	     },
+
+	     // On response success
+	     response: function (response) {
+	                 $('#loading-id').hide();
+	         return response || $q.when(response);
+	     },
+
+	     // On response failture
+	     responseError: function (rejection) {
+	                 $('#loading-id').hide();
+	         return $q.reject(rejection);
+	     }
+	   };
+	});
+	App.config(function ($httpProvider) {
+	  $httpProvider.interceptors.push('MyHttpInterceptor');  
+	})
+
 App.run(function($rootScope, $state, $location, Auth) {
 	$rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState) {
 	    
@@ -1323,6 +1440,42 @@ App.controller('LoginController',function ($scope, $rootScope, $location, $http,
 App.controller('AppController', function ($scope, $rootScope, $routeParams, $location){
     $rootScope.style = 'style1';
     $rootScope.theme = 'pink-blue';
+    
+    $scope.showMessage = function(msgType, msg){
+    	var shortCutFunction = msgType;
+		var title = '';
+        var msg = msg;
+        toastr.options = {
+            closeButton: true,
+            debug: false,
+            positionClass: 'toast-top-right',
+            onclick: null
+        };
+        $("#toastrOptions").text("Command: toastr["
+                + shortCutFunction
+                + "](\""
+                + msg
+                + (title ? "\", \"" + title : '')
+                + "\")\n\ntoastr.options = "
+                + JSON.stringify(toastr.options, null, 2)
+        );
+
+        var $toast = toastr[shortCutFunction](msg, title); // Wire up an event handler to a button in the toast, if it exists
+        $toastlast = $toast;
+        if ($toast.find('#okBtn').length) {
+            $toast.delegate('#okBtn', 'click', function () {
+                alert('you clicked me. i was toast #' + toastIndex + '. goodbye!');
+                $toast.remove();
+            });
+        }
+        if ($toast.find('#surpriseBtn').length) {
+            $toast.delegate('#surpriseBtn', 'click', function () {
+                alert('Surprise! you clicked me. i was toast #' + toastIndex + '. You could perform an action here.');
+            });
+        }
+        toastr.options.hideDuration = "3000";
+
+    }
     
     $scope.dashboard = {
     		progressBar:{
@@ -1684,22 +1837,36 @@ App.controller('ChartsChartJsController', function ($scope, $routeParams){
     });
     //END PORTLET
 });
-App.controller('ManageLeadsTableCtrl',function($scope, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){
+
+App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){
 	var vm = this;
 	vm.orders = [];
 	vm.leadHistory = [];
 	vm.lead = {};
+	$timeout(function(){
+		$http.get('/webapp/api/business/getLeads').success(function(orders){
+			vm.orders = orders;
+		});
+	}, 100);
+
 	var search_html;
 	search_html = '<div class="input-group input-group-sm mbs">';
 	search_html += "_INPUT_";
 	search_html += '</div>';
 	$scope.editLeadTab = function(id) {
 
+		$http.get('/webapp/api/business/lead/'+id).success(function(data){
+			vm.lead = data;
+			getDisposition1(data.disposition1);
+			getDisposition2(data.disposition2);
 			$('#myLeads').hide();
 			$('#gotoManage').show();
 			$('#leadDetails').show();
 			$('#leadHistory').show();
 			$('#leadDetailsTab').click();
+		});
+		
+
 	}
 
 	$scope.manageLeadTab = function() {
@@ -1777,15 +1944,6 @@ App.controller('ManageLeadsTableCtrl',function($scope, DTOptionsBuilder, DTColum
 		});
 	}
 
-    $resource('/template/madmin/app/file/get-lead.json').query().$promise.then(function(orders) {
-      vm.orders = orders;
-      
-    });
-    
-    $resource('/template/madmin/app/file/lead-history.json').query().$promise.then(function(histories) {
-        vm.history = histories;
-        
-      });
 	$scope.dropdown = {};
 	$scope.dispositoion2=[];
 	$scope.dispositoion1=[
@@ -1859,10 +2017,16 @@ App.controller('ManageLeadsTableCtrl',function($scope, DTOptionsBuilder, DTColum
 
 	$scope.selectDropdown2 = function(data){
 		vm.lead.disposition2 = data.name;
+		console.log(data.name+" ::::: "+$scope.dispositoion2[1].name)
+		if(angular.equals(data.name, $scope.dispositoion2[1].name)){
+			console.log("::::: "+!vm.lead.isLost)
+			$scope.showMessage("warning","can not able to select lost")
+			vm.lead.disposition2 = "Not Contacted"
+		}
+			//showMessage = function(msg, msgType){
 		$("#reason").hide();
 		$("#date").hide();
 		if(data.action == 0){
-			console.log(data.action);
 			$("#reason").show();
 			$("#date").hide();
 		} else {
@@ -1970,23 +2134,11 @@ App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColum
     search_html = '<div class="input-group input-group-sm mbs">';
     search_html += "_INPUT_";
     search_html += '</div>';
-
+/*
     setTimeout(function(){
         $('#pre-selected-options').multiSelect();
-    },500);
-    
-    $scope.init = function() {
-    	$http({method:'GET',url:'/webapp/api/business/getDetailsForUser'})
-		.success(function(data) {
-			console.log(data);
-			$scope.zoneList = data.zoneList;
-			$scope.stateList = data.stateList;
-			$scope.districtList = data.districtList;
-			$scope.roleList = data.roleList;
-			$scope.productList = data.productList;
-			vm.users = data.userList;
-		});
-    }
+        $('#pre-selected-options1').multiSelect();
+    },500);*/
     
     vm.dtOptions = DTOptionsBuilder.newOptions()
       .withBootstrap()
@@ -2027,13 +2179,11 @@ App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColum
     vm.selectedAll = false;
 
     vm.selectAll = function () {
-
       if ($scope.selectedAll) {
         $scope.selectedAll = false;
       } else {
         $scope.selectedAll = true;
       }
-
       angular.forEach(vm.orders, function(order) {
         order.selected = $scope.selectedAll;
       });
@@ -2042,30 +2192,50 @@ App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColum
     /*$resource('/template/madmin/app/file/get-users.json').query().$promise.then(function(users) {
       vm.users = users;
     });*/
+
+    $scope.init = function() {
+    	$http({method:'GET',url:'/webapp/api/business/getDetailsForUser'})
+		.success(function(data) {
+			console.log(data);
+			$scope.zoneList = data.zoneList;
+			$scope.stateList = data.stateList;
+			$scope.districtList = data.districtList;
+			$scope.roleList = data.roleList;
+			$scope.productList = data.productList;
+			vm.users = data.userList;
+			
+		});
+    }
     
-    $resource('/template/madmin/app/file/lead-history.json').query().$promise.then(function(histories) {
-        vm.history = histories;
-        
-      });
+    $scope.selectedProducts = [];
     
     $scope.selectAllFun = function() {
-            $('#pre-selected-options').multiSelect('select_all');
+         $('#pre-selected-options').multiSelect('select_all');
+         $('#pre-selected-options1').multiSelect('deselect_all');
     }
     
     $scope.deselectAll = function() {
     	 $('#pre-selected-options').multiSelect('deselect_all');
+    	 $('#pre-selected-options1').multiSelect('deselect_all');
     }	
         
+    setTimeout(function(){
+        $('#pre-selected-options').multiSelect();
+    },500);
     
     $scope.hideUserTab = function() {
     	$('#userTab').hide();
     }
     
     $scope.showUserTab = function(user) {
-    	
     	vm.user = user;
+    	$('#pre-selected-options1').multiSelect('deselect_all');
+    	console.log(vm.user.products);
     	$('#userTab').removeAttr("style");
     	$('#viewUserTab').click();
+    	setTimeout(function(){
+            $('#pre-selected-options1').multiSelect();
+        },500);
     }
     
     
@@ -2080,7 +2250,7 @@ App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColum
     }
     
     $scope.editUser = function(user) {
-    	
+    	console.log(user);
     	$http({method:'POST',url:'/webapp/api/business/updateUser',data:user}).success(function(data) {
 			console.log('success');
 			vm.users = data;
@@ -2180,7 +2350,7 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     
     
     $scope.loadPin = function(query) {
-    	return $http.get('/webapp/api/business/getPincodes');
+    	return $http.get('/webapp/api/business/getPincodes?query='+query);
     };
    
     
@@ -2251,6 +2421,571 @@ App.controller('ProductMappingCtrl', function ($scope, $routeParams, $resource){
 	    });*/
 	};
     
+});
+
+App.controller('DealerConfigCtrl', function ($scope, $http, $routeParams, $resource){
+
+    $scope.loadPin = function(query) {
+    	return $http.get('/webapp/api/business/getPincodes?query='+query);
+    };
+    
+    $scope.zipcode =[];
+    $scope.dealerConfig =[];
+    $scope.onTagAdded = function(newTag) {
+    	$scope.zipcode.length = 0 ;
+    	$scope.zipcode.push(newTag);
+    	console.log($scope.zipcode);
+    	$http.get('/webapp/api/business/getDealersByZipCode/'+$scope.zipcode[0].pin).success(function(data){
+    		console.log(data);
+    		$scope.dealerConfig = data;
+    	});
+    }
+    
+    $scope.updateDealerConfig = function(){
+    	var totalPercnt = 0;
+    	angular.forEach($scope.dealerConfig, function(dealer) {
+    		totalPercnt = parseFloat(totalPercnt) + parseFloat(dealer.percentage);
+    		console.log("percentage :: "+totalPercnt);
+    	});
+    	if(totalPercnt == 99.99 ||  totalPercnt == 100){
+    		$http({method:'POST',url:'/webapp/api/business/updateDealerConfig',data: $scope.dealerConfig}).success(function(response) {
+    			console.log("success");
+    			var shortCutFunction = "success";
+        		var title = '';
+                var msg = "Successfull Saved";
+                toastr.options = {
+                    closeButton: true,
+                    debug: false,
+                    positionClass: 'toast-top-right',
+                    onclick: null
+                };
+                $("#toastrOptions").text("Command: toastr["
+                        + shortCutFunction
+                        + "](\""
+                        + msg
+                        + (title ? "\", \"" + title : '')
+                        + "\")\n\ntoastr.options = "
+                        + JSON.stringify(toastr.options, null, 2)
+                );
+
+                var $toast = toastr[shortCutFunction](msg, title); // Wire up an event handler to a button in the toast, if it exists
+                $toastlast = $toast;
+                if ($toast.find('#okBtn').length) {
+                    $toast.delegate('#okBtn', 'click', function () {
+                        alert('you clicked me. i was toast #' + toastIndex + '. goodbye!');
+                        $toast.remove();
+                    });
+                }
+                if ($toast.find('#surpriseBtn').length) {
+                    $toast.delegate('#surpriseBtn', 'click', function () {
+                        alert('Surprise! you clicked me. i was toast #' + toastIndex + '. You could perform an action here.');
+                    });
+                }
+                toastr.options.hideDuration = "3000";
+    		});
+    	} else {
+    		var shortCutFunction = "warning";
+    		var title = '';
+            var msg = "Please Check Percentage";
+            toastr.options = {
+                closeButton: true,
+                debug: false,
+                positionClass: 'toast-top-right',
+                onclick: null
+            };
+            $("#toastrOptions").text("Command: toastr["
+                    + shortCutFunction
+                    + "](\""
+                    + msg
+                    + (title ? "\", \"" + title : '')
+                    + "\")\n\ntoastr.options = "
+                    + JSON.stringify(toastr.options, null, 2)
+            );
+
+            var $toast = toastr[shortCutFunction](msg, title); // Wire up an event handler to a button in the toast, if it exists
+            $toastlast = $toast;
+            if ($toast.find('#okBtn').length) {
+                $toast.delegate('#okBtn', 'click', function () {
+                    alert('you clicked me. i was toast #' + toastIndex + '. goodbye!');
+                    $toast.remove();
+                });
+            }
+            if ($toast.find('#surpriseBtn').length) {
+                $toast.delegate('#surpriseBtn', 'click', function () {
+                    alert('Surprise! you clicked me. i was toast #' + toastIndex + '. You could perform an action here.');
+                });
+            }
+            toastr.options.hideDuration = "3000";
+    	}
+    }
+
+    
+});
+
+App.controller('GeneralConfigCtrl', function ($scope, $http){
+	$scope.general = {};
+	$http.get('/webapp/api/business/getGeneralConfig').success(function(data){
+		$scope.general = data;
+		console.log(data);
+	});
+	
+	$scope.updateGeneralConfig = function(){
+		console.log($scope.general);
+		$http({method:'POST',url:'/webapp/api/business/updateGeneralConfig',data: $scope.general}).success(function(response) {
+			var shortCutFunction = "success";
+    		var title = '';
+            var msg = "Successfull Saved";
+            toastr.options = {
+                closeButton: true,
+                debug: false,
+                positionClass: 'toast-top-right',
+                onclick: null
+            };
+            $("#toastrOptions").text("Command: toastr["
+                    + shortCutFunction
+                    + "](\""
+                    + msg
+                    + (title ? "\", \"" + title : '')
+                    + "\")\n\ntoastr.options = "
+                    + JSON.stringify(toastr.options, null, 2)
+            );
+
+            var $toast = toastr[shortCutFunction](msg, title); // Wire up an event handler to a button in the toast, if it exists
+            $toastlast = $toast;
+            if ($toast.find('#okBtn').length) {
+                $toast.delegate('#okBtn', 'click', function () {
+                    alert('you clicked me. i was toast #' + toastIndex + '. goodbye!');
+                    $toast.remove();
+                });
+            }
+            if ($toast.find('#surpriseBtn').length) {
+                $toast.delegate('#surpriseBtn', 'click', function () {
+                    alert('Surprise! you clicked me. i was toast #' + toastIndex + '. You could perform an action here.');
+                });
+            }
+            toastr.options.hideDuration = "3000";
+
+		});
+	}
+});
+
+App.controller('EscalatedLeadsCtrl',function($scope, $http, DTOptionsBuilder, manageLeadsService, DTColumnDefBuilder, DTColumnBuilder,$resource){
+	var vm = this;
+	vm.orders = [];
+	vm.leadHistory = [];
+	vm.lead = {};
+	var search_html;
+	search_html = '<div class="input-group input-group-sm mbs">';
+	search_html += "_INPUT_";
+	search_html += '</div>';
+	$scope.editLeadTab = function(id) {
+		$http.get('/webapp/api/business/lead/'+id).success(function(data){
+			$http.get('/webapp/api/business/lead/history/'+id).success(function(orders){
+				vm.lead = data;
+				getDisposition1(data.disposition1);
+				getDisposition2(data.disposition2);
+				vm.leadHistory = orders;
+				$('#myLeads').hide();
+				$('#gotoManage').show();
+				$('#leadDetails').show();
+				$('#leadHistory').show();
+				$('#leadDetailsTab').click();
+				console.log(vm.leadHistory );
+			});
+			
+		});
+		
+		
+
+	}
+
+	$scope.manageLeadTab = function() {
+		console.log("manageLeadTab");
+		$('#myLeads').show();
+		$('#gotoManage').hide();
+		$('#leadDetails').hide();
+		$('#leadHistory').hide();
+		$('#myLeadsTab').click();
+	}
+
+    vm.dtOptions = DTOptionsBuilder.newOptions()
+      .withBootstrap()
+      .withOption('order', [[0, 'asc']])
+      .withTableTools('/template/madmin/app/vendors/DataTables/extensions/TableTools/swf/copy_csv_xls_pdf.swf')
+      .withTableToolsButtons(
+           [
+              "csv",
+              "xls",
+              'print'
+          ] 
+      )
+      //.withDOM('<"row"<"col-md-8 col-sm-12"<"inline-controls"l>><"col-md-4 col-sm-12"<"pull-right"f>>>t<"row"<"col-md-4 col-sm-12"<"inline-controls"l>><"col-md-4 col-sm-12"<"inline-controls text-center"i>><"col-md-4 col-sm-12"p>>')
+      .withLanguage({
+        "sLengthMenu": 'View _MENU_ records',
+        "sInfo":  'Found _TOTAL_ records',
+        "oPaginate": {
+          "sPage":    "Page",
+          "sPageOf":  "of"
+        },
+        "sSearch": search_html
+      })
+      .withPaginationType('input')
+      //.withScroller()
+      //.withOption("sScrollY", false)
+      //.withOption("sScrollX")
+      .withColumnFilter();
+
+
+    vm.dtColumnDefs = [
+      //DTColumnDefBuilder.newColumnDef(0).notSortable(),
+      DTColumnDefBuilder.newColumnDef(4).notSortable()
+    ];
+
+    vm.selectedAll = false;
+
+    vm.selectAll = function () {
+
+      if ($scope.selectedAll) {
+        $scope.selectedAll = false;
+      } else {
+        $scope.selectedAll = true;
+      }
+
+      angular.forEach(vm.orders, function(order) {
+        order.selected = $scope.selectedAll;
+      });
+    };
+
+	getDisposition1 = function(name){
+		angular.forEach( $scope.dispositoion1, function(dispo) {
+			if(dispo.name == name){
+				$scope.dropdown = dispo;
+				$scope.selectDropdown1(dispo);
+			}
+		});
+	}
+
+	getDisposition2 = function(name){
+		angular.forEach( $scope.dropdown, function(dispo) {
+			if(dispo.name == name){
+				$scope.selectDropdown2(dispo);
+				$scope.category = dispo;
+			}
+		});
+	}
+
+	$http.get('/webapp/api/business/getEscalatedLeads').success(function(orders){
+		vm.orders = orders;
+		console.log(orders);
+	});
+
+	$scope.dropdown = {};
+	$scope.dispositoion2=[];
+	$scope.dispositoion1=[
+	                      /*{ 
+	            	   id: 1, 
+	            	   name: 'New',
+	            	   dispositoion2:[
+		   	               { 
+		   	            	   id: 1,
+		   	            	   name: 'Nothing' , 
+		   	            	   action: 'Nothing'
+		   	               }
+		   	          ]
+	               },*/{ 
+	            	   id: 2, 
+	            	   name: 'Contacted',
+	            	   dispositoion2:[
+	            	                  { 
+	            	                	  name: 'Call Back' , 
+	            	                	  action: 1
+	            	                  },{ 
+	            	                	  name: 'Quote Sent' , 
+	            	                	  action: 1
+	            	                  },{ 
+	            	                	  name: 'Visiting Store' , 
+	            	                	  action: 1
+	            	                  },{ 
+	            	                	  name: 'Lost' , 
+	            	                	  action: 0
+	            	                  },{ 
+	            	                	  name: 'Won' , 
+	            	                	  action: 0
+	            	                  }
+	            	                  ]
+	               },{ 
+	            	   id: 3, 
+	            	   name: 'Tried Contacted',
+	            	   dispositoion2:[
+	            	                  { 
+	            	                	  name: 'Not Contacted' , 
+	            	                	  action: 0
+	            	                  },{ 
+	            	                	  name: 'Lost' , 
+	            	                	  action: 0
+	            	                  }
+	            	                  ]
+	               }/*,{ 
+	            	   id: 4, 
+	            	   name: 'Escalated',
+	            	   dispositoion2:[
+		   	               { 
+		   	            	   id: 1,
+		   	            	   name: 'Nothing' , 
+		   	            	   action: 'Nothing'
+		   	               }
+		   	          ]
+	               }*/
+	               ];
+
+
+	$scope.selectDropdown1 = function(data){
+		vm.lead.disposition1 = data.name;
+		$('#desposition2').show();
+		$("#reason").hide();
+		$("#date").hide();
+		/*if(data.dispositoion2[0].name == 'Nothing'){
+			$('#desposition2').hide();
+		}*/
+		$scope.dispositoion2 = data.dispositoion2;
+	};
+
+	$scope.selectDropdown2 = function(data){
+		vm.lead.disposition2 = data.name;
+		$("#reason").hide();
+		$("#date").hide();
+		if(data.action == 0){
+			console.log(data.action);
+			$("#reason").show();
+			$("#date").hide();
+		} else {
+			if(data.action == 1){
+				console.log(data.action);
+				$("#reason").hide();
+				$("#date").show();
+			} 
+		}
+	};
+
+	$scope.updateLead = function(){
+		console.log(vm.lead);
+		$http({method:'POST',url:'/webapp/api/business/updateLead',data: vm.lead}).success(function(response) {
+			console.log(response);
+		});
+	}
+
+
+});
+
+
+App.controller('FollowUpLeadsCtrl',function($scope,$timeout, $http, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){
+	var vm = this;
+	vm.orders = [];
+	vm.leadHistory = [];
+	vm.lead = {};
+	$timeout(function(){
+		$http.get('/webapp/api/business/getFollowUpLeads').success(function(orders){
+			vm.orders = orders;
+		});
+	}, 100);
+
+	var search_html;
+	search_html = '<div class="input-group input-group-sm mbs">';
+	search_html += "_INPUT_";
+	search_html += '</div>';
+	$scope.editLeadTab = function(id) {
+
+		$http.get('/webapp/api/business/lead/'+id).success(function(data){
+			vm.lead = data;
+			getDisposition1(data.disposition1);
+			getDisposition2(data.disposition2);
+			$('#myLeads').hide();
+			$('#gotoManage').show();
+			$('#leadDetails').show();
+			$('#leadHistory').show();
+			$('#leadDetailsTab').click();
+		});
+		
+
+	}
+
+	$scope.manageLeadTab = function() {
+		console.log("manageLeadTab");
+		$('#myLeads').show();
+		$('#gotoManage').hide();
+		$('#leadDetails').hide();
+		$('#leadHistory').hide();
+		$('#myLeadsTab').click();
+	}
+
+    vm.dtOptions = DTOptionsBuilder.newOptions()
+      .withBootstrap()
+      .withOption('order', [[0, 'asc']])
+      .withTableTools('/template/madmin/app/vendors/DataTables/extensions/TableTools/swf/copy_csv_xls_pdf.swf')
+      .withTableToolsButtons(
+           [
+              "csv",
+              "xls",
+              'print'
+          ] 
+      )
+      //.withDOM('<"row"<"col-md-8 col-sm-12"<"inline-controls"l>><"col-md-4 col-sm-12"<"pull-right"f>>>t<"row"<"col-md-4 col-sm-12"<"inline-controls"l>><"col-md-4 col-sm-12"<"inline-controls text-center"i>><"col-md-4 col-sm-12"p>>')
+      .withLanguage({
+        "sLengthMenu": 'View _MENU_ records',
+        "sInfo":  'Found _TOTAL_ records',
+        "oPaginate": {
+          "sPage":    "Page",
+          "sPageOf":  "of"
+        },
+        "sSearch": search_html
+      })
+      .withPaginationType('input')
+      //.withScroller()
+      //.withOption("sScrollY", false)
+      //.withOption("sScrollX")
+      .withColumnFilter();
+
+
+    vm.dtColumnDefs = [
+      //DTColumnDefBuilder.newColumnDef(0).notSortable(),
+      DTColumnDefBuilder.newColumnDef(4).notSortable()
+    ];
+
+    vm.selectedAll = false;
+
+    vm.selectAll = function () {
+
+      if ($scope.selectedAll) {
+        $scope.selectedAll = false;
+      } else {
+        $scope.selectedAll = true;
+      }
+
+      angular.forEach(vm.orders, function(order) {
+        order.selected = $scope.selectedAll;
+      });
+    };
+
+	getDisposition1 = function(name){
+		angular.forEach( $scope.dispositoion1, function(dispo) {
+			if(dispo.name == name){
+				$scope.dropdown = dispo;
+				$scope.selectDropdown1(dispo);
+			}
+		});
+	}
+
+	getDisposition2 = function(name){
+		angular.forEach( $scope.dropdown, function(dispo) {
+			if(dispo.name == name){
+				$scope.selectDropdown2(dispo);
+				$scope.category = dispo;
+			}
+		});
+	}
+
+	$scope.dropdown = {};
+	$scope.dispositoion2=[];
+	$scope.dispositoion1=[
+	                      /*{ 
+	            	   id: 1, 
+	            	   name: 'New',
+	            	   dispositoion2:[
+		   	               { 
+		   	            	   id: 1,
+		   	            	   name: 'Nothing' , 
+		   	            	   action: 'Nothing'
+		   	               }
+		   	          ]
+	               },*/{ 
+	            	   id: 2, 
+	            	   name: 'Contacted',
+	            	   dispositoion2:[
+	            	                  { 
+	            	                	  name: 'Call Back' , 
+	            	                	  action: 1
+	            	                  },{ 
+	            	                	  name: 'Quote Sent' , 
+	            	                	  action: 1
+	            	                  },{ 
+	            	                	  name: 'Visiting Store' , 
+	            	                	  action: 1
+	            	                  },{ 
+	            	                	  name: 'Lost' , 
+	            	                	  action: 0
+	            	                  },{ 
+	            	                	  name: 'Won' , 
+	            	                	  action: 0
+	            	                  }
+	            	                  ]
+	               },{ 
+	            	   id: 3, 
+	            	   name: 'Tried Contacted',
+	            	   dispositoion2:[
+	            	                  { 
+	            	                	  name: 'Not Contacted' , 
+	            	                	  action: 0
+	            	                  },{ 
+	            	                	  name: 'Lost' , 
+	            	                	  action: 0
+	            	                  }
+	            	                  ]
+	               }/*,{ 
+	            	   id: 4, 
+	            	   name: 'Escalated',
+	            	   dispositoion2:[
+		   	               { 
+		   	            	   id: 1,
+		   	            	   name: 'Nothing' , 
+		   	            	   action: 'Nothing'
+		   	               }
+		   	          ]
+	               }*/
+	               ];
+
+
+	$scope.selectDropdown1 = function(data){
+		vm.lead.disposition1 = data.name;
+		$('#desposition2').show();
+		$("#reason").hide();
+		$("#date").hide();
+		/*if(data.dispositoion2[0].name == 'Nothing'){
+			$('#desposition2').hide();
+		}*/
+		$scope.dispositoion2 = data.dispositoion2;
+	};
+
+	$scope.selectDropdown2 = function(data){
+		vm.lead.disposition2 = data.name;
+		console.log(data.name+" ::::: "+$scope.dispositoion2[1].name)
+		if(angular.equals(data.name, $scope.dispositoion2[1].name)){
+			console.log("::::: "+!vm.lead.isLost)
+			$scope.showMessage("warning","can not able to select lost")
+			vm.lead.disposition2 = "Not Contacted"
+		}
+			//showMessage = function(msg, msgType){
+		$("#reason").hide();
+		$("#date").hide();
+		if(data.action == 0){
+			$("#reason").show();
+			$("#date").hide();
+		} else {
+			if(data.action == 1){
+				console.log(data.action);
+				$("#reason").hide();
+				$("#date").show();
+			} 
+		}
+	};
+
+	$scope.updateLead = function(){
+		console.log(vm.lead);
+		$http({method:'POST',url:'/webapp/api/business/updateLead',data: vm.lead}).success(function(response) {
+			console.log(response);
+		});
+	}
+
+
 });
 
 
