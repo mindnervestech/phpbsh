@@ -430,6 +430,7 @@
                 if (e.type === 'dp.change' && ((e.date && e.date.isSame(e.oldDate)) || (!e.date && !e.oldDate))) {
                     return;
                 }
+                picker.onChange(e);
                 element.trigger(e);
             },
 
@@ -696,7 +697,7 @@
 
             setValue = function (targetMoment) {
                 var oldDate = unset ? null : date;
-
+   
                 // case of calling setValue(null or false)
                 if (!targetMoment) {
                     unset = true;
@@ -1301,6 +1302,13 @@
                 initFormatting(); // reinit formatting
             }
             return picker;
+        };
+        
+        picker.onChange = function(e) {
+        	if (e.type ==='dp.change' && options.onChange) {
+                return options.onChange(e);
+            }
+        	// TODO 
         };
 
         picker.dayViewHeaderFormat = function (newFormat) {

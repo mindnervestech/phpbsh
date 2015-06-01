@@ -1,3 +1,53 @@
+var dp;
+
+dp = angular.module('ng-bs3-datepicker', []);
+
+dp.directive('ngBs3Datepicker', function($compile) {
+  return {
+    restrict: 'AE',
+    require: 'ngModel',
+    replace: true,
+    
+    templateUrl: "./template/bootstart3datepickerInline.html",
+    link: function($scope, element, attr, ngModel) {
+      
+    	var dp;
+    	 $scope.$watch(attr.ngModel, function(value) {
+    		 if(value === undefined) return;
+    		 
+    		 
+    		  dp = $($(element).find('#datetimepicker11').get(0)).datetimepicker({
+    			 inline: true,
+                 sideBySide: true,
+                 defaultDate : ngModel.$modelValue,
+		          icons: {
+		            time: 'fa fa-clock-o',
+		            date: 'fa fa-calendar',
+		            up: 'fa fa-arrow-up',
+		            down: 'fa fa-arrow-down'
+		          },
+		          onChange: function(e) {
+		        	  $scope.$apply(function(){
+		        		  $scope.$parent.dpDate = e.date;
+		        		  ngModel.$setViewValue(e.date);
+			          });
+		        	  
+		          }
+	        });
+    		  
+    		  $('#datetimepicker11').find("input").hide();
+    	 });
+    	 
+    	 
+    	 
+      return $compile(element)($scope);
+    }
+  };
+});
+
+
+
+
 var stateBeforeLogin = 'index';
 "use strict";
 var App = angular.module('MAdmin', ['ngRoute', 'ui.bootstrap', 'ui.router', 'oc.lazyLoad','angular-flot','datatables','ngResource',
@@ -7,7 +57,7 @@ var App = angular.module('MAdmin', ['ngRoute', 'ui.bootstrap', 'ui.router', 'oc.
                                     'datatables.tabletools',
                                     'datatables.scroller',
                                     'datatables.columnfilter',
-                                    'ngTagsInput',]);
+                                    'ngTagsInput','ng-bs3-datepicker']);
 App.factory("Auth", ["$http", "$q", "$window","$rootScope","$state" ,
                      function ($http, $q, $window,$rootScope,$state) {
     var userInfo = {};
@@ -128,12 +178,22 @@ App.config(['$stateProvider', '$urlRouterProvider',
         .state('login', {
             url: "/login", 
             templateUrl: 'templates/states/login.html',
-            controller: 'LoginController'
+            controller: 'LoginController',
+            resolve: { 
+                loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+                     return $ocLazyLoad.load({
+                        files: ['vendors/moment/moment.js',
+	        'vendors/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js',
+	        'vendors/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css']
+                     });
+                }]
+            }
         })
         .state('logout', {
         	url: "/login", 
             templateUrl: 'templates/states/login.html',
-            controller: 'LoginController'	
+            controller: 'LoginController',
+            
         })
         .state('layout-left-sidebar', {
           url:"/layout-left-sidebar",
@@ -698,8 +758,8 @@ App.config(['$stateProvider', '$urlRouterProvider',
         })
         .state('escalated-leads', {
             url: "/escalated-leads", 
-            templateUrl: 'templates/states/escalated-leads.html',
-            controller: 'EscalatedLeadsCtrl', 
+            templateUrl: 'templates/states/manage-leads.html',
+            controller: 'EscalatedLeadsCtrl  as showCase', 
             data : {},
             resolve: { 
                 loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
@@ -1437,9 +1497,13 @@ App.controller('LoginController',function ($scope, $rootScope, $location, $http,
     }
 });
 
-App.controller('AppController', function ($scope, $rootScope, $routeParams, $location){
+App.controller('AppController', function ($scope, $http, $rootScope, $routeParams, $location){
     $rootScope.style = 'style1';
     $rootScope.theme = 'pink-blue';
+    
+    $http.get('/webapp/api/business/getUserInfo').success(function(info){
+		$scope.userInfo = info;
+	});
     
     $scope.showMessage = function(msgType, msg){
     	var shortCutFunction = msgType;
@@ -1840,6 +1904,7 @@ App.controller('ChartsChartJsController', function ($scope, $routeParams){
 
 App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){
 	var vm = this;
+	vm.tabHeading = "My Leads";
 	vm.orders = [];
 	vm.leadHistory = [];
 	vm.lead = {};
@@ -1857,6 +1922,7 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, DTOptions
 
 		$http.get('/webapp/api/business/lead/'+id).success(function(data){
 			vm.lead = data;
+			$scope.dpDate = moment(vm.lead.followUpDate);
 			getDisposition1(data.disposition1);
 			getDisposition2(data.disposition2);
 			$('#myLeads').hide();
@@ -2037,8 +2103,10 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, DTOptions
 			} 
 		}
 	};
-
+	
 	$scope.updateLead = function(){
+		vm.lead.followUpDate = $scope.dpDate;  
+		console.log($scope.dpDate);
 		console.log(vm.lead);
 		$http({method:'POST',url:'/webapp/api/business/updateLead',data: vm.lead}).success(function(response) {
 			console.log(response);
@@ -2569,8 +2637,9 @@ App.controller('GeneralConfigCtrl', function ($scope, $http){
 	}
 });
 
-App.controller('EscalatedLeadsCtrl',function($scope, $http, DTOptionsBuilder, manageLeadsService, DTColumnDefBuilder, DTColumnBuilder,$resource){
+App.controller('EscalatedLeadsCtrl',function($scope, $http, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){
 	var vm = this;
+	vm.tabHeading = "Escalated Leads";
 	vm.orders = [];
 	vm.leadHistory = [];
 	vm.lead = {};
@@ -2781,6 +2850,7 @@ App.controller('EscalatedLeadsCtrl',function($scope, $http, DTOptionsBuilder, ma
 App.controller('FollowUpLeadsCtrl',function($scope,$timeout, $http, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){
 	var vm = this;
 	vm.orders = [];
+	vm.tabHeading = "Follow-up Leads";
 	vm.leadHistory = [];
 	vm.lead = {};
 	$timeout(function(){

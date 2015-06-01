@@ -33,7 +33,7 @@
 		                      <label for="inputContent" class="control-label">Reason</label>
 		                      <textarea id="inputContent" data-ng-model="showCase.lead.reason" rows="2" class="form-control"></textarea>
 		                    </div>
-		                    <div class="form-group" style="display:none" id="date">
+		                    <!-- <div class="form-group" style="display:none" id="date">
 		                        <label class=" control-label">Define Follow-up</label>
 		                        <div class="control col-xs-12">
 		                          <div class="row datetimepicker">
@@ -42,7 +42,9 @@
 		                            </div>
 		                          </div>
 		                        </div>
-		                    </div>
+		                    </div> -->
+		                     <ng-bs3-datepicker style="display:none; height:230px" language="ca" ng-model="dpDate"  id="date" ></ng-bs3-datepicker>
+			            {{dpDate}}
 			            </div>
 	                    <!-- <div class="form-group">
 	                      <label for="inputUsername" class="control-label">Status</label>
@@ -217,7 +219,7 @@
 </div>    
 
 
-    <script type="text/javascript">
+    <!-- <script type="text/javascript">
         function explode(){
         	 $('#datetimepicker').datetimepicker({
                  inline: true,
@@ -227,3 +229,4 @@
        	}
        	setTimeout(explode, 100);
     </script>
+ -->
