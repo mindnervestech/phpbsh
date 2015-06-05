@@ -170,7 +170,12 @@ App.config(['$stateProvider', '$urlRouterProvider',
                                 'vendors/flot-chart/jquery.flot.fillbetween.js',
                                 'vendors/flot-chart/jquery.flot.stack.js',
                                 'vendors/flot-chart/jquery.flot.spline.js',
-                                'vendors/flot-chart/jquery.flot.time.js']
+                                'vendors/flot-chart/jquery.flot.time.js',
+                                'vendors/bootstrap-daterangepicker/daterangepicker-bs3.css',
+                                'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                                'vendors/bootstrap-daterangepicker/daterangepicker.js',
+                                'vendors/moment/min/moment-with-langs.js'
+                                ]
                      });
                 }]
             }
@@ -1500,6 +1505,13 @@ App.controller('LoginController',function ($scope, $rootScope, $location, $http,
 App.controller('AppController', function ($scope, $http, $rootScope, $routeParams, $location){
     $rootScope.style = 'style1';
     $rootScope.theme = 'pink-blue';
+    $scope.$on('reportDateChange', function (event, args) {
+    	 console.log(args.message);
+    	 $scope.dashboard.progressBar.remote = {
+   				 url:'/template/madmin/app/file/get-dashboard-progressbar.json/&d=' + Math.random()
+			}
+    	 $scope.$apply();
+    });
     
     $http.get('/webapp/api/business/getUserInfo').success(function(info){
 		$scope.userInfo = info;
@@ -9408,6 +9420,27 @@ App.controller('LayoutTitleBreadcrumbController', function ($scope, $routeParams
 });
 App.controller('MainController', function ($scope, $routeParams){
     setTimeout(function(){
+    	$('.reportrange').daterangepicker(
+                {
+                    ranges: {
+                        'Today': [moment(), moment()],
+                        'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                        'Last 7 Days': [moment().subtract('days', 6), moment()],
+                        'Last 30 Days': [moment().subtract('days', 29), moment()],
+                        'This Month': [moment().startOf('month'), moment().endOf('month')],
+                        'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+                    },
+                    startDate: moment().subtract('days', 29),
+                    endDate: moment()
+                },
+                function(start, end) {
+                	console.log('I m here');
+                	$scope.$emit('reportDateChange', { message: start });
+                    $('.reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                }
+            );
+            $('.reportrange span').html(moment().subtract('days', 29).format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+            
         $.fn.Data.checkbox();
 
         //BEGIN CALENDAR
