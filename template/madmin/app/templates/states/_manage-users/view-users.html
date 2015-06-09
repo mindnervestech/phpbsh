@@ -56,7 +56,7 @@
                           <label for="inputBirthday" class="control-label">Role</label>
                           <select id="selPSM" ng-model="showCase.user.role" class="form-control" required>
                           	<option value="">Select Role</option>
-                            <option ng-repeat="role in roleList" value="{{role.roleId}}" >{{role.name}}</option>
+                            <option data-ng-selected="showCase.user.role.roleId == role.roleId" data-ng-repeat="role in roleList" value="{{role}}" >{{role.name}}</option>
                           </select>
                         </div>
                       </div>
@@ -65,7 +65,7 @@
                           <label for="inputPhone" class="control-label">Zone</label>
                           <select id="selPSM" ng-model="showCase.user.zone" class="form-control" required>
                           	<option value="">Select Zone</option>
-                            <option ng-repeat="zone in zoneList" value="{{zone.id}}" >{{zone.name}}</option>
+                            <option data-ng-selected="showCase.user.zone.id == zone.id" ng-repeat="zone in zoneList" value="{{zone.id}}" >{{zone.name}}</option>
                           </select>
                         </div>
                       </div>
@@ -97,7 +97,7 @@
                           <label for="inputFirstName" class="control-label">state</label>
                           <select id="selPSM" ng-model="showCase.user.state" class="form-control" required>
                            <option value="">Select state</option>
-                            <option ng-repeat="state in stateList" value="{{state.id}}" >{{state.name}}</option>
+                            <option data-ng-selected="showCase.user.state.id == state.id" ng-repeat="state in stateList" value="{{state}}" >{{state.name}}</option>
                           </select>
                         </div>
                       </div>
@@ -106,7 +106,7 @@
                           <label for="inputCity" class="control-label">City <span class='require'>*</span></label>
                           <select id="selPSM" ng-model="showCase.user.district" class="form-control" required>
                             <option value="">Select District</option>
-                            <option ng-repeat="district in districtList" value="{{district.id}}" >{{district.name}}</option>
+                            <option data-ng-selected="showCase.user.district.id == district.id" ng-repeat="district in districtList" value="{{district}}" >{{district.name}}</option>
                           </select>
                         </div>
                       </div>

@@ -108,6 +108,7 @@ App.factory("Auth", ["$http", "$q", "$window","$rootScope","$state" ,
                     
                     deferred.resolve(userInfo);
                     $state.go(stateBeforeLogin);
+                    $rootScope.userRole = userInfo.permissions["role"];
                 }
                 else {
                 	userInfo = {
@@ -161,6 +162,14 @@ App.config(['$stateProvider', '$urlRouterProvider',
                 loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
                      return $ocLazyLoad.load({
                         files: [
+                                'vendors/DataTables/media/css/jquery.dataTables.css',
+                                'vendors/DataTables/extensions/TableTools/css/dataTables.tableTools.min.css',
+                                'vendors/DataTables/media/css/dataTables.bootstrap.css',
+                                'vendors/DataTables/media/js/jquery.dataTables.js',
+                                'vendors/DataTables/media/js/dataTables.bootstrap.js',
+                                'vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js',
+                                'vendors/DataTables/extensions/Pagination/input.js',
+                                'vendors/DataTables/extensions/ColumnFilter/jquery.dataTables.columnFilter.js',
                                 'vendors/jquery-tablesorter/jquery.tablesorter.min.js',
                                 'vendors/calendar/zabuto_calendar.min.js',
                                 'vendors/flot-chart/jquery.flot.categories.js',
@@ -1502,21 +1511,41 @@ App.controller('LoginController',function ($scope, $rootScope, $location, $http,
     }
 });
 
-App.controller('AppController', function ($scope, $http, $rootScope, $routeParams, $location){
+App.controller('AppController', function ($scope, $http, $rootScope, $routeParams, $location, Auth){
     $rootScope.style = 'style1';
     $rootScope.theme = 'pink-blue';
+    $scope.zone = 0;
+    $scope.product = 0;
+    $scope.startDate = moment().subtract('days', 29).format("MMDDYYYY");;
+    $scope.endDate = moment().format("MMDDYYYY");;
     $scope.$on('reportDateChange', function (event, args) {
-    	 console.log(args.message);
-    	 $scope.dashboard.progressBar.remote = {
-   				 url:'/template/madmin/app/file/get-dashboard-progressbar.json/&d=' + Math.random()
-			}
-    	 $scope.$apply();
+    	$scope.startDate = args.startDate;
+    	$scope.endDate = args.endDate;
+    	$scope.dashboard.spline1.remote = {
+    			url:'/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate,
+    	}
+    	$scope.dashboard.spline2.remote = {
+    			url:'/webapp/api/business/getProductSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate,
+    	}
+    	$scope.dashboard.progressBar.remote = {
+    			url:'/webapp/api/business/getDashboardProgressbarAll?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&product='+$scope.product,
+    	}
+    	$scope.dashboard.spline.remote = {
+    			url:'/webapp/api/business/getDealerSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate
+    	}
+    	$scope.$evalAsync();
+    	$scope.$apply();
     });
     
-    $http.get('/webapp/api/business/getUserInfo').success(function(info){
-		$scope.userInfo = info;
-	});
-    
+    $scope.getDashBoard = function(zone, product){
+    	$scope.zone = zone;
+    	$scope.product = product;
+    	$scope.dashboard.progressBar.remote = {
+    		url:'/webapp/api/business/getDashboardProgressbarAll?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&product='+$scope.product,
+    	}
+    	$scope.$evalAsync();
+    }
+
     $scope.showMessage = function(msgType, msg){
     	var shortCutFunction = msgType;
 		var title = '';
@@ -1556,12 +1585,22 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
     $scope.dashboard = {
     		progressBar:{
     			remote:{
-   				 url:"/template/madmin/app/file/get-dashboard-progressbar.json"
+   				 url:'/webapp/api/business/getDashboardProgressbarAll?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&product='+$scope.product
     			}
     		},
     		spline:{
     			remote:{
-   				 url:"/template/madmin/app/file/get-dashboard-flots-spline-data.json"
+   				 url:'/webapp/api/business/getDealerSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate
+    			}
+    		},
+    		spline1:{
+    			remote:{
+   				 url:'/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate
+    			}
+    		},
+    		spline2:{
+    			remote:{
+   				 url:'/webapp/api/business/getProductSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate
     			}
     		}
     };
@@ -1934,7 +1973,12 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, DTOptions
 
 		$http.get('/webapp/api/business/lead/'+id).success(function(data){
 			vm.lead = data;
-			$scope.dpDate = moment(vm.lead.followUpDate);
+			console.log(vm.lead.followUpDate);
+			$scope.dpDate = undefined;
+			if(vm.lead.followUpDate != null){
+				$scope.dpDate = moment(vm.lead.followUpDate);
+			}
+			
 			getDisposition1(data.disposition1);
 			getDisposition2(data.disposition2);
 			$('#myLeads').hide();
@@ -2112,12 +2156,14 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, DTOptions
 				console.log(data.action);
 				$("#reason").hide();
 				$("#date").show();
+				$scope.dpDate = moment();
 			} 
 		}
 	};
 	
 	$scope.updateLead = function(){
-		vm.lead.followUpDate = $scope.dpDate;  
+		if($scope.dpDate != undefined)
+			vm.lead.followUpDate = $scope.dpDate;  
 		console.log($scope.dpDate);
 		console.log(vm.lead);
 		$http({method:'POST',url:'/webapp/api/business/updateLead',data: vm.lead}).success(function(response) {
@@ -2423,12 +2469,6 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
 	 * vm.users = users; });
 	 */
     
-    $resource('/template/madmin/app/file/lead-history.json').query().$promise.then(function(histories) {
-        vm.history = histories;
-        
-      });
-    
-    
     $scope.loadPin = function(query) {
     	return $http.get('/webapp/api/business/getPincodes?query='+query);
     };
@@ -2440,6 +2480,8 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     
     $scope.showDealerTab = function(user) {
     	vm.dealer = user;
+    	$scope.getRSM(vm.dealer.zone);
+    	
     	$('#dealerTab').removeAttr("style");
     	$('#viewDealerTab').click();
     }
@@ -2468,6 +2510,12 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     	$('#dealerTab').hide();
     }
     
+    $scope.getRSM = function(zone){
+    	console.log(zone);
+    	$http.get('/webapp/api/business/getRSMByZone/'+zone.id).success(function(data) {
+			$scope.rsm = data;
+    	});	
+    }
     
     
 });
@@ -2902,7 +2950,7 @@ App.controller('FollowUpLeadsCtrl',function($scope,$timeout, $http, DTOptionsBui
 
     vm.dtOptions = DTOptionsBuilder.newOptions()
       .withBootstrap()
-      .withOption('order', [[0, 'asc']])
+      .withOption('order', [[4, 'desc']])
       .withTableTools('/template/madmin/app/vendors/DataTables/extensions/TableTools/swf/copy_csv_xls_pdf.swf')
       .withTableToolsButtons(
            [
@@ -2926,12 +2974,6 @@ App.controller('FollowUpLeadsCtrl',function($scope,$timeout, $http, DTOptionsBui
       //.withOption("sScrollY", false)
       //.withOption("sScrollX")
       .withColumnFilter();
-
-
-    vm.dtColumnDefs = [
-      //DTColumnDefBuilder.newColumnDef(0).notSortable(),
-      DTColumnDefBuilder.newColumnDef(4).notSortable()
-    ];
 
     vm.selectedAll = false;
 
@@ -9418,7 +9460,11 @@ App.controller('LayoutTitleBreadcrumbController', function ($scope, $routeParams
         return false;
     });
 });
-App.controller('MainController', function ($scope, $routeParams){
+App.controller('MainController', function ($scope, $routeParams,$http){
+	$http.get('/webapp/api/business/getZoneAndProduct').success(function(data){
+		$scope.zoneList = data.zoneList;
+		$scope.productList = data.productList;
+	});
     setTimeout(function(){
     	$('.reportrange').daterangepicker(
                 {

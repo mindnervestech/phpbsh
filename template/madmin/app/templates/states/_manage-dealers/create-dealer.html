@@ -54,9 +54,9 @@
                       <div class="col-md-6">
                         <div class="form-group">
                           <label for="selPSM" class="control-label">Zone <span class='require'>*</span></label>
-                          <select id="selPSM" ng-model="dealerData.zone" class="form-control" required>
+                          <select id="selPSM" data-ng-model="dealerData.zone" data-ng-change="getRSM(dealerData.zone.id)" class="form-control" required>
                           	<option value="">Select Zone</option>
-                            <option ng-repeat="zone in zoneList" value="{{zone.id}}" >{{zone.name}}</option>
+                            <option ng-repeat="zone in zoneList" value="{{zone}}" >{{zone.name}}</option>
                           </select>
                         </div>
                       </div>
@@ -67,18 +67,16 @@
                           <label for="selPSM" class="control-label">Territory <span class='require'>*</span></label>
                           <select id="selPSM" ng-model="dealerData.territory" class="form-control" required>
                             <option value="">Select Territory</option>
-                            <option ng-repeat="t in territoryList" value="{{t.id}}" >{{t.name}}</option>
+                            <option data-ng-repeat="t in territoryList" value="{{t}}" >{{t.name}}</option>
                           </select>
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
                           <label for="selPSM" class="control-label">RSM <span class='require'>*</span></label>
-                          <select id="selPSM" ng-model="dealerData.rsm" class="form-control" required>
+                          <select id="selPSM" data-ng-model="dealerData.rsm" class="form-control" required>
                             <option value="">Select RSM</option>
-                            <option value="RSM1">RSM1</option>
-                            <option value="RSM2">RSM2</option>
-                            <option value="RSM3">RSM3</option>
+                            <option ng-repeat="t in rsm" value="{{t.id}}" >{{t.name}}</option>
                           </select>
                         </div>
                       </div>
