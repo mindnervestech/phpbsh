@@ -90,9 +90,9 @@
           </ul><a id="news-ticker-close" href="javascript:;"><i class="fa fa-times"></i></a>
         </div>
       </div><a id="totop" href="/#/"><i class="fa fa-angle-up"></i></a> -->
-      <div id="header-topbar-option-demo" ng-include="'templates/states/header.html'" onload="load_header()" class="page-header-topbar"></div>
+      <div ng-if='isLoggedIn' id="header-topbar-option-demo" ng-include="'templates/states/header.html'" onload="load_header()" class="page-header-topbar"></div>
       <div id="wrapper" ng-class="header.layout_menu">
-        <nav id="sidebar" role="navigation" data-step="3" data-intro="Template has &lt;b&gt;many navigation styles&lt;/b&gt;" data-position="right" ng-include="'templates/states/sitebar.html'" ng-menu="" class="navbar-default navbar-static-side"></nav>
+        <nav ng-if='isLoggedIn' id="sidebar" role="navigation" data-step="3" data-intro="Template has &lt;b&gt;many navigation styles&lt;/b&gt;" data-position="right" ng-include="'templates/states/sitebar.html'" ng-menu="" class="navbar-default navbar-static-side"></nav>
         <div id="chat-form" ng-include="'templates/states/_includes/chat-form.html'" ng-class="{show:header.chat}" class="fixed"></div>
         <div id="page-wrapper" ng-class="header.animation" class="animated">
           <div ui-view="" class="page-content"></div>

@@ -193,6 +193,7 @@ App.config(['$stateProvider', '$urlRouterProvider',
             url: "/login", 
             templateUrl: 'templates/states/login.html',
             controller: 'LoginController',
+            data: {requireLogin:false},
             resolve: { 
                 loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
                      return $ocLazyLoad.load({
@@ -207,6 +208,7 @@ App.config(['$stateProvider', '$urlRouterProvider',
         	url: "/login", 
             templateUrl: 'templates/states/login.html',
             controller: 'LoginController',
+            data: {requireLogin:false},
             
         })
         .state('layout-left-sidebar', {
@@ -1431,15 +1433,20 @@ App.factory('MyHttpInterceptor', function ($q) {
 
 App.run(function($rootScope, $state, $location, Auth) {
 	$rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState) {
-	    
+		requireLogin = true;
+		
+		if(toState.data !== undefined
+                && toState.data.requireLogin == false) {
+			requireLogin = false;
+		}
+		
 		if(toState.name == "logout") {
 			Auth.logout();
 		}
 		
-	      var shouldLogin = toState.data !== undefined
-	                    && toState.data.requireLogin 
+	      var shouldLogin =  requireLogin 
 	                    && !Auth.getUserInfo().isLoggedIn ;
-	      //console.log(Auth.getUserInfo());
+	      //alert("toState.name" + toState.name + " | " +shouldLogin);
 	      // NOT authenticated - wants any private stuff
 	      if(shouldLogin)
 	      {
@@ -1447,6 +1454,8 @@ App.run(function($rootScope, $state, $location, Auth) {
 	        $state.go('login');
 	        event.preventDefault();
 	        return;
+	      } else {
+	    	  $rootScope.isLoggedIn = true;
 	      }
 	      
 	      console.log(fromState.name);
@@ -1487,10 +1496,10 @@ App.controller('LoginController',function ($scope, $rootScope, $location, $http,
 	//$("body>.default-page").hide();
     //$("body>.extra-page").html($(".page-content").html()).show();
 	
-	$(".page-header-topbar").hide();
-    $(".page-title-breadcrumb").hide();
-    $("#sidebar").hide();
-    
+	//$(".page-header-topbar").hide();
+    //$(".page-title-breadcrumb").hide();
+    //$("#sidebar").hide();
+    $rootScope.isLoggedIn = false;
 	$scope.login = {};
     $scope.login.j_username = '';
     $scope.login.j_password = '';
