@@ -1695,8 +1695,12 @@ App.controller('LoginController',function ($scope, $rootScope, $location, $http,
     }
 });
 
-App.controller('AppController', function ($scope, $http, $rootScope, $routeParams, $location, Auth){
-    $rootScope.style = 'style1';
+App.controller('AppController', function ($scope, $http, $rootScope, $routeParams, $location, Auth, $window){
+	var userInfo = JSON.parse($window.sessionStorage["userInfo"]);
+    
+	$rootScope.userRole = userInfo.permissions["role"];
+    
+	$rootScope.style = 'style1';
     $rootScope.theme = 'pink-blue';
     $scope.zone = 0;
     $scope.product = 0;
@@ -2444,11 +2448,6 @@ App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColum
     search_html = '<div class="input-group input-group-sm mbs">';
     search_html += "_INPUT_";
     search_html += '</div>';
-/*
-    setTimeout(function(){
-        $('#pre-selected-options').multiSelect();
-        $('#pre-selected-options1').multiSelect();
-    },500);*/
     
     vm.dtOptions = DTOptionsBuilder.newOptions()
       .withBootstrap()
@@ -2506,12 +2505,16 @@ App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColum
     $scope.init = function() {
     	$http({method:'GET',url:'/webapp/api/business/getDetailsForUser'})
 		.success(function(data) {
-			console.log(data);
 			$scope.zoneList = data.zoneList;
 			$scope.stateList = data.stateList;
 			$scope.districtList = data.districtList;
 			$scope.roleList = data.roleList;
 			$scope.productList = data.productList;
+			
+			//Hope ng-repeat on productList is finished in 500ms
+			setTimeout(function(){
+			   $('#pre-selected-options').multiSelect();
+			},500);
 			vm.users = data.userList;
 			
 		});
@@ -2529,9 +2532,9 @@ App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColum
     	 $('#pre-selected-options1').multiSelect('deselect_all');
     }	
         
-    setTimeout(function(){
+    /*setTimeout(function(){
         $('#pre-selected-options').multiSelect();
-    },500);
+    },500);*/
     
     $scope.hideUserTab = function() {
     	$('#userTab').hide();
@@ -2554,6 +2557,7 @@ App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColum
     	$scope.userData.productList = $scope.productList;
     	$http({method:'POST',url:'/webapp/api/business/saveUser',data:$scope.userData}).success(function(data) {
     		vm.users = data;
+    		$scope.userData = {};// Empty form
     	});
     	$('#userDetailsTab').click();
     	$('#userTab').hide();
