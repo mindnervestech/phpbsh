@@ -660,7 +660,7 @@ App.config(['$stateProvider', '$urlRouterProvider',
         .state('manage-users', {
             url: "/manage-users", 
             templateUrl: 'templates/states/manage-users.html',
-            controller: 'ManageController', 
+            controller: 'UsersTableCtrl as showCase', 
             resolve: { 
                 loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
                      return $ocLazyLoad.load({
@@ -687,7 +687,7 @@ App.config(['$stateProvider', '$urlRouterProvider',
         .state('manage-roles', {
             url: "/manage-roles", 
             templateUrl: 'templates/states/manage-roles.html',
-            controller: 'ManageController', 
+            controller: 'ManageRolesTableCtrl as showCase', 
             resolve: { 
                 loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
                      return $ocLazyLoad.load({
@@ -708,7 +708,7 @@ App.config(['$stateProvider', '$urlRouterProvider',
         .state('manage-dealers', {
             url: "/manage-dealers", 
             templateUrl: 'templates/states/manage-dealers.html',
-            controller: 'ManageController', 
+            controller: 'DealersTableCtrl as showCase', 
             resolve: { 
                 loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
                      return $ocLazyLoad.load({
@@ -838,22 +838,6 @@ App.config(['$stateProvider', '$urlRouterProvider',
 					        'vendors/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js',
 					        'vendors/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css',
                                 ]
-                     });
-                }]
-            }
-        })
-        .state('edit-leads', {
-            url: "/edit-leads", 
-            templateUrl: 'templates/states/edit-leads.html',
-            controller: 'ManageController', 
-            resolve: { 
-                loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
-                     return $ocLazyLoad.load({
-                        files: ['vendors/jquery-tablesorter/themes/blue/style-custom.css',
-                                'vendors/jquery-tablesorter/jquery.tablesorter.js',
-                                'vendors/moment/moment.js',
-                                'vendors/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js',
-                                'vendors/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css',]
                      });
                 }]
             }
