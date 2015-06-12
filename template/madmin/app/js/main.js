@@ -2537,7 +2537,7 @@ App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColum
     },500);*/
     
     $scope.hideUserTab = function() {
-    	
+    	$scope.userData = {};
     	$('#userTab').hide();
     }
     
