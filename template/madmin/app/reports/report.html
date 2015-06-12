@@ -92,7 +92,7 @@ li.active>a {
                 <td>{{rpt.name}}</td>
                 <td>{{rpt.description}}</td>
                 <td>
-                  <a href="#" data-ng-click="showReport(rpt)">Show</a> &nbsp;
+                  <a href="#" data-ng-click="showReport(rpt,$event)">Show</a> &nbsp;
                 </td>
             </tr>
             
@@ -114,9 +114,9 @@ li.active>a {
 <div  ng-show="isAnyActiveReport && currenttab == 'search'"  role="tabpanel">
 	<!-- Nav tabs -->
   <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a href="#table-view" aria-controls="table-view" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-th-list"></span> Table View</a></li>
-    <li role="presentation"><a href="#pivot-view" aria-controls="pivot-view" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-stats"></span> Pivot View</a></li>
-    <a href="#" ng-click="expanded =! expanded" style="
+    <li role="presentation" class="active"><a href="#table-view" ng-click="changeTab($event)" aria-controls="table-view" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-th-list"></span> Table View</a></li>
+    <li role="presentation"><a href="#pivot-view" ng-click="changeTab($event)" aria-controls="pivot-view" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-stats"></span> Pivot View</a></li>
+    <a href="#" ng-click="$event.preventDefault();expanded =! expanded;" style="
     margin-top: 10px;
     margin-left: 10px;
     position: absolute;"><span class="glyphicon" ng-class="expanded ? 'glyphicon-resize-small' : 'glyphicon-resize-full'"></span></a>

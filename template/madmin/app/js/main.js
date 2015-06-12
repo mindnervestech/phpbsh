@@ -1563,7 +1563,8 @@ App.run(function($rootScope, $state, $location, Auth) {
 		
 		$scope.showExcButton = false;
 		$scope.isAnyActiveReport= false;
-		$scope.showReport = function (report) {
+		$scope.showReport = function (report,event) {
+			event.preventDefault();
 			$scope.reportTemplate.jsonForm = report.jsonForm;
 			$scope.reportTemplate.jsonSchema = report.jsonSchema;
 			$scope.reportTemplate.model.id = report.id;
@@ -1595,7 +1596,10 @@ App.run(function($rootScope, $state, $location, Auth) {
 			});
 		}
 		
-		
+		$scope.changeTab = function($event) {
+			$event.preventDefault();
+			$(this).tab('show');
+		}
 	  
 	});
 	
@@ -2696,8 +2700,11 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     		$scope.isPin = true;
     	} else {
     		$scope.isPin = false;
-	    	$http({method:'POST',url:'/webapp/api/business/saveDealer',data:$scope.dealerData}).success(function(data) {
+	    	$scope.dealerData.zone = JSON.parse($scope.dealerData.zone);
+	    	$scope.dealerData.territory = JSON.parse($scope.dealerData.territory);
+    		$http({method:'POST',url:'/webapp/api/business/saveDealer',data:$scope.dealerData}).success(function(data) {
 				console.log('success');
+				$scope.init();
 	    	});	
     	}
     	$('#dealerDetailsTab').click();
@@ -2705,6 +2712,10 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     }
     
     $scope.getRSM = function(zone){
+    	console.log(zone);
+    	if(typeof zone == 'undefined' || typeof zone == 'string') {
+    		zone = JSON.parse($scope.dealerData.zone);
+    	}
     	console.log(zone);
     	$http.get('/webapp/api/business/getRSMByZone/'+zone.id).success(function(data) {
 			$scope.rsm = data;
@@ -9691,14 +9702,18 @@ App.controller('MainController', function ($scope, $routeParams,$http){
                         'Last 7 Days': [moment().subtract('days', 6), moment()],
                         'Last 30 Days': [moment().subtract('days', 29), moment()],
                         'This Month': [moment().startOf('month'), moment().endOf('month')],
-                        'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+                        'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')],
+                        'This Quarter': [moment().startOf('quarter'), moment().endOf('quarter')],
+                        'This Year': [moment().startOf('year'), moment().endOf('year')],
                     },
                     startDate: moment().subtract('days', 29),
                     endDate: moment()
                 },
                 function(start, end) {
                 	console.log('I m here');
-                	$scope.$emit('reportDateChange', { message: start });
+                	var startDate =  moment(start).format("MMDDYYYY");
+                	var endDate =  moment(end).format("MMDDYYYY");
+                	$scope.$emit('reportDateChange', { startDate: startDate, endDate: endDate });
                     $('.reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
                 }
             );

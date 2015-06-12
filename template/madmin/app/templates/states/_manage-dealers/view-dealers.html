@@ -77,7 +77,7 @@
                           <label for="selPSM" class="control-label">RSM <span class='require'>*</span></label>
                           <select id="selPSM" ng-model="showCase.dealer.rsm" class="form-control">
                             <option value="">Select RSM</option>
-                            <option data-ng-selected="showCase.dealer.rsm == t.name" data-ng-repeat="t in rsm" value="{{t.id}}" >{{t.name}}</option>
+                            <option data-ng-selected="showCase.dealer.rsm == t.id" data-ng-repeat="t in rsm" value="{{t.id}}" >{{t.name}}</option>
                           </select>
                         </div>
                       </div>
@@ -107,7 +107,7 @@
                           <label for="selPSM" class="control-label">State <span class='require'>*</span></label>
                           <select id="selPSM" ng-model="showCase.dealer.state" class="form-control">
                            <option value="">Select state</option>
-                            <option ng-repeat="state in stateList" value="{{state.id}}" >{{state.name}}</option>
+                            <option ng-repeat="state in stateList" value="{{state.name}}" >{{state.name}}</option>
                           </select>
                         </div>
                       </div>
@@ -116,7 +116,7 @@
                           <label for="selPSM" class="control-label">District <span class='require'>*</span></label>
                           <select id="selPSM" ng-model="showCase.dealer.district" class="form-control">
                             <option value="">Select District</option>
-                            <option ng-repeat="district in districtList" value="{{district.id}}" >{{district.name}}</option>
+                            <option ng-repeat="district in districtList" value="{{district.name}}" >{{district.name}}</option>
                           </select>
                         </div>
                       </div>

@@ -1,3 +1,7 @@
+.col-xs-2-4 {
+	width:20%;
+	float: left;
+}
 .icon-spin {
   display: inline-block;
   -moz-animation: spin 2s infinite linear;
