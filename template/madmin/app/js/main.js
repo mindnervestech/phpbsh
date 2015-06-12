@@ -1696,10 +1696,10 @@ App.controller('LoginController',function ($scope, $rootScope, $location, $http,
 });
 
 App.controller('AppController', function ($scope, $http, $rootScope, $routeParams, $location, Auth, $window){
-	var userInfo = JSON.parse($window.sessionStorage["userInfo"]);
-    
-	$rootScope.userRole = userInfo.permissions["role"];
-    
+	if($window.sessionStorage["userInfo"]) {
+		var userInfo = JSON.parse($window.sessionStorage["userInfo"]);
+		$rootScope.userRole = userInfo.permissions["role"];
+	}
 	$rootScope.style = 'style1';
     $rootScope.theme = 'pink-blue';
     $scope.zone = 0;
@@ -2537,6 +2537,7 @@ App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColum
     },500);*/
     
     $scope.hideUserTab = function() {
+    	
     	$('#userTab').hide();
     }
     
@@ -2558,9 +2559,14 @@ App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColum
     	$http({method:'POST',url:'/webapp/api/business/saveUser',data:$scope.userData}).success(function(data) {
     		vm.users = data;
     		$scope.userData = {};// Empty form
+    		//$scope.userData.$setPristine();
+    		$('#pre-selected-options').multiSelect('deselect_all');
+    		$('#userDetailsTab').click();
+        	$('#userTab').hide();
+    	}).error(function(data){
+    			// TODO: Shashank Show Error on screen in case of failure
     	});
-    	$('#userDetailsTab').click();
-    	$('#userTab').hide();
+    	
     }
     
     $scope.editUser = function(user) {
