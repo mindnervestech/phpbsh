@@ -793,7 +793,7 @@ App.config(['$stateProvider', '$urlRouterProvider',
             }
         })
         .state('escalated-leads', {
-            url: "/escalated-leads", 
+            url: "/escalated-leads/:leadType?editId", 
             templateUrl: 'templates/states/manage-leads.html',
             controller: 'EscalatedLeadsCtrl  as showCase', 
             data : {},
@@ -923,8 +923,6 @@ App.config(['$stateProvider', '$urlRouterProvider',
                 }]
             }
         })
-        
-        // start data grid
         .state('grid-layout-div', {
             url: "/grid-layout-div", 
             templateUrl: 'templates/states/grid-layout-div.html',
@@ -2899,16 +2897,10 @@ App.controller('GeneralConfigCtrl', function ($scope, $http){
 	}
 });
 
-App.controller('EscalatedLeadsCtrl',function($scope, $http, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){
+App.controller('EscalatedLeadsCtrl',function($stateParams, $scope, $http, $timeout, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){
 	var vm = this;
-	vm.tabHeading = "Escalated Leads";
-	vm.orders = [];
-	vm.leadHistory = [];
-	vm.lead = {};
-	var search_html;
-	search_html = '<div class="input-group input-group-sm mbs">';
-	search_html += "_INPUT_";
-	search_html += '</div>';
+	//$scope.userRole = Auth.getUserInfo().permissions["role"];
+	vm.tabHeading = $stateParams.leadType+" Leads";
 	$scope.editLeadTab = function(id) {
 		$http.get('/webapp/api/business/lead/'+id).success(function(data){
 			$http.get('/webapp/api/business/lead/history/'+id).success(function(orders){
@@ -2923,13 +2915,47 @@ App.controller('EscalatedLeadsCtrl',function($scope, $http, DTOptionsBuilder, DT
 				$('#leadDetailsTab').click();
 				console.log(vm.leadHistory );
 			});
-			
 		});
-		
-		
-
 	}
 
+	var api = '/webapp/api/business/getEscalatedLeads';
+	switch($stateParams.leadType){
+		case 'Escalated':
+			api = '/webapp/api/business/getEscalatedLeads';
+			break;
+		case 'Open':
+			api = '/webapp/api/business/getOpenLeads';
+			break;
+		case 'Won':			
+			api = '/webapp/api/business/getWonLeads';
+			break;
+		case 'Lost':
+			api = '/webapp/api/business/getLostLeads';
+			break;
+		case 'Follow-up':
+			api = '/webapp/api/business/getFollowUpLeads';
+			break;
+		case 'My':
+			api = '/webapp/api/business/getLeads';
+			break;
+		case "Edit":
+			api = '/webapp/api/business/getFollowUpLeads';
+			$scope.editLeadTab($stateParams.editId);
+			break;
+			
+	}
+	$timeout(function(){
+		$http.get(api).success(function(orders){
+			vm.orders = orders;
+		});
+	}, 100);
+	vm.orders = [];
+	vm.leadHistory = [];
+	vm.lead = {};
+	var search_html;
+	search_html = '<div class="input-group input-group-sm mbs">';
+	search_html += "_INPUT_";
+	search_html += '</div>';
 	$scope.manageLeadTab = function() {
 		console.log("manageLeadTab");
 		$('#myLeads').show();
@@ -3004,11 +3030,6 @@ App.controller('EscalatedLeadsCtrl',function($scope, $http, DTOptionsBuilder, DT
 			}
 		});
 	}
-
-	$http.get('/webapp/api/business/getEscalatedLeads').success(function(orders){
-		vm.orders = orders;
-		console.log(orders);
-	});
 
 	$scope.dropdown = {};
 	$scope.dispositoion2=[];

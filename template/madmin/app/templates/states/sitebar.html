@@ -17,31 +17,31 @@
 	<li><a ui-sref="index"><i class="fa fa-tachometer fa-fw">
 				<div class="icon-bg bg-orange"></div>
 		</i><span class="menu-title">Dashboard</span></a></li>
-	<li><a ui-sref="manage-leads"><i class="fa fa-gift fa-fw">
+	<li><a data-ng-show="userRole==5||userRole==6||userRole==7||userRole==8||userRole=='9'" ui-sref="manage-leads"><i class="fa fa-gift fa-fw">
 				<div class="icon-bg bg-pink"></div>
 		</i><span class="menu-title">Manage Leads</span></a></li>
-	<li><a ui-sref="manage-users"><i class="fa fa-group fa-fw">
+	<li><a data-ng-show="userRole == 10" ui-sref="manage-users"><i class="fa fa-group fa-fw">
 				<div class="icon-bg bg-pink"></div>
 		</i><span class="menu-title">Manage Users</span></a></li>
-	<li><a ui-sref="manage-roles"><i class="fa fa-sitemap fa-fw">
+	<li><a data-ng-show="userRole == 10" ui-sref="manage-roles"><i class="fa fa-sitemap fa-fw">
 				<div class="icon-bg bg-pink"></div>
 		</i><span class="menu-title">Manage Roles</span></a></li>
-	<li><a ui-sref="manage-dealers"><i class="fa fa-group fa-fw">
+	<li><a data-ng-show="userRole==5||userRole==6||userRole==7||userRole==8" ui-sref="manage-dealers"><i class="fa fa-group fa-fw">
 				<div class="icon-bg bg-pink"></div>
 		</i><span class="menu-title">Manage Dealers</span></a></li>
-	<li><a ui-sref="product-mapping"><i class="glyphicon glyphicon-transfer">
+	<li><a data-ng-show="userRole == 10" ui-sref="product-mapping"><i class="glyphicon glyphicon-transfer">
 				<div class="icon-bg bg-pink"></div>
 		</i><span class="menu-title">Product Mapping</span></a></li>
 	<li><a ui-sref="dealer-config"><i class="fa fa-bitbucket">
 				<div class="icon-bg bg-pink"></div>
 		</i><span class="menu-title">Dealer Bucket Configuration</span></a></li>
-	<li><a ui-sref="general-config"><i class="fa fa-gear">
+	<li><a data-ng-show="userRole == 10" ui-sref="general-config"><i class="fa fa-gear">
 				<div class="icon-bg bg-pink"></div>
 		</i><span class="menu-title">General Configuration</span></a></li>
-	<li><a ui-sref="escalated-leads"><i class="fa fa-caret-square-o-up">
+	<li><a data-ng-show="userRole==5||userRole==6||userRole==7||userRole==8||userRole==9" ui-sref="escalated-leads"><i class="fa fa-caret-square-o-up">
 				<div class="icon-bg bg-pink"></div>
 		</i><span class="menu-title">Escalated Leads</span></a></li>
-	<li><a ui-sref="follow-up-leads"><i class="fa fa-bell">
+	<li><a data-ng-show="userRole==5||userRole==6||userRole==7||userRole==8||userRole==9" ui-sref="follow-up-leads"><i class="fa fa-bell">
 				<div class="icon-bg bg-pink"></div>
 		</i><span class="menu-title">Follow-up Leads</span></a></li>
 	<li><a ui-sref="reporting"><i class="fa fa-list">
