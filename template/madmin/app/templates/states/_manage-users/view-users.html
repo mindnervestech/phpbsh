@@ -54,18 +54,21 @@
                       <div class="col-md-6">
                         <div class="form-group">
                           <label for="inputBirthday" class="control-label">Role</label>
-                          <select id="selPSM" ng-model="showCase.user.role" class="form-control" required>
+                          <select id="selPSM" ng-model="showCase.user.role.roleId" class="form-control" required>
                           	<option value="">Select Role</option>
-                            <option data-ng-selected="showCase.user.role.roleId == role.roleId" data-ng-repeat="role in roleList" value="{{role}}" >{{role.name}}</option>
+                            <option data-ng-selected="showCase.user.role.roleId == role.roleId" 
+                            data-ng-repeat="role in roleList" 
+                            value="{{role.roleId}}" >{{role.name}}</option>
                           </select>
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
                           <label for="inputPhone" class="control-label">Zone</label>
-                          <select id="selPSM" ng-model="showCase.user.zone" class="form-control" required>
+                          <select id="selPSM" ng-model="showCase.user.zone.id" class="form-control" required>
                           	<option value="">Select Zone</option>
-                            <option data-ng-selected="showCase.user.zone.id == zone.id" ng-repeat="zone in zoneList" value="{{zone.id}}" >{{zone.name}}</option>
+                            <option data-ng-selected="showCase.user.zone.id == zone.id" ng-repeat="zone in zoneList" 
+                            value="{{zone.id}}" >{{zone.name}}</option>
                           </select>
                         </div>
                       </div>
@@ -74,9 +77,11 @@
                <div class="form-group" id="product-list">
               <label class="control-label col-md-3">Select Products</label>
               <div class="col-md-6">
+	              	<!-- 
 	              	<div class="btn-group btn-group-sm mbm"><a id="select-all" class="btn btn-white" ng-click="selectAllFun()">select all</a><a id="deselect-all" class="btn btn-white" ng-click="deselectAll()">deselect all</a>
 	             	</div>
-	                <select id="pre-selected-options1" multiple="multiple" data-ng-model="showCase.user.productList">
+	                 -->
+	                <select id="pre-selected-options1" multiple="multiple" data-ng-model="showCase.user.productlist">
 	                 <option ng-repeat="product in showCase.user.products" value="{{product.id}}" data-ng-selected="{{product.selected}}">{{product.name}}</option>
 	                </select>
             	</div>                                
@@ -95,18 +100,20 @@
                       <div class="col-md-6">
                         <div class="form-group">
                           <label for="inputFirstName" class="control-label">state</label>
-                          <select id="selPSM" ng-model="showCase.user.state" class="form-control" required>
+                          <select id="selPSM" ng-model="showCase.user.state.id" class="form-control" required>
                            <option value="">Select state</option>
-                            <option data-ng-selected="showCase.user.state.id == state.id" ng-repeat="state in stateList" value="{{state}}" >{{state.name}}</option>
+                            <option data-ng-selected="showCase.user.state.id == state.id" ng-repeat="state in stateList" 
+                            value="{{state.id}}" >{{state.name}}</option>
                           </select>
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
                           <label for="inputCity" class="control-label">City <span class='require'>*</span></label>
-                          <select id="selPSM" ng-model="showCase.user.district" class="form-control" required>
+                          <select id="selPSM" ng-model="showCase.user.district.id" class="form-control" required>
                             <option value="">Select District</option>
-                            <option data-ng-selected="showCase.user.district.id == district.id" ng-repeat="district in districtList" value="{{district}}" >{{district.name}}</option>
+                            <option data-ng-selected="showCase.user.district.id == district.id" 
+                            ng-repeat="district in districtList" value="{{district.id}}" >{{district.name}}</option>
                           </select>
                         </div>
                       </div>

@@ -2541,14 +2541,15 @@ App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColum
     },500);*/
     
     $scope.hideUserTab = function() {
-    	$scope.userData = {};
+    	
     	$('#userTab').hide();
     }
     
     $scope.showUserTab = function(user) {
     	vm.user = user;
+    	console.log(vm.user);
     	$('#pre-selected-options1').multiSelect('deselect_all');
-    	console.log(vm.user.products);
+    	
     	$('#userTab').removeAttr("style");
     	$('#viewUserTab').click();
     	setTimeout(function(){
@@ -2559,7 +2560,6 @@ App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColum
     
     $scope.createUser = function() {
     	
-    	$scope.userData.productList = $scope.productList;
     	$http({method:'POST',url:'/webapp/api/business/saveUser',data:$scope.userData}).success(function(data) {
     		vm.users = data;
     		$scope.userData = {};// Empty form
@@ -2574,9 +2574,17 @@ App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColum
     }
     
     $scope.editUser = function(user) {
-    	console.log(user);
-    	$http({method:'POST',url:'/webapp/api/business/updateUser',data:user}).success(function(data) {
-			console.log('success');
+		angular.forEach(user.products, function(productVM) {
+			if(user.productlist) {
+				if(user.productlist.indexOf(""+productVM.id) == -1) {
+					productVM.selected = false;
+				} else {
+					productVM.selected = true;
+				}
+			}
+         });
+    	
+		$http({method:'POST',url:'/webapp/api/business/updateUser',data:user}).success(function(data) {
 			vm.users = data;
     	});
     	$('#userDetailsTab').click();
@@ -2712,7 +2720,7 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     }
     
     $scope.getRSM = function(zone){
-    	console.log(zone);
+    	
     	if(typeof zone == 'undefined' || typeof zone == 'string') {
     		zone = JSON.parse($scope.dealerData.zone);
     	}
@@ -9702,15 +9710,13 @@ App.controller('MainController', function ($scope, $routeParams,$http){
                         'Last 7 Days': [moment().subtract('days', 6), moment()],
                         'Last 30 Days': [moment().subtract('days', 29), moment()],
                         'This Month': [moment().startOf('month'), moment().endOf('month')],
-                        'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')],
-                        'This Quarter': [moment().startOf('quarter'), moment().endOf('quarter')],
-                        'This Year': [moment().startOf('year'), moment().endOf('year')],
+                        'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
                     },
                     startDate: moment().subtract('days', 29),
                     endDate: moment()
                 },
                 function(start, end) {
-                	console.log('I m here');
+                	
                 	var startDate =  moment(start).format("MMDDYYYY");
                 	var endDate =  moment(end).format("MMDDYYYY");
                 	$scope.$emit('reportDateChange', { startDate: startDate, endDate: endDate });

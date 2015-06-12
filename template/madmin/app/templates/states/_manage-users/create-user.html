@@ -74,8 +74,11 @@
                <div class="form-group" id="product-list">
               <label class="control-label col-md-3">Select Products</label>
               <div class="col-md-6">
+	              	<!-- 
 	              	<div class="btn-group btn-group-sm mbm"><a id="select-all" class="btn btn-white" ng-click="selectAllFun()">select all</a><a id="deselect-all" class="btn btn-white" ng-click="deselectAll()">deselect all</a>
 	             	</div>
+	                 -->
+	                
 	                <select id="pre-selected-options" multiple="multiple" data-ng-model="userData.productlist">
 	                 <option ng-repeat="product in productList" value="{{product.id}}">{{product.name}}</option>
 	                </select>
