@@ -99,6 +99,7 @@ App.factory("Auth", ["$http", "$q", "$window","$rootScope","$state" ,
                 if(result.data.loggedIn === true) {
                 	$rootScope.SessionId = result.data.accessToken;
                     //$cookieStore.put('sessionId', login.sessionId);
+                	
                     userInfo = {
                         accessToken: result.data.accessToken,
                         isLoggedIn: true,
@@ -110,6 +111,8 @@ App.factory("Auth", ["$http", "$q", "$window","$rootScope","$state" ,
                     deferred.resolve(userInfo);
                     $state.go(stateBeforeLogin);
                     $rootScope.userRole = userInfo.permissions["role"];
+                    $rootScope.userName = userInfo.userName;
+                    $rootScope.$broadcast('userloggedIn',{});
                 }
                 else {
                 	userInfo = {
@@ -1700,40 +1703,147 @@ App.controller('LoginController',function ($scope, $rootScope, $location, $http,
 });
 
 App.controller('AppController', function ($scope, $http, $rootScope, $routeParams, $location, Auth, $window){
+	$scope.zone = 0;
+    $scope.product = 0;
+    $scope.startDate = moment().subtract('days', 29).format("MMDDYYYY");;
+    $scope.endDate = moment().format("MMDDYYYY");
 	if($window.sessionStorage["userInfo"]) {
 		var userInfo = JSON.parse($window.sessionStorage["userInfo"]);
 		console.log(userInfo);
 		if(userInfo.isLoggedIn){
 			$rootScope.userRole = userInfo.permissions["role"];
 			$rootScope.userName = userInfo.userName;
+			console.log($rootScope.userRole);
 		}
 		
 	}
+	
+
+    
+    $scope.$on('userloggedIn',function(event, arg){
+    	
+    	var spline1Url,spline2Url,splineUrl; 
+        if($rootScope.userRole == '1' || $rootScope.userRole == '10' || $rootScope.userRole == '2' || $rootScope.userRole == '3' || $rootScope.userRole == '4'){
+        	spline1Url = '/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate;
+        	spline2Url = '/webapp/api/business/getProductSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate;
+        	splineUrl = undefined;
+        	$http.get('/webapp/api/business/getZoneAndProduct').success(function(data){
+				$scope.zoneList = data.zoneList;
+				$scope.productList = data.productList;
+			});
+        } else {
+        	splineUrl = '/webapp/api/business/getDealerSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate;
+        	spline2Url = undefined;
+        	spline1Url = undefined;
+        	
+        }
+        
+        $scope.dashboard = {
+        		progressBar:{
+        			remote:{
+       				 url:'/webapp/api/business/getDashboardProgressbarAll?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&product='+$scope.product
+        			}
+        		}
+        }
+
+        if(splineUrl) {
+        	$scope.dashboard.spline={
+        			remote:{
+        				url:splineUrl
+        			}
+        	};
+        }
+
+        
+        if(spline1Url) {
+        	$scope.dashboard.spline1={
+        			remote:{
+        				url:spline1Url
+        			}
+        	};
+        }
+
+        if(spline2Url) {
+        	$scope.dashboard.spline2={
+        			remote:{
+        				url:spline2Url
+        			}
+        	};
+
+        }
+        
+    });
+    
+    
+    
+    /*if($rootScope.userRole == '1' || $rootScope.userRole == '10' || $rootScope.userRole == '2' || $rootScope.userRole == '3' || $rootScope.userRole == '4'){
+    	$scope.dashboard = {
+        		spline1:{
+        			remote:{
+       				 url:'/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate
+        			}
+        		},
+        		spline2:{
+        			remote:{
+       				 url:'/webapp/api/business/getProductSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate
+        			}
+        		}
+        };
+	} else {
+		$scope.dashboard = {
+	    		spline:{
+	    			remote:{
+	   				 url:'/webapp/api/business/getDealerSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate
+	    			}
+	    		}
+	    };
+	}*/
+	
+    
+	/*$scope.dashboard = {
+    		progressBar:{
+    			remote:{
+   				 url:'/webapp/api/business/getDashboardProgressbarAll?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&product='+$scope.product
+    			}
+    		},
+    		spline1:{
+    			remote:{
+   				 url:'/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate
+    			}
+    		},
+    		spline2:{
+    			remote:{
+   				 url:'/webapp/api/business/getProductSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate
+    			}
+    		}
+    };*/
+    
+    
 	$rootScope.style = 'style1';
     $rootScope.theme = 'pink-blue';
-    $scope.zone = 0;
-    $scope.product = 0;
-    $scope.startDate = moment().subtract('days', 29).format("MMDDYYYY");;
-    $scope.endDate = moment().format("MMDDYYYY");;
     $scope.$on('reportDateChange', function (event, args) {
     	$scope.startDate = args.startDate;
     	$scope.endDate = args.endDate;
-    	$scope.dashboard.spline1.remote = {
-    			url:'/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate,
+    	if($rootScope.userRole == '1' || $rootScope.userRole == '10' || $rootScope.userRole == '2' || $rootScope.userRole == '3' || $rootScope.userRole == '4'){
+    		$scope.dashboard.spline1.remote = {
+        			url:'/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate,
+        	}
+        	$scope.dashboard.spline2.remote = {
+        			url:'/webapp/api/business/getProductSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate,
+        	}
+    	} else {
+    		$scope.dashboard.spline.remote = {
+        			url:'/webapp/api/business/getDealerSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate
+        	}
     	}
-    	$scope.dashboard.spline2.remote = {
-    			url:'/webapp/api/business/getProductSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate,
-    	}
+    	
     	$scope.dashboard.progressBar.remote = {
     			url:'/webapp/api/business/getDashboardProgressbarAll?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&product='+$scope.product,
     	}
-    	$scope.dashboard.spline.remote = {
-    			url:'/webapp/api/business/getDealerSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate
-    	}
+    	
     	$scope.$evalAsync();
     	$scope.$apply();
     });
-    
     $scope.getDashBoard = function(zone, product){
     	$scope.zone = zone;
     	$scope.product = product;
@@ -1778,40 +1888,6 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
         toastr.options.hideDuration = "3000";
 
     }
-    
-    $scope.dashboard = {
-    		progressBar:{
-    			remote:{
-   				 url:'/webapp/api/business/getDashboardProgressbarAll?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&product='+$scope.product
-    			}
-    		},
-    		spline:{
-    			remote:{
-   				 url:'/webapp/api/business/getDealerSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate
-    			}
-    		},
-    		spline1:{
-    			remote:{
-   				 url:'/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate
-    			}
-    		},
-    		spline2:{
-    			remote:{
-   				 url:'/webapp/api/business/getProductSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate
-    			}
-    		}
-    };
-    
-    
-    $scope.dataset = [{
-        data: [["Jan", 67],["Feb", 91],["Mar", 36],["Apr", 150],["May", 28],["Jun", 123],["Jul", 38]],
-        label: "Upload",
-        color: "#ffce54"
-    },{
-        data: [["Jan", 59],["Feb", 49],["Mar", 45],["Apr", 94],["May", 76],["Jun", 22],["Jul", 31]],
-        label: "Download",
-        color: "#01b6ad"
-    }];
     
     
     $scope.data = {};
@@ -9698,11 +9774,7 @@ App.controller('LayoutTitleBreadcrumbController', function ($scope, $routeParams
     });
 });
 App.controller('MainController', function ($scope, $routeParams,$http){
-	$http.get('/webapp/api/business/getZoneAndProduct').success(function(data){
-		$scope.zoneList = data.zoneList;
-		$scope.productList = data.productList;
-	});
-    setTimeout(function(){
+	setTimeout(function(){
     	$('.reportrange').daterangepicker(
                 {
                     ranges: {
