@@ -2,7 +2,7 @@ var dp;
 
 dp = angular.module('ng-bs3-datepicker', []);
 
-dp.directive('ngBs3Datepicker', function($compile) {
+dp.directive('ngBs3Datepicker', function($compile,$timeout) {
   return {
     restrict: 'AE',
     require: 'ngModel',
@@ -27,11 +27,10 @@ dp.directive('ngBs3Datepicker', function($compile) {
 		            down: 'fa fa-arrow-down'
 		          },
 		          onChange: function(e) {
-		        	  $scope.$apply(function(){
+		        	  $timeout(angular.bind(this, function() {
 		        		  $scope.$parent.dpDate = e.date;
 		        		  ngModel.$setViewValue(e.date);
-			          });
-		        	  
+		               }));
 		          }
 	        });
     		  
