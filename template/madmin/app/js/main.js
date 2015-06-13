@@ -102,7 +102,8 @@ App.factory("Auth", ["$http", "$q", "$window","$rootScope","$state" ,
                     userInfo = {
                         accessToken: result.data.accessToken,
                         isLoggedIn: true,
-                        permissions: result.data.payload
+                        permissions: result.data.payload,
+                        userName: result.data.name
                     };
                     $window.sessionStorage["userInfo"] = JSON.stringify(userInfo);
                     
@@ -1701,7 +1702,12 @@ App.controller('LoginController',function ($scope, $rootScope, $location, $http,
 App.controller('AppController', function ($scope, $http, $rootScope, $routeParams, $location, Auth, $window){
 	if($window.sessionStorage["userInfo"]) {
 		var userInfo = JSON.parse($window.sessionStorage["userInfo"]);
-		$rootScope.userRole = userInfo.permissions["role"];
+		console.log(userInfo);
+		if(userInfo.isLoggedIn){
+			$rootScope.userRole = userInfo.permissions["role"];
+			$rootScope.userName = userInfo.userName;
+		}
+		
 	}
 	$rootScope.style = 'style1';
     $rootScope.theme = 'pink-blue';
@@ -2161,7 +2167,6 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, DTOptions
 	search_html += "_INPUT_";
 	search_html += '</div>';
 	$scope.editLeadTab = function(id) {
-
 		$http.get('/webapp/api/business/lead/'+id).success(function(data){
 			vm.lead = data;
 			console.log(vm.lead.followUpDate);
@@ -2171,12 +2176,14 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, DTOptions
 			}
 			
 			getDisposition1(data.disposition1);
-			getDisposition2(data.disposition2);
 			$('#myLeads').hide();
 			$('#gotoManage').show();
 			$('#leadDetails').show();
 			$('#leadHistory').show();
 			$('#leadDetailsTab').click();
+		});
+		$http.get('/webapp/api/business/lead/history/'+id).success(function(orders){
+			vm.leadHistory = orders;
 		});
 		
 
@@ -2248,14 +2255,6 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, DTOptions
 		});
 	}
 
-	getDisposition2 = function(name){
-		angular.forEach( $scope.dropdown, function(dispo) {
-			if(dispo.name == name){
-				$scope.selectDropdown2(dispo);
-				$scope.category = dispo;
-			}
-		});
-	}
 
 	$scope.dropdown = {};
 	$scope.dispositoion2=[];
@@ -2329,12 +2328,14 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, DTOptions
 	};
 
 	$scope.selectDropdown2 = function(data){
+		$scope.category = data;
 		vm.lead.disposition2 = data.name;
 		console.log(data.name+" ::::: "+$scope.dispositoion2[1].name)
 		if(angular.equals(data.name, $scope.dispositoion2[1].name)){
 			console.log("::::: "+!vm.lead.isLost)
-			$scope.showMessage("warning","can not able to select lost")
-			vm.lead.disposition2 = "Not Contacted"
+			if(!vm.lead.isLost){
+				$scope.showMessage("warning","Action Not Allowed.");
+			}
 		}
 			//showMessage = function(msg, msgType){
 		$("#reason").hide();
@@ -2359,6 +2360,7 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, DTOptions
 		console.log(vm.lead);
 		$http({method:'POST',url:'/webapp/api/business/updateLead',data: vm.lead}).success(function(response) {
 			console.log(response);
+			$scope.showMessage("success","Successfully Updated.");
 		});
 	}
 
