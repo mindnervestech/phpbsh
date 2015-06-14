@@ -1,4 +1,4 @@
-var dp;
+var dp, dpDate ;
 
 dp = angular.module('ng-bs3-datepicker', []);
 
@@ -27,10 +27,13 @@ dp.directive('ngBs3Datepicker', function($compile,$timeout) {
 		            down: 'fa fa-arrow-down'
 		          },
 		          onChange: function(e) {
-		        	  $timeout(angular.bind(this, function() {
+			       /*$timeout(angular.bind(this, function() {
 		        		  $scope.$parent.dpDate = e.date;
+		        		  $scope.dpDate = e.date;
+		        		  
 		        		  ngModel.$setViewValue(e.date);
-		               }));
+		               }));*/
+			       dpDate = e.date;
 		          }
 	        });
     		  
@@ -99,7 +102,6 @@ App.factory("Auth", ["$http", "$q", "$window","$rootScope","$state" ,
                 if(result.data.loggedIn === true) {
                 	$rootScope.SessionId = result.data.accessToken;
                     //$cookieStore.put('sessionId', login.sessionId);
-                	
                     userInfo = {
                         accessToken: result.data.accessToken,
                         isLoggedIn: true,
@@ -1711,11 +1713,9 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
 		var userInfo = JSON.parse($window.sessionStorage["userInfo"]);
 		console.log(userInfo);
 		if(userInfo.isLoggedIn){
-			$rootScope.userRole = userInfo.permissions["role"];
+		if(userInfo.permissions) $rootScope.userRole = userInfo.permissions["role"];
 			$rootScope.userName = userInfo.userName;
-			console.log($rootScope.userRole);
 		}
-		
 	}
 	
 
@@ -1844,6 +1844,7 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
     	$scope.$evalAsync();
     	$scope.$apply();
     });
+    
     $scope.getDashBoard = function(zone, product){
     	$scope.zone = zone;
     	$scope.product = product;
@@ -2243,12 +2244,13 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, DTOptions
 	search_html += "_INPUT_";
 	search_html += '</div>';
 	$scope.editLeadTab = function(id) {
+		
 		$http.get('/webapp/api/business/lead/'+id).success(function(data){
 			vm.lead = data;
 			console.log(vm.lead.followUpDate);
 			$scope.dpDate = undefined;
 			if(vm.lead.followUpDate != null){
-				$scope.dpDate = moment(vm.lead.followUpDate);
+				$scope.dpDate = moment();
 			}
 			
 			getDisposition1(data.disposition1);
@@ -2407,7 +2409,7 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, DTOptions
 		$scope.category = data;
 		vm.lead.disposition2 = data.name;
 		console.log(data.name+" ::::: "+$scope.dispositoion2[1].name)
-		if(angular.equals(data.name, $scope.dispositoion2[1].name)){
+		if(angular.equals(data.name, $scope.dispositoion2[1].name) && data.name !== 'Quote Sent'){
 			console.log("::::: "+!vm.lead.isLost)
 			if(!vm.lead.isLost){
 				$scope.showMessage("warning","Action Not Allowed.");
@@ -2429,10 +2431,10 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, DTOptions
 		}
 	};
 	
-	$scope.updateLead = function(){
-		if($scope.dpDate != undefined)
-			vm.lead.followUpDate = $scope.dpDate;  
-		console.log($scope.dpDate);
+	$scope.updateLead = function() {
+		
+		vm.lead.followUpDate = dpDate;  
+		
 		console.log(vm.lead);
 		$http({method:'POST',url:'/webapp/api/business/updateLead',data: vm.lead}).success(function(response) {
 			console.log(response);
@@ -2801,7 +2803,6 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     	if(typeof zone == 'undefined' || typeof zone == 'string') {
     		zone = JSON.parse($scope.dealerData.zone);
     	}
-    	console.log(zone);
     	$http.get('/webapp/api/business/getRSMByZone/'+zone.id).success(function(data) {
 			$scope.rsm = data;
     	});	
