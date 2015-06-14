@@ -197,7 +197,6 @@ App.config(['$stateProvider', '$urlRouterProvider',
                                 'vendors/bootstrap-daterangepicker/daterangepicker-bs3.css',
                                 'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
                                 'vendors/bootstrap-daterangepicker/daterangepicker.js',
-                                'vendors/moment/min/moment-with-langs.js'
                                 ]
                      });
                 }]
@@ -211,7 +210,7 @@ App.config(['$stateProvider', '$urlRouterProvider',
             resolve: { 
                 loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
                      return $ocLazyLoad.load({
-                        files: [    'vendors/moment/moment.js',
+                        files: [    
 	                            'vendors/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js',
 	                            'vendors/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css']
                      });
@@ -592,7 +591,6 @@ App.config(['$stateProvider', '$urlRouterProvider',
                                 'vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js',
                                 'vendors/DataTables/extensions/Pagination/input.js',
                                 'vendors/DataTables/extensions/ColumnFilter/jquery.dataTables.columnFilter.js',
-					        'vendors/moment/moment.js',
 					        'vendors/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js',
 					        'vendors/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css',
                                 ]
@@ -752,7 +750,6 @@ App.config(['$stateProvider', '$urlRouterProvider',
                                 'vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js',
                                 'vendors/DataTables/extensions/Pagination/input.js',
                                 'vendors/DataTables/extensions/ColumnFilter/jquery.dataTables.columnFilter.js',
-					        'vendors/moment/moment.js',
 					        'vendors/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js',
 					        'vendors/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css',
                                 ]
@@ -777,7 +774,6 @@ App.config(['$stateProvider', '$urlRouterProvider',
                                 'vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js',
                                 'vendors/DataTables/extensions/Pagination/input.js',
                                 'vendors/DataTables/extensions/ColumnFilter/jquery.dataTables.columnFilter.js',
-					        'vendors/moment/moment.js',
 					        'vendors/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js',
 					        'vendors/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css',
                                 ]
@@ -1388,8 +1384,8 @@ App.controller('LoginController',function ($scope, $rootScope, $location, $http,
 App.controller('AppController', function ($scope, $http, $rootScope, $routeParams, $location, Auth, $window){
 	$scope.zone = 0;
     $scope.product = 0;
-    $scope.startDate = moment().subtract('days', 29).format("MMDDYYYY");;
-    $scope.endDate = moment().format("MMDDYYYY");
+    $scope.startDate = moment().subtract('days', 7).format("MMDDYYYY");;
+    $scope.endDate = moment().add('days', 1).format("MMDDYYYY");
 	if($window.sessionStorage["userInfo"]) {
 		var userInfo = JSON.parse($window.sessionStorage["userInfo"]);
 		if(userInfo.isLoggedIn){
@@ -2680,7 +2676,7 @@ App.controller('GeneralConfigCtrl', function ($scope, $http){
 
 App.controller('EscalatedLeadsCtrl',function($stateParams, $scope, $http, $timeout, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){
 	var vm = this;
-	//$scope.userRole = Auth.getUserInfo().permissions["role"];
+	$scope.dpDate = moment();
 	vm.tabHeading = $stateParams.leadType+" Leads";
 	$scope.editLeadTab = function(id) {
 		$http.get('/webapp/api/business/lead/'+id).success(function(data){
@@ -2694,7 +2690,6 @@ App.controller('EscalatedLeadsCtrl',function($stateParams, $scope, $http, $timeo
 				$('#leadDetails').show();
 				$('#leadHistory').show();
 				$('#leadDetailsTab').click();
-				console.log(vm.leadHistory );
 			});
 		});
 	}
@@ -2768,14 +2763,10 @@ App.controller('EscalatedLeadsCtrl',function($stateParams, $scope, $http, $timeo
         "sSearch": search_html
       })
       .withPaginationType('input')
-      //.withScroller()
-      //.withOption("sScrollY", false)
-      //.withOption("sScrollX")
       .withColumnFilter();
 
 
     vm.dtColumnDefs = [
-      //DTColumnDefBuilder.newColumnDef(0).notSortable(),
       DTColumnDefBuilder.newColumnDef(4).notSortable()
     ];
 
@@ -2877,9 +2868,6 @@ App.controller('EscalatedLeadsCtrl',function($stateParams, $scope, $http, $timeo
 		$('#desposition2').show();
 		$("#reason").hide();
 		$("#date").hide();
-		/*if(data.dispositoion2[0].name == 'Nothing'){
-			$('#desposition2').hide();
-		}*/
 		$scope.dispositoion2 = data.dispositoion2;
 	};
 
@@ -8444,171 +8432,7 @@ App.controller('FormBasicController', function ($scope, $routeParams){
         });
     }
 });
-App.controller('FormComponentsController', function ($scope, $routeParams){
-    setTimeout(function(){
-        //BEGIN PLUGINS DATE RANGE PICKER
-        $('input[name="daterangepicker-default"]').daterangepicker();
-        $('input[name="daterangepicker-date-time"]').daterangepicker({ timePicker: true, timePickerIncrement: 30, format: 'MM/DD/YYYY h:mm A' });
-        $('.reportrange').daterangepicker(
-            {
-                ranges: {
-                    'Today': [moment(), moment()],
-                    'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
-                    'Last 7 Days': [moment().subtract('days', 6), moment()],
-                    'Last 30 Days': [moment().subtract('days', 29), moment()],
-                    'This Month': [moment().startOf('month'), moment().endOf('month')],
-                    'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
-                },
-                startDate: moment().subtract('days', 29),
-                endDate: moment()
-            },
-            function(start, end) {
-                $('.reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-            }
-        );
-        $('.reportrange span').html(moment().subtract('days', 29).format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
-        //END PLUGINS DATE RANGE PICKER
 
-        //BEGIN PLUGINS DATE PICKER
-        $('.datepicker-default').datepicker();
-        $('.datepicker-years').datepicker({
-            startView: 1,
-            minViewMode: 2
-        });
-        $('.input-daterange').datepicker({
-            format: "dd-mm-yyyy"
-        });
-        $('.datepicker-inline').datepicker({
-            format: "dd-mm-yyyy",
-            startView: 2,
-            minViewMode: 1
-        });
-        //END PLUGINS DATE PICKER
-
-        //BEGIN PLUGINS DATETIME PICKER
-        $('.datetimepicker-default').datetimepicker();
-        $('.datetimepicker-disable-date').datetimepicker({
-            pickDate: false
-        });
-        $('.datetimepicker-disable-time').datetimepicker({
-            pickTime: false
-        });
-        $('.datetimepicker-start').datetimepicker();
-        $('.datetimepicker-end').datetimepicker();
-        $('.datetimepicker-start').on("change.dp",function (e) {
-            $('.datetimepicker-end').data("DateTimePicker").setStartDate(e.date);
-        });
-        $('.datetimepicker-end').on("change.dp",function (e) {
-            $('.datetimepicker-start').data("DateTimePicker").setEndDate(e.date);
-        });
-        //END PLUGINS DATETIME PICKER
-
-        //BEGIN PLUGINS TIME PICKER
-        $('.timepicker-default').timepicker();
-        $('.timepicker-24hr').timepicker({
-            autoclose: true,
-            minuteStep: 1,
-            showSeconds: true,
-            showMeridian: false
-        });
-        //END PLUGINS TIME PICKER
-
-        //BEGIN PLUGINS CLOCKFACE TIME PICKER
-        $('.clockface-default').clockface();
-        $('.clockface-component').clockface({
-            format: 'HH:mm',
-            trigger: 'manual'
-        });
-
-        $('#btn-clockface-component').click(function(e){
-            e.stopPropagation();
-            $('.clockface-component').clockface('toggle');
-        });
-
-        $('.clockface-inline').clockface({
-            format: 'H:mm'
-        }).clockface('show', '14:30');
-        //END PLUGINS CLOCKFACE TIME PICKER
-
-
-        //BEGIN PLUGINS COLOR PICKER
-        $('.colorpicker-default').colorpicker();
-        $('.colorpicker-rgba').colorpicker();
-        $('.colorpicker-component').colorpicker({
-            format: 'hex'
-        }).on('changeColor', function(ev) {
-                $('.colorpicker-component span i').css('color',ev.color.toHex());
-                $('.colorpicker-component input').val(ev.color.toHex());
-            });
-        //END PLUGINS COLOR PICKER
-
-        // BEGIN PLUGIN MASK INPUT
-        $("#date").mask("99/99/9999");
-        $("#phone").mask("(999) 999-9999");
-        $("#product-key").mask("(aa) 99-999");
-        // END PLUGIN MASK INPUT
-
-        //$("[name='my-checkbox']").bootstrapSwitch();
-        setTimeout(function(){
-            $('.make-switch').bootstrapSwitch();
-        }, 50);
-
-        //BEGIN CHECKBOX & RADIO
-        if($('#demo-checkbox-radio').length <= 0){
-            $('input[type="checkbox"]:not(".switch")').iCheck({
-                checkboxClass: 'icheckbox_minimal-grey',
-                increaseArea: '20%' // optional
-            });
-
-            $('input[type="radio"]:not(".switch")').iCheck({
-                radioClass: 'iradio_minimal-grey',
-                increaseArea: '20%' // optional
-            });
-        }
-        //END CHECKBOX & RADIO
-        //BEGIN CHARACTER COUNT
-        $("#message1, #message2").charCount();
-        $("#message3").charCount({
-            allowed: 50,
-            warning: 20,
-            counterText: 'Characters left: '
-        });
-        //END CHARACTER COUNT
-        //BEGIN PORTLET
-        $(".portlet").each(function(index, element) {
-            var me = $(this);
-            $(">.portlet-header>.tools>i", me).click(function(e){
-                if($(this).hasClass('fa-chevron-up')){
-                    $(">.portlet-body", me).slideUp('fast');
-                    $(this).removeClass('fa-chevron-up').addClass('fa-chevron-down');
-                }
-                else if($(this).hasClass('fa-chevron-down')){
-                    $(">.portlet-body", me).slideDown('fast');
-                    $(this).removeClass('fa-chevron-down').addClass('fa-chevron-up');
-                }
-                else if($(this).hasClass('fa-cog')){
-                    //Show modal
-                }
-                else if($(this).hasClass('fa-refresh')){
-                    //$(">.portlet-body", me).hide();
-                    $(">.portlet-body", me).addClass('wait');
-
-                    setTimeout(function(){
-                        //$(">.portlet-body>div", me).show();
-                        $(">.portlet-body", me).removeClass('wait');
-                    }, 1000);
-                }
-                else if($(this).hasClass('fa-times')){
-                    me.remove();
-                }
-            });
-        });
-        //END PORTLET
-    }, 100);
-});
-App.controller('FormDropzoneFileUploadController', function($scope, $routeParams){
-
-});
 App.controller('FormLayoutsController', function ($scope, $routeParams){
     $.fn.Data.checkbox();
     $("ul.nav-tabs a").click(function(e){
@@ -9474,12 +9298,12 @@ App.controller('MainController', function ($scope, $routeParams,$http){
                     ranges: {
                         'Today': [moment(), moment()],
                         'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
-                        'Last 7 Days': [moment().subtract('days', 6), moment()],
+                        'Last 7 Days': [moment().subtract('days', 7), moment()],
                         'Last 30 Days': [moment().subtract('days', 29), moment()],
                         'This Month': [moment().startOf('month'), moment().endOf('month')],
                         'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
                     },
-                    startDate: moment().subtract('days', 29),
+                    startDate: moment().subtract('days', 7),
                     endDate: moment()
                 },
                 function(start, end) {
@@ -9490,7 +9314,7 @@ App.controller('MainController', function ($scope, $routeParams,$http){
                     $('.reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
                 }
             );
-            $('.reportrange span').html(moment().subtract('days', 29).format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+            $('.reportrange span').html(moment().subtract('days', 7).format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
             
         $.fn.Data.checkbox();
 
