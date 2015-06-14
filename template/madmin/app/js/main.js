@@ -204,7 +204,7 @@ App.config(['$stateProvider', '$urlRouterProvider',
             resolve: { 
                 loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
                      return $ocLazyLoad.load({
-                        files: ['vendors/moment/moment.js',
+                        files: [    'vendors/moment/moment.js',
 	                            'vendors/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js',
 	                            'vendors/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css']
                      });
@@ -466,77 +466,8 @@ App.config(['$stateProvider', '$urlRouterProvider',
             templateUrl: 'templates/states/form-basic.html',
             controller: 'FormBasicController'
         })
-        .state('form-components', {
-            url: "/form-components", 
-            templateUrl: 'templates/states/form-components.html',
-            controller: 'FormComponentsController', 
-            resolve: { 
-                loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
-                     return $ocLazyLoad.load({
-                        files: ['vendors/bootstrap-colorpicker/css/colorpicker.css',
-                                'vendors/bootstrap-datepicker/css/datepicker.css',
-                                'vendors/bootstrap-daterangepicker/daterangepicker-bs3.css',
-                                'vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
-                                'vendors/bootstrap-timepicker/css/bootstrap-timepicker.min.css',
-                                'vendors/bootstrap-clockface/css/clockface.css',
-                                'vendors/bootstrap-switch/css/bootstrap-switch.css',
-                                'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                                'vendors/bootstrap-daterangepicker/daterangepicker.js',
-                                'vendors/moment/moment.js',
-                                'vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
-                                'vendors/bootstrap-timepicker/js/bootstrap-timepicker.js',
-                                'vendors/bootstrap-clockface/js/clockface.js',
-                                'vendors/bootstrap-colorpicker/js/bootstrap-colorpicker.js',
-                                'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
-                                'vendors/jquery-maskedinput/jquery-maskedinput.js',
-                                'vendors/charCount.js']
-                     });
-                }]
-            }
-        })
-        .state('form-wizard', {
-            url: "/form-wizard", 
-            templateUrl: 'templates/states/form-wizard.html',
-            controller: 'FormWizardController', 
-            resolve: { 
-                loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
-                     return $ocLazyLoad.load({
-                        files: ['vendors/jquery-bootstrap-wizard/custom.css',
-                                'vendors/jquery-steps/css/jquery.steps.css',
-                                'vendors/jquery-validate/jquery.validate.min.js',
-                                'vendors/jquery-steps/js/jquery.steps.min.js',
-                                'vendors/jquery-bootstrap-wizard/jquery.bootstrap.wizard.min.js']
-                     });
-                }]
-            }
-        })
-        .state('form-xeditable', {
-            url: "/form-xeditable", 
-            templateUrl: 'templates/states/form-xeditable.html',
-            controller: 'FormXeditableController', 
-            resolve: { 
-                loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
-                     return $ocLazyLoad.load({
-                        files: ['vendors/x-editable/select2/lib/select2-madmin.css',
-                                'vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
-                                'vendors/x-editable/bootstrap3-editable/css/bootstrap-editable.css',
-                                'vendors/x-editable/inputs-ext/address/address.css',
-                                'vendors/bootstrap-switch/css/bootstrap-switch.css',
-                                'vendors/x-editable/jquery.mockjax.js',
-                                'vendors/moment/moment.js',
-                                'vendors/x-editable/select2/lib/select2.js',
-                                'vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
-                                'vendors/x-editable/bootstrap3-editable/js/bootstrap-editable.min.js',
-                                'vendors/x-editable/inputs-ext/typeaheadjs/lib/typeahead.js',
-                                'vendors/x-editable/inputs-ext/typeaheadjs/typeaheadjs.js',
-                                'vendors/x-editable/inputs-ext/wysihtml5/wysihtml5.js',
-                                'vendors/x-editable/inputs-ext/address/address.js',
-                                'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
-                                'vendors/x-editable/demo-mock.js']
-                     });
-                }]
-            }
-        })
+        
+        
         .state('form-validation', {
             url: "/form-validation", 
             templateUrl: 'templates/states/form-validation.html',
@@ -912,203 +843,7 @@ App.config(['$stateProvider', '$urlRouterProvider',
                 }]
             }
         })
-        .state('grid-layout-div', {
-            url: "/grid-layout-div", 
-            templateUrl: 'templates/states/grid-layout-div.html',
-            controller: 'GridLayoutDivController', 
-            resolve: { 
-                loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
-                     return $ocLazyLoad.load({
-                        files: ['vendors/jplist/html/css/jplist-custom.css',
-                                'vendors/jplist/html/js/vendor/modernizr.min.js',
-                                'vendors/jplist/html/js/jplist.min.js']
-                     });
-                }]
-            }
-        })
-        .state('grid-layout-table-1', {
-            url: "/grid-layout-table-1", 
-            templateUrl: 'templates/states/grid-layout-table-1.html',
-            controller: 'GridLayoutTable1Controller', 
-            resolve: { 
-                loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
-                     return $ocLazyLoad.load({
-                        files: ['vendors/jplist/html/css/jplist-custom.css',
-                                'vendors/jplist/html/js/vendor/modernizr.min.js',
-                                'vendors/jplist/html/js/jplist.min.js']
-                     });
-                }]
-            }
-        })
-        .state('grid-layout-table-2', {
-            url: "/grid-layout-table-2", 
-            templateUrl: 'templates/states/grid-layout-table-2.html',
-            controller: 'GridLayoutTable2Controller', 
-            resolve: { 
-                loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
-                     return $ocLazyLoad.load({
-                        files: ['vendors/jplist/html/css/jplist-custom.css',
-                                'vendors/jplist/html/js/vendor/modernizr.min.js',
-                                'vendors/jplist/html/js/jplist.min.js']
-                     });
-                }]
-            }
-        })
-        .state('grid-layout-2-table', {
-            url: "/grid-layout-2-table", 
-            templateUrl: 'templates/states/grid-layout-2-table.html',
-            controller: 'GridLayout2TableController', 
-            resolve: { 
-                loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
-                     return $ocLazyLoad.load({
-                        files: ['vendors/jplist/html/css/jplist-custom.css',
-                                'vendors/jplist/html/js/vendor/modernizr.min.js',
-                                'vendors/jplist/html/js/jplist.min.js']
-                     });
-                }]
-            }
-        })
-        .state('grid-layout-ul-li', {
-            url: "/grid-layout-ul-li", 
-            templateUrl: 'templates/states/grid-layout-ul-li.html',
-            controller: 'GridLayoutUlLiController', 
-            resolve: { 
-                loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
-                     return $ocLazyLoad.load({
-                        files: ['vendors/jplist/html/css/jplist-custom.css',
-                                'vendors/jplist/html/js/vendor/modernizr.min.js',
-                                'vendors/jplist/html/js/jplist.min.js']
-                     });
-                }]
-            }
-        })
-        .state('grid-filter-with-ul-li', {
-            url: "/grid-filter-with-ul-li", 
-            templateUrl: 'templates/states/grid-filter-with-ul-li.html',
-            controller: 'GridFilterWithUiLiController', 
-            resolve: { 
-                loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
-                     return $ocLazyLoad.load({
-                        files: ['vendors/jplist/html/css/jplist-custom.css',
-                                'vendors/jplist/html/js/vendor/modernizr.min.js',
-                                'vendors/jplist/html/js/jplist.min.js']
-                     });
-                }]
-            }
-        })
-        .state('grid-filter-with-select', {
-            url: "/grid-filter-with-select", 
-            templateUrl: 'templates/states/grid-filter-with-select.html',
-            controller: 'GridFilterWithSelectController', 
-            resolve: { 
-                loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
-                     return $ocLazyLoad.load({
-                        files: ['vendors/jplist/html/css/jplist-custom.css',
-                                'vendors/jplist/html/js/vendor/modernizr.min.js',
-                                'vendors/jplist/html/js/jplist.min.js']
-                     });
-                }]
-            }
-        })
-        .state('grid-double-sort', {
-            url: "/grid-double-sort", 
-            templateUrl: 'templates/states/grid-double-sort.html',
-            controller: 'GridDoubleSortController', 
-            resolve: { 
-                loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
-                     return $ocLazyLoad.load({
-                        files: ['vendors/jplist/html/css/jplist-custom.css',
-                                'vendors/jplist/html/js/vendor/modernizr.min.js',
-                                'vendors/jplist/html/js/jplist.min.js']
-                     });
-                }]
-            }
-        })
-        .state('grid-deep-linking', {
-            url: "/grid-deep-linking", 
-            templateUrl: 'templates/states/grid-deep-linking.html',
-            controller: 'GridDeepLinkingController', 
-            resolve: { 
-                loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
-                     return $ocLazyLoad.load({
-                        files: ['vendors/jplist/html/css/jplist-custom.css',
-                                'vendors/jplist/html/js/vendor/modernizr.min.js',
-                                'vendors/jplist/html/js/jplist.min.js']
-                     });
-                }]
-            }
-        })
         
-        .state('grid-pagination-only', {
-            url: "/grid-pagination-only", 
-            templateUrl: 'templates/states/grid-pagination-only.html',
-            controller: 'GridPaginationOnlyController', 
-            resolve: { 
-                loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
-                     return $ocLazyLoad.load({
-                        files: ['vendors/jplist/html/css/jplist-custom.css',
-                                'vendors/jplist/html/js/vendor/modernizr.min.js',
-                                'vendors/jplist/html/js/jplist.min.js']
-                     });
-                }]
-            }
-        })
-        .state('grid-without-item-per-page', {
-            url: "/grid-without-item-per-page", 
-            templateUrl: 'templates/states/grid-without-item-per-page.html',
-            controller: 'GridWithoutItemPerPageController', 
-            resolve: { 
-                loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
-                     return $ocLazyLoad.load({
-                        files: ['vendors/jplist/html/css/jplist-custom.css',
-                                'vendors/jplist/html/js/vendor/modernizr.min.js',
-                                'vendors/jplist/html/js/jplist.min.js']
-                     });
-                }]
-            }
-        })
-        .state('grid-hidden-sort', {
-            url: "/grid-hidden-sort", 
-            templateUrl: 'templates/states/grid-hidden-sort.html',
-            controller: 'GridHiddenSortController', 
-            resolve: { 
-                loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
-                     return $ocLazyLoad.load({
-                        files: ['vendors/jplist/html/css/jplist-custom.css',
-                                'vendors/jplist/html/js/vendor/modernizr.min.js',
-                                'vendors/jplist/html/js/jplist.min.js']
-                     });
-                }]
-            }
-        })
-        .state('grid-range-slider', {
-            url: "/grid-range-slider", 
-            templateUrl: 'templates/states/grid-range-slider.html',
-            controller: 'GridRangeSliderController', 
-            resolve: { 
-                loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
-                     return $ocLazyLoad.load({
-                        files: ['vendors/jplist/html/css/jplist-custom.css',
-                                'vendors/jplist/html/js/vendor/modernizr.min.js',
-                                'vendors/jplist/html/js/jplist.min.js']
-                     });
-                }]
-            }
-        })
-        .state('grid-datepicker', {
-            url: "/grid-datepicker", 
-            templateUrl: 'templates/states/grid-datepicker.html',
-            controller: 'GridDatepickerController', 
-            resolve: { 
-                loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
-                     return $ocLazyLoad.load({
-                        files: ['vendors/jplist/html/css/jplist-custom.css',
-                                'vendors/jplist/html/js/vendor/modernizr.min.js',
-                                'vendors/jplist/html/js/jplist.min.js']
-                     });
-                }]
-            }
-        })
         
         // start page
         .state('page-gallery', {
@@ -1153,20 +888,7 @@ App.config(['$stateProvider', '$urlRouterProvider',
                 }]
             }
         })
-        .state('page-calendar', {
-            url: "/page-calendar", 
-            templateUrl: 'templates/states/page-calendar.html',
-            controller: 'PageCalendarController', 
-            resolve: { 
-                loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
-                     return $ocLazyLoad.load({
-                        files: ['vendors/fullcalendar/fullcalendar.css',
-                                'vendors/fullcalendar/fullcalendar.print.css',
-                                'vendors/fullcalendar/fullcalendar.min.js']
-                     });
-                }]
-            }
-        })
+        
         
         // start extra
         .state('extra-profile', {
@@ -1205,52 +927,6 @@ App.config(['$stateProvider', '$urlRouterProvider',
         .state('extra-invoice', {
             url: "/extra-invoice", 
             templateUrl: 'templates/states/extra-invoice.html'
-        })
-        .state('extra-faq', {
-            url: "/extra-faq", 
-            templateUrl: 'templates/states/extra-faq.html'
-        })
-        .state('extra-pricing-table', {
-            url: "/extra-pricing-table", 
-            templateUrl: 'templates/states/extra-pricing-table.html'
-        })
-        .state('extra-blank', {
-            url: "/extra-blank", 
-            templateUrl: 'templates/states/extra-blank.html'
-        })
-        .state('extra-404', {
-            url: "/extra-404", 
-            templateUrl: 'templates/states/extra-404.html',
-            controller: 'Extra404Controller'
-        })
-        .state('extra-500', {
-            url: "/extra-500", 
-            templateUrl: 'templates/states/extra-500.html',
-            controller: 'Extra500Controller'
-        })
-        
-        // start email
-        .state('email-inbox', {
-            url: "/email-inbox", 
-            templateUrl: 'templates/states/email-inbox.html',
-            controller: 'EmailInboxController'
-        })
-        .state('email-compose-mail', {
-            url: "/email-compose-mail", 
-            templateUrl: 'templates/states/email-compose-mail.html',
-            controller: 'EmailComposeMailController', 
-            resolve: { 
-                loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
-                     return $ocLazyLoad.load({
-                        files: ['vendors/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css',
-                                'vendors/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js']
-                     });
-                }]
-            }
-        })
-        .state('email-view-mail', {
-          url:"/email-view-mail",
-          templateUrl: 'templates/states/email-view-mail.html'
         })
         
         // start charts
@@ -1465,8 +1141,6 @@ App.run(function($rootScope, $state, $location, Auth) {
 	    	  $rootScope.isLoggedIn = true;
 	      }
 	      
-	      console.log(fromState.name);
-	      console.log(toState.name);
 	      // authenticated (previously) comming not to root main
 	      if(Auth.getUserInfo().isLoggedIn && false) 
 	      {
@@ -1711,17 +1385,20 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
     $scope.endDate = moment().format("MMDDYYYY");
 	if($window.sessionStorage["userInfo"]) {
 		var userInfo = JSON.parse($window.sessionStorage["userInfo"]);
-		console.log(userInfo);
 		if(userInfo.isLoggedIn){
 		if(userInfo.permissions) $rootScope.userRole = userInfo.permissions["role"];
 			$rootScope.userName = userInfo.userName;
+			buildDashboard();
 		}
 	}
 	
 
     
     $scope.$on('userloggedIn',function(event, arg){
-    	
+    	buildDashboard();
+    });
+    
+    function buildDashboard() {
     	var spline1Url,spline2Url,splineUrl; 
         if($rootScope.userRole == '1' || $rootScope.userRole == '10' || $rootScope.userRole == '2' || $rootScope.userRole == '3' || $rootScope.userRole == '4'){
         	spline1Url = '/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate;
@@ -1772,7 +1449,7 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
 
         }
         
-    });
+    };
     
     
     
@@ -9801,126 +9478,12 @@ App.controller('MainController', function ($scope, $routeParams,$http){
             
         $.fn.Data.checkbox();
 
-
     }, 3000);
 });
-App.controller('NoneController', function ($scope, $routeParams){
 
-});
-App.controller('PageCalendarController', function ($scope, $routeParams){
-    $.fn.Data.checkbox();
 
-    var eventDrag = function(el){
-        // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
-        // it doesn't need to have a start or end
-        var eventObject = {
-            title: $.trim(el.text()) // use the element's text as the event title
-        };
 
-        // store the Event Object in the DOM element so we can get to it later
-        el.data('eventObject', eventObject);
 
-        // make the event draggable using jQuery UI
-        el.draggable({
-            zIndex: 999,
-            revert: true,      // will cause the event to go back to its
-            revertDuration: 0  //  original position after the drag
-        });
-    };
-
-    $('#external-events div.external-event').each(function() {
-        eventDrag($(this));
-    });
-
-    /* initialize the calendar
-     -----------------------------------------------------------------*/
-    $('#calendar').fullCalendar({
-        header: {
-            left: 'prev,next today',
-            center: 'title',
-            right: 'month,agendaWeek,agendaDay'
-        },
-        editable: true,
-        droppable: true, // this allows things to be dropped onto the calendar !!!
-        drop: function(date, allDay) { // this function is called when something is dropped
-
-            // retrieve the dropped element's stored Event Object
-            var originalEventObject = $(this).data('eventObject');
-
-            // we need to copy it, so that multiple events don't have a reference to the same object
-            var copiedEventObject = $.extend({}, originalEventObject);
-
-            // assign it the date that was reported
-            copiedEventObject.start = date;
-            copiedEventObject.allDay = allDay;
-
-            // render the event on the calendar
-            // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
-            $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
-
-            // is the "remove after drop" checkbox checked?
-            if ($('#drop-remove').is(':checked')) {
-                // if so, remove the element from the "Draggable Events" list
-                $(this).remove();
-            }
-
-        }
-    });
-
-    var addEvent = function (name) {
-        name = name.length === 0 ? "Untitled Event" : name;
-        var html = $('<div class="external-event label label-default">' + name + '</div>');
-        $('#event-box').append(html);
-        eventDrag(html);
-    };
-
-    $('#event-add').on('click', function () {
-        var name = $('#event-name').val();
-        addEvent(name);
-    });
-
-    $(".page-content").css("padding-bottom", "120px");
-});
-App.controller('PageContactController', function ($scope, $routeParams){
-    var map = new GMaps({
-        div: '#gmaps',
-        lat: -12.043333,
-        lng: -77.028333
-    });
-
-    var infoWindow = new google.maps.InfoWindow({
-        content: '<p><strong>Loop, Inc.</strong> <br>7275 Crescent Canyon St</p>'
-    });
-
-    map.addMarker({
-        lat: -12.043333,
-        lng: -77.028333,
-        title: 'Company',
-        map: map.map,
-        infoWindow: infoWindow
-    });
-});
-App.controller('PageGalleryController', function ($scope, $routeParams){
-    $scope.update_gallery = function(){
-        $('.mix-grid').mixItUp();
-    };
-});
-App.controller('TableActionController', function($scope, $routeParams){
-    $scope.table_action_update = function(){
-        $(".spinner").spinner();
-        $.fn.Data.checkbox();
-
-        //BEGIN CHECKBOX TABLE
-        $('.checkall').on('ifChecked ifUnchecked', function(event) {
-            if (event.type == 'ifChecked') {
-                $(this).closest('table').find('input[type=checkbox]').iCheck('check');
-            } else {
-                $(this).closest('table').find('input[type=checkbox]').iCheck('uncheck');
-            }
-        });
-        //END CHECKBOX TABLE
-    };
-});
 App.controller('ManageController', function ($scope, $routeParams){
     $scope.table_advanced_update = function(){
         $(".tablesorter").tablesorter({
