@@ -83,6 +83,13 @@ App.factory("Auth", ["$http", "$q", "$window","$rootScope","$state" ,
     		deferred.resolve(userInfo);
     		$window.sessionStorage["userInfo"] = JSON.stringify(userInfo);
     		
+    	}).error(function(data){
+    		userInfo = {
+                    accessToken: '',
+                    isLoggedIn: false
+                };
+    		deferred.resolve(userInfo);
+    		$window.sessionStorage["userInfo"] = JSON.stringify(userInfo);
     	});
     }
     
@@ -1924,12 +1931,8 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, DTOptions
 		
 		$http.get('/webapp/api/business/lead/'+id).success(function(data){
 			vm.lead = data;
-			console.log(vm.lead.followUpDate);
-			$scope.dpDate = undefined;
-			if(vm.lead.followUpDate != null){
-				$scope.dpDate = moment();
-			}
-			
+			$scope.dpDate = moment();
+						
 			getDisposition1(data.disposition1);
 			$('#myLeads').hide();
 			$('#gotoManage').show();
@@ -2114,7 +2117,6 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, DTOptions
 		
 		console.log(vm.lead);
 		$http({method:'POST',url:'/webapp/api/business/updateLead',data: vm.lead}).success(function(response) {
-			console.log(response);
 			$scope.showMessage("success","Successfully Updated.");
 		});
 	}
@@ -2323,8 +2325,10 @@ App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColum
     		$('#pre-selected-options').multiSelect('deselect_all');
     		$('#userDetailsTab').click();
         	$('#userTab').hide();
+        	$scope.showMessage("success","Successfully Saved.");
     	}).error(function(data){
-    			// TODO: Shashank Show Error on screen in case of failure
+    		$scope.showMessage("error","Failed to Save.");
+    			
     	});
     	
     }
@@ -2342,6 +2346,9 @@ App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColum
     	
 		$http({method:'POST',url:'/webapp/api/business/updateUser',data:user}).success(function(data) {
 			vm.users = data;
+			$scope.showMessage("success","Successfully Updated.");
+    	}).Error(function(data){
+    		$scope.showMessage("error","Fail to  Updated.");
     	});
     	$('#userDetailsTab').click();
     	$('#userTab').hide();
@@ -2453,6 +2460,9 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     
     	$http({method:'POST',url:'/webapp/api/business/updateDealer',data:dealer}).success(function(data) {
 			console.log('success');
+			$scope.showMessage("success","Successfully Updated.");
+    	}).error(function(data){
+    		$scope.showMessage("success","Failed to updated.");
     	});	
     	$('#dealerDetailsTab').click();
     	$('#dealerTab').hide();
@@ -2468,7 +2478,10 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
 	    	$scope.dealerData.territory = JSON.parse($scope.dealerData.territory);
     		$http({method:'POST',url:'/webapp/api/business/saveDealer',data:$scope.dealerData}).success(function(data) {
 				console.log('success');
+				$scope.showMessage("success","Successfully Saved.");
 				$scope.init();
+	    	}).error(function(data){
+	    		$scope.showMessage("error","Fail to save.");
 	    	});	
     	}
     	$('#dealerDetailsTab').click();
@@ -2891,6 +2904,7 @@ App.controller('EscalatedLeadsCtrl',function($stateParams, $scope, $http, $timeo
 		console.log(vm.lead);
 		$http({method:'POST',url:'/webapp/api/business/updateLead',data: vm.lead}).success(function(response) {
 			console.log(response);
+			$scope.showMessage("success","Successfully Updated.");
 		});
 	}
 
@@ -3097,6 +3111,7 @@ App.controller('FollowUpLeadsCtrl',function($scope,$timeout, $http, DTOptionsBui
 		console.log(vm.lead);
 		$http({method:'POST',url:'/webapp/api/business/updateLead',data: vm.lead}).success(function(response) {
 			console.log(response);
+			$scope.showMessage("success","Successfully Updated.");
 		});
 	}
 
@@ -9451,6 +9466,7 @@ App.controller('LayoutTitleBreadcrumbController', function ($scope, $routeParams
         return false;
     });
 });
+
 App.controller('MainController', function ($scope, $routeParams,$http){
 	setTimeout(function(){
     	$('.reportrange').daterangepicker(
