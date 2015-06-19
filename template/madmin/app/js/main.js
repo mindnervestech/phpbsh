@@ -654,6 +654,12 @@ App.config(['$stateProvider', '$urlRouterProvider',
                 loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
                      return $ocLazyLoad.load({
                         files: [
+								'vendors/select2/select2-madmin.css',
+								'vendors/bootstrap-select/bootstrap-select.min.css',
+								'vendors/multi-select/css/multi-select-madmin.css',
+								'vendors/select2/select2.min.js',
+								'vendors/bootstrap-select/bootstrap-select.min.js',
+								'vendors/multi-select/js/jquery.multi-select.js',
                                 'vendors/DataTables/media/css/jquery.dataTables.css',
                                 'vendors/DataTables/extensions/TableTools/css/dataTables.tableTools.min.css',
                                 'vendors/DataTables/media/css/dataTables.bootstrap.css',
@@ -1913,10 +1919,22 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, DTOptions
 	vm.orders = [];
 	vm.leadHistory = [];
 	vm.lead = {};
+	vm.newLead = {};
+	$scope.dealerList = {};
+	$scope.productList = {};
+	$scope.stateList = {};
+	$scope.cityList = {};
 	$timeout(function(){
 		$http.get('/webapp/api/business/getLeads').success(function(orders){
 			vm.orders = orders;
 		});
+		$http.get('/webapp/api/business/getNewLeadData').success(function(data){
+			$scope.dealerList = data.dealerList;
+			$scope.productList = data.productList;
+			$scope.stateList = data.stateList;
+			$scope.cityList = data.cityList;
+		});
+		
 	}, 100);
 
 	var search_html;
@@ -1924,11 +1942,9 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, DTOptions
 	search_html += "_INPUT_";
 	search_html += '</div>';
 	$scope.editLeadTab = function(id) {
-		
 		$http.get('/webapp/api/business/lead/'+id).success(function(data){
 			vm.lead = data;
 			$scope.dpDate = moment();
-						
 			getDisposition1(data.disposition1);
 			$('#myLeads').hide();
 			$('#gotoManage').show();
@@ -1939,8 +1955,6 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, DTOptions
 		$http.get('/webapp/api/business/lead/history/'+id).success(function(orders){
 			vm.leadHistory = orders;
 		});
-		
-
 	}
 
 	$scope.manageLeadTab = function() {
@@ -2108,13 +2122,15 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, DTOptions
 	};
 	
 	$scope.updateLead = function() {
-		
 		vm.lead.followUpDate = dpDate;  
-		
 		console.log(vm.lead);
 		$http({method:'POST',url:'/webapp/api/business/updateLead',data: vm.lead}).success(function(response) {
 			$scope.showMessage("success","Successfully Updated.");
 		});
+	}
+	
+	vm.createLead = function(){
+		console.log(vm.newLead);
 	}
 
 
@@ -2199,9 +2215,10 @@ App.controller('ManageRolesTableCtrl',function($scope, DTOptionsBuilder, DTColum
 App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){
 	var vm = this;
     vm.users = [];
-    vm.user;
+    vm.user = {};
     vm.leadHistory = [];
     $scope.userData = {};
+    $scope.dralerList = [];
     var search_html;
     search_html = '<div class="input-group input-group-sm mbs">';
     search_html += "_INPUT_";
@@ -2294,16 +2311,47 @@ App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColum
         $('#pre-selected-options').multiSelect();
     },500);*/
     
+    vm.changeStatusActive = function() {
+    	var userIds = []
+    	var tempUsers = vm.users;
+    	angular.forEach(tempUsers, function(user) {
+    		if(user.selected){
+    			userIds.push(user.id);
+    			user.status = "Active";
+    		}
+    	});
+    	changeStatus(userIds, 1, tempUsers);
+    }
+    
+    vm.changeStatusInActive = function() {
+    	var userIds = []
+    	var tempUsers = vm.users;
+    	angular.forEach(tempUsers, function(user) {
+    		if(user.selected){
+    			userIds.push(user.id);
+    			user.status = "Inactive";
+    		}
+    	});
+    	changeStatus(userIds, 0, tempUsers);
+    }
+    
+    changeStatus = function(userIds, status, tempUsers){
+    	$http({method:'POST',url:'/webapp/api/business/changeUserStatus/'+status,data:userIds}).success(function(data) {
+    		vm.users = tempUsers;
+			$scope.showMessage("success","Successfully status changed.");
+    	}).error(function(data){
+    		$scope.showMessage("success","Failed to change status.");
+    	});	
+    }
+    
     $scope.hideUserTab = function() {
-    	
     	$('#userTab').hide();
     }
     
     $scope.showUserTab = function(user) {
+    	$scope.getDealearsByDistrict(user.district.id);
     	vm.user = user;
-    	console.log(vm.user);
     	$('#pre-selected-options1').multiSelect('deselect_all');
-    	
     	$('#userTab').removeAttr("style");
     	$('#viewUserTab').click();
     	setTimeout(function(){
@@ -2350,6 +2398,14 @@ App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColum
     	$('#userTab').hide();
     }
     
+    $scope.getDealearsByDistrict = function(district){
+    	vm.user.dealer = "";
+    	$http.get('/webapp/api/business/getDealersByDistrict/'+district).success(function(data) {
+			$scope.dralerList = data;
+    	});	
+    }
+    
+    
 });
 
 App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){
@@ -2359,8 +2415,11 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     vm.pincode = [];
     vm.leadHistory = [];
     $scope.dealerData = {};
+    $scope.dealerData.products = {};
     $scope.dealerDetails = {};
     $scope.isPin = false;
+    $scope.isTsr = false;
+    $scope.isRsm = false;
     var search_html;
     search_html = '<div class="input-group input-group-sm mbs">';
     search_html += "_INPUT_";
@@ -2374,7 +2433,11 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
 			$scope.stateList = data.stateList;
 			$scope.territoryList = data.territoryList;
 			$scope.districtList = data.districtList;
+			$scope.dealerData.products = data.productList;
 			vm.users = data.dealerList;
+			setTimeout(function(){
+				$('#pre-selected-options').multiSelect();
+			},500);
 		});
     }
     
@@ -2417,17 +2480,19 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     vm.selectedAll = false;
 
     vm.selectAll = function () {
-
       if ($scope.selectedAll) {
         $scope.selectedAll = false;
       } else {
         $scope.selectedAll = true;
       }
-
-      angular.forEach(vm.orders, function(order) {
-        order.selected = $scope.selectedAll;
+      angular.forEach(vm.users, function(user) {
+    	  user.selected = $scope.selectedAll;
       });
     };
+    
+    vm.changeStatus = function(){
+    	
+    }
 
     /*
 	 * $resource('/template/madmin/app/file/get-dealers.json').query().$promise.then(function(users) {
@@ -2437,6 +2502,14 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     $scope.loadPin = function(query) {
     	return $http.get('/webapp/api/business/getPincodes?query='+query);
     };
+    
+    $scope.loadRsm = function(){
+    	return $scope.rsm;
+    }
+    
+    $scope.loadTsr = function(){
+    	return $scope.tsr;
+    }
    
     
     $scope.hideDealerTab = function() {
@@ -2445,31 +2518,97 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     
     $scope.showDealerTab = function(user) {
     	vm.dealer = user;
-    	$scope.getRSM(vm.dealer.zone);
-    	
+    	var zone = vm.dealer.zone;
+    	if(typeof vm.dealer.zone == 'undefined' || typeof vm.dealer.zone == 'string') {
+    		zone = JSON.parse(vm.dealer.zone);
+    	}
+    	$scope.getRSM(zone);
+		setTimeout(function(){
+			$('#pre-selected-options1').multiSelect();
+		},500);
+
     	$('#dealerTab').removeAttr("style");
     	$('#viewDealerTab').click();
     }
     
+    vm.changeStatusActive = function() {
+    	var dealerIds = []
+    	var tempUsers = vm.users;
+    	angular.forEach(tempUsers, function(dealer) {
+    		if(dealer.selected){
+    			dealerIds.push(dealer.id);
+    			dealer.status = "Active";
+    		}
+    	});
+    	changeStatus(dealerIds, 1, tempUsers);
+    }
     
-    $scope.updateDealer = function(dealer) {
+    vm.changeStatusInActive = function() {
+    	var dealerIds = []
+    	var tempUsers = vm.users;
+    	angular.forEach(tempUsers, function(dealer) {
+    		if(dealer.selected){
+    			dealerIds.push(dealer.id);
+    			dealer.status = "Inactive";
+    		}
+    	});
+    	changeStatus(dealerIds, 0, tempUsers);
+    }
     
-    	$http({method:'POST',url:'/webapp/api/business/updateDealer',data:dealer}).success(function(data) {
-			console.log('success');
-			$scope.showMessage("success","Successfully Updated.");
+    changeStatus = function(dealerIds, status, tempUsers){
+    	$http({method:'POST',url:'/webapp/api/business/changeDealerStatus/'+status,data:dealerIds}).success(function(data) {
+			vm.users = tempUsers;
+			$scope.showMessage("success","Successfully status changed.");
     	}).error(function(data){
-    		$scope.showMessage("success","Failed to updated.");
+    		$scope.showMessage("success","Failed to change status.");
     	});	
-    	$('#dealerDetailsTab').click();
-    	$('#dealerTab').hide();
+    }
+    $scope.updateDealer = function(dealer) {
+    		$scope.isPin = false;
+    		$scope.isRsm = false;
+    		$scope.isTsr = false;
+	    	if(typeof dealer.zone == 'string') {
+	    		dealer.zone = JSON.parse(dealer.zone);
+	    	}
+	    	angular.forEach(dealer.products, function(productVM) {
+				if($scope.productlist) {
+					if($scope.productlist.indexOf(""+productVM.id) == -1) {
+						productVM.selected = false;
+					} else {
+						productVM.selected = true;
+					}
+				}
+	         });
+	    	$http({method:'POST',url:'/webapp/api/business/updateDealer',data:dealer}).success(function(data) {
+				console.log('success');
+				$scope.showMessage("success","Successfully Updated.");
+	    	}).error(function(data){
+	    		$scope.showMessage("success","Failed to updated.");
+	    	});	
+	    	$('#dealerDetailsTab').click();
+	    	$('#dealerTab').hide();
     }
     
     $scope.createDealer = function() {
-    	
+    	angular.forEach($scope.dealerData.products, function(productVM) {
+			if($scope.dealerData.productlist) {
+				if($scope.dealerData.productlist.indexOf(""+productVM.id) == -1) {
+					productVM.selected = false;
+				} else {
+					productVM.selected = true;
+				}
+			}
+         });
     	if($scope.dealerData.pins == "" || angular.isUndefined($scope.dealerData.pins)) {
     		$scope.isPin = true;
+    	} else if($scope.dealerData.rsm == "" || angular.isUndefined($scope.dealerData.rsm)) {
+    		$scope.isRsm = true;
+    	} else if($scope.dealerData.tsr == "" || angular.isUndefined($scope.dealerData.tsr)) {
+    		$scope.isTsr = true;
     	} else {
     		$scope.isPin = false;
+    		$scope.isRsm = false;
+    		$scope.isTsr = false;
 	    	$scope.dealerData.zone = JSON.parse($scope.dealerData.zone);
 	    	$scope.dealerData.territory = JSON.parse($scope.dealerData.territory);
     		$http({method:'POST',url:'/webapp/api/business/saveDealer',data:$scope.dealerData}).success(function(data) {
@@ -2485,15 +2624,19 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     }
     
     $scope.getRSM = function(zone){
+    	console.log(zone);
     	
-    	if(typeof zone == 'undefined' || typeof zone == 'string') {
-    		zone = JSON.parse($scope.dealerData.zone);
+    	if(typeof zone == undefined || typeof zone == 'string') {
+    		console.log($scope.dealerData.zone);
+    		zone = JSON.parse(zone);
     	}
     	$http.get('/webapp/api/business/getRSMByZone/'+zone.id).success(function(data) {
 			$scope.rsm = data;
-    	});	
+    	});
+    	$http.get('/webapp/api/business/getTSRByZone/'+zone.id).success(function(data) {
+			$scope.tsr = data;
+    	});
     }
-    
     
 });
 

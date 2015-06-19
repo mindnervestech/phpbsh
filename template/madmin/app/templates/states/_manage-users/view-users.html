@@ -52,7 +52,7 @@
                     </div>
                     <div class="row">
                       <div class="col-md-6">
-                        <div class="form-group">
+                        <div class="form-group" data-ng-if="userRole == 10">
                           <label for="inputBirthday" class="control-label">Role</label>
                           <select id="selPSM" ng-model="showCase.user.role.roleId" class="form-control" required>
                           	<option value="">Select Role</option>
@@ -60,6 +60,13 @@
                             data-ng-repeat="role in roleList" 
                             value="{{role.roleId}}" >{{role.name}}</option>
                           </select>
+                        </div>
+                        
+                         <div class="form-group"  data-ng-if="userRole == 2 || userRole == 4">
+                          <label  for="inputBirthday" class="control-label">Role<span class='require'>*</span></label>
+                            <div class="input-icon"><!-- <i class="fa fa-user"></i> -->
+                        		<input id="inputUsername" ng-init="userData.role = 11"  type="text" placeholder="City" value="Sales Consultant" style="cursor: auto;" class="form-control" readonly="readonly"/>
+                      		</div>
                         </div>
                       </div>
                       <div class="col-md-6">
@@ -87,7 +94,6 @@
             	</div>                                
                                                 
             </div>
-            
                     <div class="row">
                       <div class="col-md-12">
                         <div class="form-group">
@@ -110,10 +116,9 @@
                       <div class="col-md-6">
                         <div class="form-group">
                           <label for="inputCity" class="control-label">City <span class='require'>*</span></label>
-                          <select id="selPSM" ng-model="showCase.user.district.id" class="form-control" required>
+                          <select id="selPSM" ng-model="showCase.user.district.id"  data-ng-change="getDealearsByDistrict(showCase.user.district.id)" class="form-control" required>
                             <option value="">Select District</option>
-                            <option data-ng-selected="showCase.user.district.id == district.id" 
-                            ng-repeat="district in districtList" value="{{district.id}}" >{{district.name}}</option>
+                            <option ng-repeat="district in districtList" value="{{district.id}}" >{{district.name}}</option>
                           </select>
                         </div>
                       </div>
@@ -123,6 +128,15 @@
                         <div class="form-group">
                           <label for="inputPostCode" class="control-label">Post Code</label>
                           <input id="inputPostCode" type="text" placeholder="" ng-model="showCase.user.postCode" class="form-control"/>
+                        </div>
+                      </div>
+                      <div class="col-md-6" data-ng-if="userRole == 2 || userRole == 4">
+                        <div class="form-group">
+                          <label for="inputCity" class="control-label">Dealer <span class='require'>*</span></label>
+                          <select id="selPSM" ng-model="showCase.user.dealer" class="form-control" required>
+                            <option value="">Select Dealer</option>
+                            <option  data-ng-selected="showCase.user.dealer == dealer.id" ng-repeat="dealer in dralerList" value="{{dealer.id}}" >{{dealer.name}}</option>
+                          </select>
                         </div>
                       </div>
                     </div>
