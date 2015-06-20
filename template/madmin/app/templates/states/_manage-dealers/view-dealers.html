@@ -3,7 +3,7 @@
             <div class="panel panel-red">
               <div class="panel-heading">View Dealer</div>
               <div class="panel-body pan">
-                <form ng-submit="updateDealer(showCase.dealer)" class="horizontal-form">
+                <form ng-submit="updateDealer(showCase.dealer)" class="horizontal-form" name="myForm">
                   <div class="form-body pal">
                     
                     <div class="row">
@@ -11,7 +11,7 @@
                         <div class="form-group has-success">
                           <label for="inputFirstName" class="control-label">Dealer Code <span class='require'>*</span></label>
                           <div class="input-icon">
-                            <input id="inputFirstName" type="text" placeholder="Dealer Code" ng-model="showCase.dealer.code" class="form-control"/>
+                            <input id="inputFirstName" type="number" placeholder="Dealer Code" ng-model="showCase.dealer.code" class="form-control" required/>
                           </div>
                         </div>
                       </div>
@@ -19,7 +19,7 @@
                         <div class="form-group has-success">
                           <label for="inputFirstName" class="control-label">Dealer Name <span class='require'>*</span></label>
                           <div class="input-icon"><i class="fa fa-user"></i>
-                            <input id="inputFirstName" type="text" placeholder="Dealer Name" ng-model="showCase.dealer.name" class="form-control"/>
+                            <input id="inputFirstName" type="text" placeholder="Dealer Name" ng-model="showCase.dealer.name" class="form-control" required/>
                           </div>
                         </div>
                       </div>
@@ -27,19 +27,20 @@
                     <div class="row">
                     <div class="col-md-6">
                         <div class="form-group has-success">
-                          <label for="inputFirstName" class="control-label">Customer Group </label>
+                          <label for="inputFirstName" class="control-label">Customer Group <span class='require'>*</span></label>
                           <div class="input-icon">
-                            <input id="inputFirstName" type="text" placeholder="Customer Group" ng-model="showCase.dealer.customerGroup" class="form-control"/>
+                            <input id="inputFirstName" type="text" placeholder="Customer Group" ng-model="showCase.dealer.customerGroup" class="form-control" required/>
                           </div>
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group has-success">
-                          <label for="inputFirstName" class="control-label">Phone </label>
+                          <label for="inputFirstName" class="control-label">Phone <span class='require'>*</span></label>
                           <div class="input-icon">
-                            <input id="inputFirstName" type="text" placeholder="Phone" ng-model="showCase.dealer.phone" class="form-control"  data-ng-pattern="/^[0-9]{1,10}$/"/>
-                             <span ng-show="myForm.price_field.$error.pattern">Not a valid number!</span>
+                            <input id="inputFirstName" name="input" type="number" placeholder="Phone" ng-model="showCase.dealer.phone" class="form-control" required ng-pattern="/^[0-9]{10,10}$/" />
+                            <span class="error" ng-show="myForm.input.$error.pattern">Please enter 10 digit number!</span>
                           </div>
+                          
                         </div>
                       </div>
                     </div>
@@ -48,14 +49,14 @@
                         <div class="form-group">
                           <label for="inputEmail" class="control-label">Email <span class='require'>*</span></label>
                           <div class="input-icon"><i class="fa fa-envelope"></i>
-                            <input type="email" placeholder="Email Address" ng-model="showCase.dealer.email" class="form-control"/>
+                            <input type="email" placeholder="Email Address" ng-model="showCase.dealer.email" class="form-control" required/>
                           </div>
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
                           <label for="selPSM" class="control-label">Zone <span class='require'>*</span></label>
-                          <select id="selPSM" ng-model="showCase.dealer.zone" data-ng-change="getRSM(showCase.dealer.zone)" class="form-control">
+                          <select id="selPSM" ng-model="showCase.dealer.zone" data-ng-change="getRSM(showCase.dealer.zone)" class="form-control" required>
                           	<option value="">Select Zone</option>
                             <option data-ng-selected="showCase.dealer.zone.id == zone.id" ng-repeat="zone in zoneList" value="{{zone}}" >{{zone.name}}</option>
                           </select>
@@ -66,7 +67,7 @@
                       <div class="col-md-6">
                         <div class="form-group">
                           <label for="selPSM" class="control-label">Territory <span class='require'>*</span></label>
-                          <select id="selPSM" ng-model="showCase.dealer.territory" class="form-control">
+                          <select id="selPSM" ng-model="showCase.dealer.territory" class="form-control" required>
                             <option value="">Select Territory</option>
                             <option data-ng-selected="showCase.dealer.territory.id == t.id" ng-repeat="t in territoryList" value="{{t}}" >{{t.name}}</option>
                           </select>
@@ -80,7 +81,7 @@
                           <tags-input ng-model="showCase.dealer.pins" display-property="pin" add-from-autocomplete-only="true">
 						      <auto-complete source="loadPin($query)"></auto-complete>
 						  </tags-input>
-						  <p style="color: red;" ng-show="isPin"><b>*Please enter pins</b></p>
+						  <p style="color: red;" ng-show="isPin"><b>*Please enter pins</b></p> 
                         </div>
                       </div>
                     </div>
@@ -120,7 +121,7 @@
                       <div class="col-md-12">
                         <div class="form-group">
                           <label for="inputStreet" class="control-label">Address Line <span class='require'>*</span></label>
-                          <textarea rows="1" cols="" ng-model="showCase.dealer.address" class="form-control"></textarea>
+                          <textarea rows="1" cols="" ng-model="showCase.dealer.address" class="form-control" required></textarea>
                         </div>
                       </div>
                     </div>
@@ -128,7 +129,7 @@
                       <div class="col-md-6">
                         <div class="form-group">
                           <label for="selPSM" class="control-label">State <span class='require'>*</span></label>
-                          <select id="selPSM" ng-model="showCase.dealer.state" class="form-control">
+                          <select id="selPSM" ng-model="showCase.dealer.state" class="form-control" required>
                            <option value="">Select state</option>
                             <option ng-repeat="state in stateList" value="{{state.name}}" >{{state.name}}</option>
                           </select>
@@ -137,7 +138,7 @@
                       <div class="col-md-6">
                         <div class="form-group">
                           <label for="selPSM" class="control-label">District <span class='require'>*</span></label>
-                          <select id="selPSM" ng-model="showCase.dealer.district" class="form-control">
+                          <select id="selPSM" ng-model="showCase.dealer.district" class="form-control" required>
                             <option value="">Select District</option>
                             <option ng-repeat="district in districtList" value="{{district.name}}" >{{district.name}}</option>
                           </select>
@@ -147,16 +148,16 @@
                     <div class="row">
                     <div class="col-md-6">
                         <div class="form-group has-success">
-                          <label for="inputFirstName" class="control-label">Sub District </label>
+                          <label for="inputFirstName" class="control-label">Sub District <span class='require'>*</span></label>
                           <div class="input-icon">
-                            <input id="inputFirstName" type="text" ng-model="showCase.dealer.subdist" placeholder="Sub District" class="form-control"/>
+                            <input id="inputFirstName" type="text" ng-model="showCase.dealer.subdist" placeholder="Sub District" class="form-control" required/>
                           </div>
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label for="inputPostCode" class="control-label">Zip Code</label>
-                          <input id="inputPostCode" type="text" ng-model="showCase.dealer.zipCode" placeholder="Zip Code" class="form-control"/>
+                          <label for="inputPostCode" class="control-label">Zip Code <span class='require'>*</span></label>
+                          <input id="inputPostCode" type="text" ng-model="showCase.dealer.zipCode" placeholder="Zip Code" class="form-control" required/>
                         </div>
                       </div>
                     </div>

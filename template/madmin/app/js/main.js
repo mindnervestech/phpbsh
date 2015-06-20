@@ -1916,6 +1916,7 @@ App.controller('ChartsChartJsController', function ($scope, $routeParams){
 App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){
 	var vm = this;
 	vm.tabHeading = "My Leads";
+	$scope.invalidPhone = false;
 	vm.orders = [];
 	vm.leadHistory = [];
 	vm.lead = {};
@@ -1942,9 +1943,11 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, DTOptions
 	search_html += "_INPUT_";
 	search_html += '</div>';
 	$scope.editLeadTab = function(id) {
+		
 		$http.get('/webapp/api/business/lead/'+id).success(function(data){
 			vm.lead = data;
 			$scope.dpDate = moment();
+						
 			getDisposition1(data.disposition1);
 			$('#myLeads').hide();
 			$('#gotoManage').show();
@@ -1955,6 +1958,8 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, DTOptions
 		$http.get('/webapp/api/business/lead/history/'+id).success(function(orders){
 			vm.leadHistory = orders;
 		});
+		
+
 	}
 
 	$scope.manageLeadTab = function() {
@@ -2130,7 +2135,13 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, DTOptions
 	}
 	
 	vm.createLead = function(){
-		console.log(vm.newLead);
+		if(($scope.showCase.newLead.contactNo+"").length == 10){
+    		$scope.invalidPhone = false;
+    		console.log(vm.newLead);
+		}
+		else{
+			$scope.invalidPhone = true;
+		}
 	}
 
 
@@ -2215,6 +2226,7 @@ App.controller('ManageRolesTableCtrl',function($scope, DTOptionsBuilder, DTColum
 App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){
 	var vm = this;
     vm.users = [];
+    $scope.invalidPhone = false;
     vm.user = {};
     vm.leadHistory = [];
     $scope.userData = {};
@@ -2223,6 +2235,11 @@ App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColum
     search_html = '<div class="input-group input-group-sm mbs">';
     search_html += "_INPUT_";
     search_html += '</div>';
+    
+    
+    
+    
+    
     
     vm.dtOptions = DTOptionsBuilder.newOptions()
       .withBootstrap()
@@ -2361,20 +2378,25 @@ App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColum
     
     
     $scope.createUser = function() {
+    	/*console.log(($scope.userData.phone+"").length);*/
     	
-    	$http({method:'POST',url:'/webapp/api/business/saveUser',data:$scope.userData}).success(function(data) {
-    		vm.users = data;
-    		$scope.userData = {};// Empty form
-    		//$scope.userData.$setPristine();
-    		$('#pre-selected-options').multiSelect('deselect_all');
-    		$('#userDetailsTab').click();
-        	$('#userTab').hide();
+    	if(($scope.userData.phone+"").length == 10){
+    		$scope.invalidPhone = false;
+    		$http({method:'POST',url:'/webapp/api/business/saveUser',data:$scope.userData}).success(function(data) {
+    			vm.users = data;
+    			$scope.userData = {};// Empty form
+    			//$scope.userData.$setPristine();
+    			$('#pre-selected-options').multiSelect('deselect_all');
+    			$('#userDetailsTab').click();
+    			$('#userTab').hide();
         	$scope.showMessage("success","Successfully Saved.");
-    	}).error(function(data){
+    		}).error(function(data){
     		$scope.showMessage("error","Failed to Save.");
-    			
-    	});
-    	
+    		});
+    	}
+    	else{
+    		$scope.invalidPhone = true;
+    	}
     }
     
     $scope.editUser = function(user) {
@@ -2387,30 +2409,42 @@ App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColum
 				}
 			}
          });
+		
+		if(($scope.showCase.user.phone+"").length == 10){
+    		$scope.invalidPhone = false;
     	
-		$http({method:'POST',url:'/webapp/api/business/updateUser',data:user}).success(function(data) {
-			vm.users = data;
-			$scope.showMessage("success","Successfully Updated.");
-    	}).Error(function(data){
-    		$scope.showMessage("error","Fail to  Updated.");
-    	});
-    	$('#userDetailsTab').click();
-    	$('#userTab').hide();
+    		$http({method:'POST',url:'/webapp/api/business/updateUser',data:user}).success(function(data) {
+    			vm.users = data;
+    			$scope.showMessage("success","Successfully Updated.");
+    			}).Error(function(data){
+    			$scope.showMessage("error","Fail to  Updated.");
+    			});
+    		$('#userDetailsTab').click();
+    		$('#userTab').hide();
+    		
+    		
+		}
+		else{
+			$scope.invalidPhone = true;
+		}
+		
+        
     }
+    
     
     $scope.getDealearsByDistrict = function(district){
     	vm.user.dealer = "";
     	$http.get('/webapp/api/business/getDealersByDistrict/'+district).success(function(data) {
 			$scope.dralerList = data;
     	});	
-    }
-    
+        }
     
 });
 
 App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){
 	var vm = this;
     vm.users = [];
+    $scope.invalidPhone = false;
     vm.dealer;
     vm.pincode = [];
     vm.leadHistory = [];
@@ -2424,22 +2458,6 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     search_html = '<div class="input-group input-group-sm mbs">';
     search_html += "_INPUT_";
     search_html += '</div>';
-
-    $scope.init = function() {
-    	$http({method:'GET',url:'/webapp/api/business/getZones'})
-		.success(function(data) {
-			console.log(data);
-			$scope.zoneList = data.zoneList;
-			$scope.stateList = data.stateList;
-			$scope.territoryList = data.territoryList;
-			$scope.districtList = data.districtList;
-			$scope.dealerData.products = data.productList;
-			vm.users = data.dealerList;
-			setTimeout(function(){
-				$('#pre-selected-options').multiSelect();
-			},500);
-		});
-    }
     
     vm.dtOptions = DTOptionsBuilder.newOptions()
       .withBootstrap()
@@ -2498,6 +2516,24 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
 	 * $resource('/template/madmin/app/file/get-dealers.json').query().$promise.then(function(users) {
 	 * vm.users = users; });
 	 */
+    
+    $scope.init = function() {
+    	
+    	$http({method:'GET',url:'/webapp/api/business/getZones'})
+		.success(function(data) {
+			console.log(data);
+			$scope.zoneList = data.zoneList;
+			$scope.stateList = data.stateList;
+			$scope.territoryList = data.territoryList;
+			$scope.districtList = data.districtList;
+			$scope.dealerData.products = data.productList;
+			vm.users = data.dealerList;
+			setTimeout(function(){
+				$('#pre-selected-options').multiSelect();
+			},500);
+		});
+    }
+    
     
     $scope.loadPin = function(query) {
     	return $http.get('/webapp/api/business/getPincodes?query='+query);
@@ -2564,6 +2600,10 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     	});	
     }
     $scope.updateDealer = function(dealer) {
+    	
+    	if(($scope.showCase.dealer.phone+"").length == 10){
+    		$scope.invalidPhone = false;
+    	
     		$scope.isPin = false;
     		$scope.isRsm = false;
     		$scope.isTsr = false;
@@ -2578,7 +2618,8 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
 						productVM.selected = true;
 					}
 				}
-	         });
+	         });    	
+		 
 	    	$http({method:'POST',url:'/webapp/api/business/updateDealer',data:dealer}).success(function(data) {
 				console.log('success');
 				$scope.showMessage("success","Successfully Updated.");
@@ -2587,9 +2628,18 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
 	    	});	
 	    	$('#dealerDetailsTab').click();
 	    	$('#dealerTab').hide();
+	    	
+	    	}
+	    	else{
+	    		$scope.invalidPhone = true;
+	    	}
     }
     
     $scope.createDealer = function() {
+    	
+    	if(($scope.dealerData.phone+"").length == 10){
+    		$scope.invalidPhone = false;
+    	
     	angular.forEach($scope.dealerData.products, function(productVM) {
 			if($scope.dealerData.productlist) {
 				if($scope.dealerData.productlist.indexOf(""+productVM.id) == -1) {
@@ -2621,6 +2671,10 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     	}
     	$('#dealerDetailsTab').click();
     	$('#dealerTab').hide();
+    	
+    	}else{
+    		$scope.invalidPhone = true;
+    	}
     }
     
     $scope.getRSM = function(zone){

@@ -3,7 +3,7 @@
             <div class="panel panel-red">
               <div class="panel-heading">View User</div>
               <div class="panel-body pan">
-                <form data-ng-submit="editUser(showCase.user)" class="horizontal-form">
+                <form data-ng-submit="editUser(showCase.user)" class="horizontal-form" name="myForm">
                   <div class="form-body pal">
                     <h3>Personal</h3>
                     <div class="row">
@@ -45,15 +45,16 @@
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label for="inputPhone" class="control-label">Contact Number</label>
-                          <input id="inputPhone" type="text" placeholder="" ng-model="showCase.user.phone" class="form-control"/>
+                          <label for="inputPhone" class="control-label">Contact Number<span class='require'>*</span></label>
+                          <input id="inputPhone" type="number" name="input" placeholder="" ng-model="showCase.user.phone" class="form-control" required ng-pattern="/^[0-9]{10,10}$/"/>
+                          <span class="error" ng-show="myForm.input.$error.pattern">Please enter 10 digit number!</span>
                         </div>
                       </div>
                     </div>
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group" data-ng-if="userRole == 10">
-                          <label for="inputBirthday" class="control-label">Role</label>
+                          <label for="inputBirthday" class="control-label">Role<span class='require'>*</span></label>
                           <select id="selPSM" ng-model="showCase.user.role.roleId" class="form-control" required>
                           	<option value="">Select Role</option>
                             <option data-ng-selected="showCase.user.role.roleId == role.roleId" 
@@ -71,7 +72,7 @@
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label for="inputPhone" class="control-label">Zone</label>
+                          <label for="inputPhone" class="control-label">Zone<span class='require'>*</span></label>
                           <select id="selPSM" ng-model="showCase.user.zone.id" class="form-control" required>
                           	<option value="">Select Zone</option>
                             <option data-ng-selected="showCase.user.zone.id == zone.id" ng-repeat="zone in zoneList" 
@@ -105,7 +106,7 @@
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label for="inputFirstName" class="control-label">state</label>
+                          <label for="inputFirstName" class="control-label">State<span class='require'>*</span></label>
                           <select id="selPSM" ng-model="showCase.user.state.id" class="form-control" required>
                            <option value="">Select state</option>
                             <option data-ng-selected="showCase.user.state.id == state.id" ng-repeat="state in stateList" 

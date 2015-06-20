@@ -3,27 +3,28 @@
 		<div class="panel panel-red">
 			<div class="panel-heading">newLead Details</div>
 			<div class="panel-body pan">
-				<form data-ng-submit="showCase.createLead()">
+				<form data-ng-submit="showCase.createLead()" name="myForm">
 					<div class="form-body pal">
 						<div class="row">
 							<div class="col-md-4">
 								<div class="form-group">
 									<label for="inputUsername" class="control-label">Lead
-										Number</label>
+										Number <span class='require'>*</span></label>
 									<div class="input-icon">
-										<input id="inputUsername" type="text"
+										<input id="inputUsername" type="number"
 											placeholder="Lead Number"
 											data-ng-model="showCase.newLead.leadNumber" style="cursor: auto;"
-											class="form-control" />
+											class="form-control" required />
 									</div>
 								</div>
 							</div>
 							<div class="col-md-4">
 								<div class="form-group">
-									<label for="inputEmail" class="control-label">Dealer</label>
+									<label for="inputEmail" class="control-label">Dealer <span class='require'>*</span></label>
 									<div class="input-icon">
 										 <select class="form-control" data-ng-model="showCase.newLead.dealer"
-											style="cursor: auto;">
+											style="cursor: auto;" required>
+											<option value="">Select Dealer</option>
 											<option data-ng-repeat="dealer in dealerList" value="{{dealer.id}}">{{dealer.name}}</option>
 										</select>
 
@@ -33,10 +34,11 @@
 							<div class="col-md-4">
 								<div class="form-group">
 									<label for="inputEmail" class="control-label">Product
-										Name</label>
+										Name <span class='require'>*</span></label>
 									<div class="input-icon">
 										<select class="form-control" data-ng-model="showCase.newLead.product"
-											style="cursor: auto;">
+											style="cursor: auto;" required>
+											<option value="">Select Product</option>
 											<option data-ng-repeat="product in productList" value="{{product.id}}">{{product.name}}</option>
 										</select>
 									</div>
@@ -48,32 +50,33 @@
 							<div class="col-md-4">
 								<div class="form-group">
 									<label for="inputEmail" class="control-label">Contact
-										Name</label>
+										Name <span class='require'>*</span></label>
 									<div class="input-icon">
 										<i class="fa fa-user"></i> <input type="text"
 											placeholder="Contact Name" data-ng-model="showCase.newLead.nam"
-											style="cursor: auto;" class="form-control" />
+											style="cursor: auto;" class="form-control" required/>
 									</div>
 								</div>
 							</div>
 							<div class="col-md-4">
 								<div class="form-group">
-									<label for="inputUsername" class="control-label">Email</label>
+									<label for="inputUsername" class="control-label">Email <span class='require'>*</span></label>
 									<div class="input-icon">
 										<i class="fa fa-envelope"></i> <input id="inputUsername"
 											type="text" placeholder="email" style="cursor: auto;"
-											data-ng-model="showCase.newLead.email" class="form-control" />
+											data-ng-model="showCase.newLead.email" class="form-control" required/>
 									</div>
 								</div>
 							</div>
 							<div class="col-md-4">
 								<div class="form-group">
 									<label for="inputEmail" class="control-label">Contact
-										Number</label>
+										Number <span class='require'>*</span></label>
 									<div class="input-icon">
-										 <input type="text" placeholder="Contact Number"
+										 <input type="number" name="input" placeholder="Contact Number"
 											data-ng-model="showCase.newLead.contactNo" style="cursor: auto;"
-											class="form-control" />
+											class="form-control" required ng-pattern="/^[0-9]{10,10}$/" />
+											<span class="error" ng-show="myForm.input.$error.pattern">Please enter 10 digit number!</span>
 									</div>
 								</div>
 							</div>
@@ -82,10 +85,11 @@
 						<div class="row">
 							<div class="col-md-4">
 								<div class="form-group">
-									<label for="inputEmail" class="control-label">State</label>
+									<label for="inputEmail" class="control-label">State <span class='require'>*</span></label>
 									<div class="input-icon">
 										<select class="form-control" data-ng-model="showCase.newLead.state"
-											style="cursor: auto;">
+											style="cursor: auto;" required>
+											<option value="">Select State</option>
 											<option data-ng-repeat="state in stateList" value="{{state.name}}">{{state.name}}</option>
 										</select>
 									</div>
@@ -93,10 +97,11 @@
 							</div>
 							<div class="col-md-4">
 								<div class="form-group">
-									<label for="inputUsername" class="control-label">City</label>
+									<label for="inputUsername" class="control-label">City <span class='require'>*</span></label>
 									<div class="input-icon">
 										<select class="form-control" data-ng-model="showCase.newLead.city"
-											style="cursor: auto;">
+											style="cursor: auto;" required>
+											<option value="">Select City</option>
 											<option data-ng-repeat="city in cityList" value="{{city.name}}">{{city.name}}</option>
 										</select>
 									</div>
@@ -104,11 +109,11 @@
 							</div>
 							<div class="col-md-4">
 								<div class="form-group">
-									<label for="inputEmail" class="control-label">Pincode</label>
+									<label for="inputEmail" class="control-label">Pincode <span class='require'>*</span></label>
 									<div class="input-icon">
 										<input type="text" placeholder="Pincode"
 											data-ng-model="showCase.newLead.pinCode" style="cursor: auto;"
-											class="form-control" />
+											class="form-control" required />
 									</div>
 								</div>
 							</div>
@@ -117,10 +122,11 @@
 						<div class="row">
 							<div class="col-md-4">
 								<div class="form-group">
-									<label for="inputEmail" class="control-label">Type</label>
+									<label for="inputEmail" class="control-label">Type <span class='require'>*</span></label>
 									<div class="input-icon">
 										<select class="form-control" data-ng-model="showCase.newLead.type"
-											style="cursor: auto;">
+											style="cursor: auto;" required>
+											<option value="">Select Type</option>
 											<option value="Free Standing">Free Standing</option>
 											<option value="Build In">Build In</option>
 										</select>
@@ -130,21 +136,22 @@
 							<div class="col-md-4">
 								<div class="form-group">
 									<label for="inputUsername" class="control-label">Campaign
-										Name</label>
+										Name <span class='require'>*</span></label>
 									<div class="input-icon">
 										<!-- <i class="fa fa-user"></i> -->
 										<input id="inputUsername" type="text"
 											data-ng-model="showCase.newLead.campaignName" style="cursor: auto;"
-											placeholder="Campaign Name" class="form-control" />
+											placeholder="Campaign Name" class="form-control" required />
 									</div>
 								</div>
 							</div>
 							<div class="col-md-4">
 								<div class="form-group">
-									<label for="inputUsername" class="control-label">Categorization</label>
+									<label for="inputUsername" class="control-label">Categorization<span class='require'>*</span></label>
 									<div class="input-icon">
 										<select class="form-control" data-ng-model="showCase.newLead.categorization"
-											style="cursor: auto;">
+											style="cursor: auto;" required>
+											<option value="">Select Categorization</option>
 											<option value="Hot">Hot</option>
 											<option value="Warm">Warm</option>
 										</select>
@@ -158,33 +165,33 @@
 							<div class="col-md-4">
 								<div class="form-group">
 									<label for="inputEmail" class="control-label">Area of
-										Interest 1</label>
+										Interest 1 <span class='require'>*</span></label>
 									<div class="input-icon">
 										<input type="text" placeholder="Area of Interest 1"
 											style="cursor: auto;"
 											data-ng-model="showCase.newLead.areaofInterest1"
-											class="form-control" />
+											class="form-control" required />
 									</div>
 								</div>
 							</div>
 							<div class="col-md-4">
 								<div class="form-group">
 									<label for="inputEmail" class="control-label">Area of
-										Interest 2</label>
+										Interest 2<span class='require'>*</span></label>
 									<div class="input-icon">
 										 <input type="text" placeholder="Area of Interest 2"
 											style="cursor: auto;"
 											data-ng-model="showCase.newLead.areaofInterest2"
-											class="form-control" />
+											class="form-control" required />
 									</div>
 								</div>
 							</div>
 							<div class="col-md-4">
 								<div class="form-group">
-									<label for="inputEmail" class="control-label">Remarks</label>
+									<label for="inputEmail" class="control-label">Remarks <span class='require'>*</span></label>
 									<div class="input-icon">
 										<textarea rows="2" class="form-control" data-ng-model="showCase.newLead.remarks1"
-											style="cursor: auto;"></textarea>
+											style="cursor: auto;" required></textarea>
 									</div>
 								</div>
 							</div>
