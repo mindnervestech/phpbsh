@@ -1913,7 +1913,7 @@ App.controller('ChartsChartJsController', function ($scope, $routeParams){
     //END PORTLET
 });
 
-App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){
+App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScope, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){
 	var vm = this;
 	vm.tabHeading = "My Leads";
 	$scope.invalidPhone = false;
@@ -1929,13 +1929,15 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, DTOptions
 		$http.get('/webapp/api/business/getLeads').success(function(orders){
 			vm.orders = orders;
 		});
-		$http.get('/webapp/api/business/getNewLeadData').success(function(data){
-			$scope.dealerList = data.dealerList;
-			$scope.productList = data.productList;
-			$scope.stateList = data.stateList;
-			$scope.cityList = data.cityList;
-		});
 		
+		if($rootScope.userRole == '9' || $rootScope.userRole == '11' || $rootScope.userRole == '5' || $rootScope.userRole == '7'){
+			$http.get('/webapp/api/business/getNewLeadData').success(function(data){
+				$scope.dealerList = data.dealerList;
+				$scope.productList = data.productList;
+				$scope.stateList = data.stateList;
+				$scope.cityList = data.cityList;
+			});
+		}
 	}, 100);
 
 	var search_html;
@@ -1943,11 +1945,9 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, DTOptions
 	search_html += "_INPUT_";
 	search_html += '</div>';
 	$scope.editLeadTab = function(id) {
-		
 		$http.get('/webapp/api/business/lead/'+id).success(function(data){
 			vm.lead = data;
 			$scope.dpDate = moment();
-						
 			getDisposition1(data.disposition1);
 			$('#myLeads').hide();
 			$('#gotoManage').show();
@@ -1958,8 +1958,6 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, DTOptions
 		$http.get('/webapp/api/business/lead/history/'+id).success(function(orders){
 			vm.leadHistory = orders;
 		});
-		
-
 	}
 
 	$scope.manageLeadTab = function() {
@@ -2018,6 +2016,15 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, DTOptions
         order.selected = $scope.selectedAll;
       });
     };
+    
+    vm.reassignDealer = function(dealer){
+    	console.log(dealer);
+    	angular.forEach(vm.orders, function(order) {
+    		if(order.selected){
+    			console.log("selected"+order.id);
+    		}
+    	});
+    }
 
 	getDisposition1 = function(name){
 		angular.forEach( $scope.dispositoion1, function(dispo) {
@@ -2136,8 +2143,11 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, DTOptions
 	
 	vm.createLead = function(){
 		if(($scope.showCase.newLead.contactNo+"").length == 10){
-    		$scope.invalidPhone = false;
-    		console.log(vm.newLead);
+	    		$scope.invalidPhone = false;
+	    		console.log(vm.newLead);
+			$http({method:'POST',url:'/webapp/api/business/createLead',data: vm.newLead}).success(function(response) {
+				$scope.showMessage("success","Successfully Updated.");
+			});
 		}
 		else{
 			$scope.invalidPhone = true;
@@ -2235,11 +2245,6 @@ App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColum
     search_html = '<div class="input-group input-group-sm mbs">';
     search_html += "_INPUT_";
     search_html += '</div>';
-    
-    
-    
-    
-    
     
     vm.dtOptions = DTOptionsBuilder.newOptions()
       .withBootstrap()
@@ -2378,7 +2383,6 @@ App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColum
     
     
     $scope.createUser = function() {
-    	/*console.log(($scope.userData.phone+"").length);*/
     	
     	if(($scope.userData.phone+"").length == 10){
     		$scope.invalidPhone = false;
@@ -2431,13 +2435,13 @@ App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColum
         
     }
     
-    
     $scope.getDealearsByDistrict = function(district){
     	vm.user.dealer = "";
     	$http.get('/webapp/api/business/getDealersByDistrict/'+district).success(function(data) {
 			$scope.dralerList = data;
     	});	
-        }
+    }
+    
     
 });
 
