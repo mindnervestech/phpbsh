@@ -1390,6 +1390,7 @@ App.controller('LoginController',function ($scope, $rootScope, $location, $http,
 App.controller('AppController', function ($scope, $http, $rootScope, $routeParams, $location, Auth, $window){
 	$scope.zone = 0;
     $scope.product = 0;
+    $scope.state = 0;
     $scope.startDate = moment().subtract('days', 7).format("MMDDYYYY");;
     $scope.endDate = moment().add('days', 1).format("MMDDYYYY");
 	if($window.sessionStorage["userInfo"]) {
@@ -1413,9 +1414,10 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
         	spline1Url = '/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate;
         	spline2Url = '/webapp/api/business/getProductSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate;
         	splineUrl = undefined;
-        	$http.get('/webapp/api/business/getZoneAndProduct').success(function(data){
+        	$http.get('/webapp/api/business/getZoneStateProduct').success(function(data){
 				$scope.zoneList = data.zoneList;
 				$scope.productList = data.productList;
+				$scope.stateList = data.stateList;
 			});
         } else {
         	splineUrl = '/webapp/api/business/getDealerSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate;
@@ -1427,7 +1429,7 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
         $scope.dashboard = {
         		progressBar:{
         			remote:{
-       				 url:'/webapp/api/business/getDashboardProgressbarAll?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&product='+$scope.product
+       				 url:'/webapp/api/business/getDashboardProgressbarAll?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product
         			}
         		}
         }
@@ -1460,51 +1462,6 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
         
     };
     
-    
-    
-    /*if($rootScope.userRole == '1' || $rootScope.userRole == '10' || $rootScope.userRole == '2' || $rootScope.userRole == '3' || $rootScope.userRole == '4'){
-    	$scope.dashboard = {
-        		spline1:{
-        			remote:{
-       				 url:'/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate
-        			}
-        		},
-        		spline2:{
-        			remote:{
-       				 url:'/webapp/api/business/getProductSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate
-        			}
-        		}
-        };
-	} else {
-		$scope.dashboard = {
-	    		spline:{
-	    			remote:{
-	   				 url:'/webapp/api/business/getDealerSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate
-	    			}
-	    		}
-	    };
-	}*/
-	
-    
-	/*$scope.dashboard = {
-    		progressBar:{
-    			remote:{
-   				 url:'/webapp/api/business/getDashboardProgressbarAll?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&product='+$scope.product
-    			}
-    		},
-    		spline1:{
-    			remote:{
-   				 url:'/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate
-    			}
-    		},
-    		spline2:{
-    			remote:{
-   				 url:'/webapp/api/business/getProductSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate
-    			}
-    		}
-    };*/
-    
-    
 	$rootScope.style = 'style1';
     $rootScope.theme = 'pink-blue';
     $scope.$on('reportDateChange', function (event, args) {
@@ -1524,18 +1481,19 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
     	}
     	
     	$scope.dashboard.progressBar.remote = {
-    			url:'/webapp/api/business/getDashboardProgressbarAll?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&product='+$scope.product,
+    			url:'/webapp/api/business/getDashboardProgressbarAll?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product,
     	}
     	
     	$scope.$evalAsync();
     	$scope.$apply();
     });
     
-    $scope.getDashBoard = function(zone, product){
+    $scope.getDashBoard = function(zone, state, product){
     	$scope.zone = zone;
+    	$scope.state = state;
     	$scope.product = product;
     	$scope.dashboard.progressBar.remote = {
-    		url:'/webapp/api/business/getDashboardProgressbarAll?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&product='+$scope.product,
+    		url:'/webapp/api/business/getDashboardProgressbarAll?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product,
     	}
     	$scope.$evalAsync();
     }
