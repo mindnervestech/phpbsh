@@ -72,8 +72,7 @@
 				<div class="col-md-12">
 					<div class="form-group">
 						<div class="col-md-4"><label for="inputPinCodes" class="control-label">Select Dealer </label></div>
-						<div class="col-md-8"><select size="5" class="form-control" data-ng-model="dealer"
-							style="cursor: auto;">
+						<div class="col-md-8 myselect-container"><select class="form-control" data-ng-model="dealer" onmousedown="if(this.options.length>6){this.size=6;}" onchange='this.size=0;' onblur="this.size=0;">
 							<option data-ng-repeat="dealer in dealerList" value="{{dealer}}">{{dealer.name}}</option>
 						</select></div>
 					</div>
@@ -86,3 +85,14 @@
         </div>
       </div>
     </div>
+
+
+<style>
+#myselect-container {
+	position: relative;
+}
+
+#myselect-container select {
+	position: absolute;
+}
+</style>

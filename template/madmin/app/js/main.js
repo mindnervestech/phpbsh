@@ -1937,6 +1937,9 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScop
 				$scope.stateList = data.stateList;
 				$scope.cityList = data.cityList;
 			});
+			$http.get('/webapp/api/business/getReassignList').success(function(data){
+				$scope.dealerList = data;
+			});
 		}
 	}, 100);
 
@@ -2019,11 +2022,29 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScop
     
     vm.reassignDealer = function(dealer){
     	console.log(dealer);
-    	angular.forEach(vm.orders, function(order) {
+    	if(dealer == undefined){
+    		$scope.showMessage("warning","Select Reassign User.");
+    	}
+    	var ids = [];
+    	var tempLeads = vm.orders;
+    	angular.forEach(tempLeads, function(order) {
     		if(order.selected){
-    			console.log("selected"+order.id);
+    			ids.push(order.id);
+    			order.dealerName =  JSON.parse(dealer).name;
     		}
     	});
+    	if(ids.length == 0){
+    		$scope.showMessage("warning","Select Leads.");
+    		$('#reassign-dealer-modal').modal('hide');
+    	}
+    	vm.orders = tempLeads;
+    	var data = {};
+    	data.ids = ids;
+    	data.reassign = JSON.parse(dealer);
+    	$http({method:'POST',url:'/webapp/api/business/reassignDealerToLead',data: data}).success(function(response) {
+			$scope.showMessage("success","Successfully Updated.");
+			$('#reassign-dealer-modal').modal('hide');
+		});
     }
 
 	getDisposition1 = function(name){
@@ -2511,10 +2532,6 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     	  user.selected = $scope.selectedAll;
       });
     };
-    
-    vm.changeStatus = function(){
-    	
-    }
 
     /*
 	 * $resource('/template/madmin/app/file/get-dealers.json').query().$promise.then(function(users) {
