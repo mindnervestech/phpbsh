@@ -1,0 +1,59 @@
+<div class="row" >
+  <div class="col-lg-12">
+    <div class="panel panel-red">
+      <div class="panel-heading">Report Frequency</div>
+      <div class="panel-body pan">
+        <form data-ng-submit="updateReportFrequency()" role="form" class="form-horizontal form-bordered">
+          
+          <div class="form-body">
+       		
+          
+          
+          <div class="col-lg-12" >
+		     <div class="portlet-body">
+		        <div class="row mbm">
+		          <div class="col-lg-12">
+		            <div class="table-responsive"  >
+		              <table id="my_leads"
+		              class="table table-hover table-striped table-bordered table-advanced tablesorter display tb-sticky-header">
+		              	<thead>
+		                  <tr>
+		                   
+		                    <th style="background-color: #dc6767;color:white;text-align:Center;"   width="30%">Roles</th>
+		                    <th style="background-color: #dc6767;color:white;text-align:Center;" width="50%">Report Frequency</th>
+		                    
+		                  </tr>
+		                  </thead>
+		                  
+		          		  <tbody>
+		                  <tr data-ng-repeat="role in showCase.roles">
+		                    
+		                    <td style="text-align:Center;">{{ role.name }}</td>
+		                    
+		                    
+		                    <td style="text-align:Center;"><select style="cursor:pointer;" ng-model="role.report_freq"  class="selectpicker form-control">
+						                  
+						                  <option value="daily">Daily</option>
+						                  <option value="weekly">Weekly</option>
+						                  <option value="fortnightly">Fortnightly</option>
+						                  <option value="monthly" >Monthly</option>
+										</select>
+							</td>
+		                    
+		                  </tr>
+		                  </tbody>	        
+		              </table>
+		              	<div class="form-actions text-right pal">
+                			<button type="submit" class="btn btn-primary">Submit</button>&nbsp;
+            			</div>
+		            </div>
+		           </div>
+		          </div>
+		      </div>      
+		  </div>   
+		  </div>     
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

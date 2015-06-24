@@ -583,16 +583,20 @@ App.config(['$stateProvider', '$urlRouterProvider',
                 loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
                      return $ocLazyLoad.load({
                         files: [
-                                'vendors/DataTables/media/css/jquery.dataTables.css',
-                                'vendors/DataTables/extensions/TableTools/css/dataTables.tableTools.min.css',
-                                'vendors/DataTables/media/css/dataTables.bootstrap.css',
-                                'vendors/DataTables/media/js/jquery.dataTables.js',
-                                'vendors/DataTables/media/js/dataTables.bootstrap.js',
-                                'vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js',
-                                'vendors/DataTables/extensions/Pagination/input.js',
-                                'vendors/DataTables/extensions/ColumnFilter/jquery.dataTables.columnFilter.js',
-					        'vendors/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js',
-					        'vendors/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css',
+								'vendors/select2/select2-madmin.css',
+								'vendors/bootstrap-select/bootstrap-select.min.css',
+								'vendors/multi-select/css/multi-select-madmin.css',
+								'vendors/select2/select2.min.js',
+								'vendors/bootstrap-select/bootstrap-select.min.js',
+								'vendors/multi-select/js/jquery.multi-select.js',
+								'vendors/DataTables/media/css/jquery.dataTables.css',
+								'vendors/DataTables/extensions/TableTools/css/dataTables.tableTools.min.css',
+								'vendors/DataTables/media/css/dataTables.bootstrap.css',
+								'vendors/DataTables/media/js/jquery.dataTables.js',
+								'vendors/DataTables/media/js/dataTables.bootstrap.js',
+								'vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js',
+								'vendors/DataTables/extensions/Pagination/input.js',
+								'vendors/DataTables/extensions/ColumnFilter/jquery.dataTables.columnFilter.js',
                                 ]
                      });
                 }]
@@ -739,6 +743,29 @@ App.config(['$stateProvider', '$urlRouterProvider',
                 }]
             }
         })
+        
+        .state('report-freq', {
+            url: "/report-freq", 
+            templateUrl: 'templates/states/report-freq.html',
+            controller: 'ReportFreqTableCtrl as showCase', 
+            resolve: { 
+                loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+                     return $ocLazyLoad.load({
+                        files: [
+								'vendors/DataTables/media/css/jquery.dataTables.css',
+								'vendors/DataTables/extensions/TableTools/css/dataTables.tableTools.min.css',
+								'vendors/DataTables/media/css/dataTables.bootstrap.css',
+								'vendors/DataTables/media/js/jquery.dataTables.js',
+								'vendors/DataTables/media/js/dataTables.bootstrap.js',
+								'vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js',
+								'vendors/DataTables/extensions/Pagination/input.js',
+								'vendors/DataTables/extensions/ColumnFilter/jquery.dataTables.columnFilter.js',
+                                ]
+                     });
+                }]
+            }
+        })
+        
         .state('escalated-leads', {
             url: "/escalated-leads/:leadType?editId", 
             templateUrl: 'templates/states/manage-leads.html',
@@ -2849,6 +2876,35 @@ App.controller('GeneralConfigCtrl', function ($scope, $http){
 		});
 	}
 });
+
+App.controller('ReportFreqTableCtrl', function ($scope, $http, $routeParams, $resource){
+
+	var vm = this;
+    vm.roles = [];
+    $scope.role = {};
+   
+    	$http({method:'GET',url:'/webapp/api/business/getDetailsForRoles'})
+		.success(function(data) {		
+			vm.roles = data;	
+			console.log(vm.roles);
+		});
+    	 	
+    	$scope.updateReportFrequency = function(){ 		    		
+    		console.log(vm.roles);
+    		$http({method:'POST',url:'/webapp/api/business/updateReportFrequency',data:vm.roles}).success(function(response) {
+    			console.log('success');
+				$scope.showMessage("success","Successfully Saved.");
+	    	}).error(function(data){
+	    		$scope.showMessage("error","Fail to save.");
+	    	});	
+    
+    	}
+    
+});
+
+
+
+
 
 App.controller('EscalatedLeadsCtrl',function($stateParams, $scope, $http, $timeout, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){
 	var vm = this;
