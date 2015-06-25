@@ -22,7 +22,7 @@
 		        <div class="row mbm">
 		          <div class="col-lg-12">
 		            <div class="table-responsive" >
-		              <table id="my_leads" datatable="ng" data-dt-options="showCase.dtOptions" data-dt-column-defs="showCase.dtColumnDefs" 
+		              <table id="my_leads" datatable="ng" data-dt-options="showCase.dtOptions" data-dt-column-defs="showCase.dtColumnDefsHome" 
 		              class="table table-hover table-striped table-bordered table-advanced tablesorter display tb-sticky-header">
 		              	<thead>
 		                  <tr>
@@ -67,7 +67,7 @@
 		        <div class="row mbm">
 		          <div class="col-lg-12">
 		            <div class="table-responsive" >
-		              <table id="my_leads" datatable="ng" data-dt-options="showCase.dtOptions" data-dt-column-defs="showCase.dtColumnDefs" 
+		              <table id="my_leads" datatable="ng" data-dt-options="showCase.dtOptions" data-dt-column-defs="showCase.dtColumnDefsHome" 
 		              class="table table-hover table-striped table-bordered table-advanced tablesorter display tb-sticky-header">
 		              	<thead>
 		                  <tr>
@@ -97,7 +97,7 @@
 		</div>
       </div>
     </div>
-    <div class="col-lg-12" data-ng-if="userRole == 7 || userRole == 9 || userRole == 5 ||userRole == 6 || userRole == 8">
+    <div class="col-lg-12" data-ng-if="userRole == 11 ||userRole == 7 || userRole == 9 || userRole == 5 ||userRole == 6 || userRole == 8">
       <div class="panel">
         <div class="panel-body">
           <div class="row">
@@ -113,12 +113,12 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-12" data-ng-if="userRole != 7 && userRole != 9  && userRole != 5 && userRole != 6 && userRole != 8 ">
+    <div class="col-lg-12" data-ng-if="userRole != 7 && userRole != 9  && userRole != 5 && userRole != 11 ">
       <div class="panel">
         <div class="panel-body">
           <div class="row">
             <div class="col-md-12">
-              <h4 class="mbs text-uppercase">Leads By Zone</h4>
+              <h4 class="mbs text-uppercase"><span data-ng-show="zone == '0' && userRole != 6 && userRole != 8">Leads By Zone</span><span data-ng-show="zone != '0' || userRole == 6 || userRole == 8">Leads By State</span></h4>
               <p class="help-block"></p>
               <!-- <div id="area-chart-spline" style="width: 100%; height:300px" 
               ng-areachartspline=""></div> -->
@@ -129,7 +129,7 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-12"  data-ng-if="userRole != 7 && userRole != 9  && userRole != 5 && userRole != 6 && userRole != 8 ">
+    <div class="col-lg-12"  data-ng-if="userRole != 7 && userRole != 9  && userRole != 5 && userRole != 6 && userRole != 8  && userRole != 11">
       <div class="panel">
         <div class="panel-body">
           <div class="row">

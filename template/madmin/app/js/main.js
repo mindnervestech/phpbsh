@@ -1420,6 +1420,7 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
     $scope.state = 0;
     $scope.startDate = moment().subtract('days', 7).format("MMDDYYYY");;
     $scope.endDate = moment().add('days', 1).format("MMDDYYYY");
+    $scope.stateList = [];
 	if($window.sessionStorage["userInfo"]) {
 		var userInfo = JSON.parse($window.sessionStorage["userInfo"]);
 		if(userInfo.isLoggedIn){
@@ -1438,19 +1439,28 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
     function buildDashboard() {
     	var spline1Url,spline2Url,splineUrl; 
         if($rootScope.userRole == '1' || $rootScope.userRole == '10' || $rootScope.userRole == '2' || $rootScope.userRole == '3' || $rootScope.userRole == '4'){
-        	spline1Url = '/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate;
+        	spline1Url = '/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product,
         	spline2Url = '/webapp/api/business/getProductSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate;
         	splineUrl = undefined;
         	$http.get('/webapp/api/business/getZoneStateProduct').success(function(data){
 				$scope.zoneList = data.zoneList;
 				$scope.productList = data.productList;
-				$scope.stateList = data.stateList;
 			});
         } else {
         	splineUrl = '/webapp/api/business/getDealerSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate;
         	spline2Url = undefined;
         	spline1Url = undefined;
-        	
+        }
+        if($rootScope.userRole == '5' || $rootScope.userRole == '7'){
+        	$http.get('/webapp/api/business/getZoneStateProduct').success(function(data){
+				$scope.productList = data.productList;
+			});
+        }
+        if($rootScope.userRole == '6' || $rootScope.userRole == '8'){
+        	$http.get('/webapp/api/business/getStateByZone/user').success(function(data){
+    			$scope.stateList = data;
+    		});
+        	spline1Url = '/webapp/api/business/getStateSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&state='+$scope.state;
         }
         
         $scope.dashboard = {
@@ -1496,15 +1506,20 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
     	$scope.endDate = args.endDate;
     	if($rootScope.userRole == '1' || $rootScope.userRole == '10' || $rootScope.userRole == '2' || $rootScope.userRole == '3' || $rootScope.userRole == '4'){
     		$scope.dashboard.spline1.remote = {
-        			url:'/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate,
+        			url:'/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product,
         	}
         	$scope.dashboard.spline2.remote = {
         			url:'/webapp/api/business/getProductSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate,
         	}
     	} else {
     		$scope.dashboard.spline.remote = {
-        			url:'/webapp/api/business/getDealerSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate
-        	}
+    				url:'/webapp/api/business/getDealerSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate
+    		}
+    		if($rootScope.userRole == '6' || $rootScope.userRole == '8' ){
+    			$scope.dashboard.spline1.remote = {
+    					url:'/webapp/api/business/getStateSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&state='+$scope.state,
+    			}
+    		}
     	}
     	
     	$scope.dashboard.progressBar.remote = {
@@ -1516,9 +1531,38 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
     });
     
     $scope.getDashBoard = function(zone, state, product){
-    	$scope.zone = zone;
     	$scope.state = state;
     	$scope.product = product;
+    	if($rootScope.userRole == '6' || $rootScope.userRole == '8'){
+    		$scope.dashboard.spline1={
+    				remote:{
+    					url:'/webapp/api/business/getStateSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&state='+$scope.state,
+    				}
+    		};
+    	} else {
+    		if(zone == '0'){
+    			$scope.zone = zone;
+        		$scope.state = 0;
+        		$scope.stateList = [];
+        		$scope.dashboard.spline1={
+        				remote:{
+        					url:'/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product,
+        				}
+        		};
+        	} else {
+        		if(!angular.equals($scope.zone, zone)){
+        			$scope.zone = zone;
+        			$http.get('/webapp/api/business/getStateByZone/'+zone).success(function(data){
+            			$scope.stateList = data;
+            		});
+        		}
+        		$scope.dashboard.spline1={
+        				remote:{
+        					url:'/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product,
+        				}
+        		};
+        	}
+    	}
     	$scope.dashboard.progressBar.remote = {
     		url:'/webapp/api/business/getDashboardProgressbarAll?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product,
     	}
@@ -1922,9 +1966,11 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScop
 				$scope.stateList = data.stateList;
 				$scope.cityList = data.cityList;
 			});
-			$http.get('/webapp/api/business/getReassignList').success(function(data){
-				$scope.dealerList = data;
-			});
+			if($rootScope.userRole == '5' || $rootScope.userRole == '7'){
+				$http.get('/webapp/api/business/getReassignList').success(function(data){
+					$scope.dealerList = data;
+				});
+			}
 		}
 	}, 100);
 
@@ -1986,9 +2032,16 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScop
 
 
     vm.dtColumnDefs = [
-      //DTColumnDefBuilder.newColumnDef(0).notSortable(),
-      DTColumnDefBuilder.newColumnDef(4).notSortable()
-    ];
+                       // DTColumnDefBuilder.newColumnDef(0).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(2).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(3).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(4).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(5).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(6).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(7).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(8).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(9).notSortable(),
+                       ];
 
     vm.selectedAll = false;
 
@@ -2284,9 +2337,13 @@ App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColum
 
 
     vm.dtColumnDefs = [
-      // DTColumnDefBuilder.newColumnDef(0).notSortable(),
-      DTColumnDefBuilder.newColumnDef(4).notSortable()
-    ];
+                       DTColumnDefBuilder.newColumnDef(2).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(3).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(4).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(5).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(6).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(7).notSortable(),
+                       ];
 
     vm.selectedAll = false;
 
@@ -2501,9 +2558,13 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
 
 
     vm.dtColumnDefs = [
-      // DTColumnDefBuilder.newColumnDef(0).notSortable(),
-      DTColumnDefBuilder.newColumnDef(4).notSortable()
-    ];
+                       DTColumnDefBuilder.newColumnDef(2).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(3).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(4).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(5).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(6).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(7).notSortable(),
+                       ];
 
     vm.selectedAll = false;
 
@@ -2999,8 +3060,12 @@ App.controller('EscalatedLeadsCtrl',function($stateParams, $scope, $http, $timeo
 
 
     vm.dtColumnDefs = [
-      DTColumnDefBuilder.newColumnDef(4).notSortable()
-    ];
+                       DTColumnDefBuilder.newColumnDef(2).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(3).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(4).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(5).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(6).notSortable(),
+                       ];
 
     vm.selectedAll = false;
 
