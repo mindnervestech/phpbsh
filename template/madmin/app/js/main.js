@@ -1418,6 +1418,7 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
 	$scope.zone = 0;
     $scope.product = 0;
     $scope.state = 0;
+    $scope.dealer = 0;
     $scope.startDate = moment().subtract('days', 7).format("MMDDYYYY");;
     $scope.endDate = moment().add('days', 1).format("MMDDYYYY");
     $scope.stateList = [];
@@ -1429,8 +1430,6 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
 			buildDashboard();
 		}
 	}
-	
-
     
     $scope.$on('userloggedIn',function(event, arg){
     	buildDashboard();
@@ -1454,6 +1453,7 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
         if($rootScope.userRole == '5' || $rootScope.userRole == '7'){
         	$http.get('/webapp/api/business/getZoneStateProduct').success(function(data){
 				$scope.productList = data.productList;
+				$scope.dealerList = data.dealerList;
 			});
         }
         if($rootScope.userRole == '6' || $rootScope.userRole == '8'){
@@ -1466,7 +1466,7 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
         $scope.dashboard = {
         		progressBar:{
         			remote:{
-       				 url:'/webapp/api/business/getDashboardProgressbarAll?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product
+       				 url:'/webapp/api/business/getDashboardProgressbarAll?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product+'&dealer='+$scope.dealer
         			}
         		}
         }
@@ -1523,16 +1523,18 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
     	}
     	
     	$scope.dashboard.progressBar.remote = {
-    			url:'/webapp/api/business/getDashboardProgressbarAll?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product,
+    			url:'/webapp/api/business/getDashboardProgressbarAll?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product+'&dealer='+$scope.dealer,
     	}
     	
     	$scope.$evalAsync();
     	$scope.$apply();
     });
     
-    $scope.getDashBoard = function(zone, state, product){
+    $scope.getDashBoard = function(zone, state, product, dealer){
     	$scope.state = state;
     	$scope.product = product;
+    	$scope.dealer = dealer;
+    	console.log("Product  :: "+product);
     	if($rootScope.userRole == '6' || $rootScope.userRole == '8'){
     		$scope.dashboard.spline1={
     				remote:{
@@ -1564,7 +1566,7 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
         	}
     	}
     	$scope.dashboard.progressBar.remote = {
-    		url:'/webapp/api/business/getDashboardProgressbarAll?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product,
+    		url:'/webapp/api/business/getDashboardProgressbarAll?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product+'&dealer='+$scope.dealer,
     	}
     	$scope.$evalAsync();
     }
@@ -2040,7 +2042,6 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScop
                        DTColumnDefBuilder.newColumnDef(6).notSortable(),
                        DTColumnDefBuilder.newColumnDef(7).notSortable(),
                        DTColumnDefBuilder.newColumnDef(8).notSortable(),
-                       DTColumnDefBuilder.newColumnDef(9).notSortable(),
                        ];
 
     vm.selectedAll = false;
