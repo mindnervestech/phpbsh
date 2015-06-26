@@ -2170,14 +2170,11 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScop
 	$scope.selectDropdown2 = function(data){
 		$scope.category = data;
 		vm.lead.disposition2 = data.name;
-		console.log(data.name+" ::::: "+$scope.dispositoion2[1].name)
 		if(angular.equals(data.name, $scope.dispositoion2[1].name) && data.name !== 'Quote Sent'){
-			console.log("::::: "+!vm.lead.isLost)
 			if(!vm.lead.isLost){
 				$scope.showMessage("warning","Action Not Allowed.");
 			}
 		}
-			//showMessage = function(msg, msgType){
 		$("#reason").hide();
 		$("#date").hide();
 		if(data.action == 0){
@@ -2208,7 +2205,6 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScop
 	    		if($rootScope.userRole == '9' || $rootScope.userRole == '11'){
 	    			vm.newLead.dealer = $scope.dealerList[0].id;
 	    		}
-	    		console.log(vm.newLead);
 			$http({method:'POST',url:'/webapp/api/business/createLead',data: vm.newLead}).success(function(response) {
 				$scope.showMessage("success","Successfully Updated.");
 			});
@@ -2611,12 +2607,23 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     	return $http.get('/webapp/api/business/getPincodes?query='+query);
     };
     
-    $scope.loadRsm = function(){
-    	return $scope.rsm;
+    $scope.state;
+    $scope.setState = function(state){
+    	$scope.state = state;
+    	console.log($scope.state);
     }
     
-    $scope.loadTsr = function(){
-    	return $scope.tsr;
+    $scope.load = function(query, user){
+    	if($scope.state == 0 ){
+    		$scope.showMessage("warning","Please Select State First.");
+    		return;
+    	} 
+    	if(angular.equals(user,'tsr')){
+    		return $http.get('/webapp/api/business/getTSRByZone/'+ $scope.state+'?query='+query);
+    	} else if(angular.equals(user,'rsm')){
+    		return $http.get('/webapp/api/business/getRSMByZone/'+ $scope.state+'?query='+query);
+    	} 
+    	
     }
    
     
@@ -2630,7 +2637,7 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     	if(typeof vm.dealer.zone == 'undefined' || typeof vm.dealer.zone == 'string') {
     		zone = JSON.parse(vm.dealer.zone);
     	}
-    	$scope.getRSM(zone);
+	$scope.setState(dealer.state);
 		setTimeout(function(){
 			$('#pre-selected-options1').multiSelect();
 		},500);
@@ -2679,6 +2686,7 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     		$scope.isPin = false;
     		$scope.isRsm = false;
     		$scope.isTsr = false;
+    		
 	    	if(typeof dealer.zone == 'string') {
 	    		dealer.zone = JSON.parse(dealer.zone);
 	    	}
@@ -2747,21 +2755,6 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     	}else{
     		$scope.invalidPhone = true;
     	}
-    }
-    
-    $scope.getRSM = function(zone){
-    	console.log(zone);
-    	
-    	if(typeof zone == undefined || typeof zone == 'string') {
-    		console.log($scope.dealerData.zone);
-    		zone = JSON.parse(zone);
-    	}
-    	$http.get('/webapp/api/business/getRSMByZone/'+zone.id).success(function(data) {
-			$scope.rsm = data;
-    	});
-    	$http.get('/webapp/api/business/getTSRByZone/'+zone.id).success(function(data) {
-			$scope.tsr = data;
-    	});
     }
     
 });
@@ -2974,12 +2967,12 @@ App.controller('ReportFreqTableCtrl', function ($scope, $http, $routeParams, $re
 
 App.controller('EscalatedLeadsCtrl',function($stateParams, $scope, $http, $timeout, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){
 	var vm = this;
-	$scope.dpDate = moment();
 	vm.tabHeading = $stateParams.leadType+" Leads";
 	$scope.editLeadTab = function(id) {
 		$http.get('/webapp/api/business/lead/'+id).success(function(data){
 			$http.get('/webapp/api/business/lead/history/'+id).success(function(orders){
 				vm.lead = data;
+				$scope.dpDate = moment();
 				getDisposition1(data.disposition1);
 				getDisposition2(data.disposition2);
 				vm.leadHistory = orders;
@@ -3174,11 +3167,16 @@ App.controller('EscalatedLeadsCtrl',function($stateParams, $scope, $http, $timeo
 	};
 
 	$scope.selectDropdown2 = function(data){
+		$scope.category = data;
 		vm.lead.disposition2 = data.name;
+		if(angular.equals(data.name, $scope.dispositoion2[1].name) && data.name !== 'Quote Sent'){
+			if(!vm.lead.isLost){
+				$scope.showMessage("warning","Action Not Allowed.");
+			}
+		}
 		$("#reason").hide();
 		$("#date").hide();
 		if(data.action == 0){
-			console.log(data.action);
 			$("#reason").show();
 			$("#date").hide();
 		} else {
@@ -3186,11 +3184,13 @@ App.controller('EscalatedLeadsCtrl',function($stateParams, $scope, $http, $timeo
 				console.log(data.action);
 				$("#reason").hide();
 				$("#date").show();
+				$scope.dpDate = moment();
 			} 
 		}
 	};
 
 	$scope.updateLead = function(){
+		vm.lead.followUpDate = dpDate;  
 		console.log(vm.lead);
 		$http({method:'POST',url:'/webapp/api/business/updateLead',data: vm.lead}).success(function(response) {
 			console.log(response);
@@ -3269,6 +3269,20 @@ App.controller('FollowUpLeadsCtrl',function($scope,$timeout, $http, DTOptionsBui
       //.withOption("sScrollY", false)
       //.withOption("sScrollX")
       .withColumnFilter();
+    
+    vm.dtColumnDefs = [
+                       DTColumnDefBuilder.newColumnDef(2).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(3).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(4).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(5).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(6).notSortable(),
+                       ];
+    
+    vm.dtColumnDefsDashBoard = [
+                       DTColumnDefBuilder.newColumnDef(2).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(3).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(5).notSortable(),
+                       ];
 
     vm.selectedAll = false;
 
@@ -3375,14 +3389,13 @@ App.controller('FollowUpLeadsCtrl',function($scope,$timeout, $http, DTOptionsBui
 	};
 
 	$scope.selectDropdown2 = function(data){
+		$scope.category = data;
 		vm.lead.disposition2 = data.name;
-		console.log(data.name+" ::::: "+$scope.dispositoion2[1].name)
-		if(angular.equals(data.name, $scope.dispositoion2[1].name)){
-			console.log("::::: "+!vm.lead.isLost)
-			$scope.showMessage("warning","can not able to select lost")
-			vm.lead.disposition2 = "Not Contacted"
+		if(angular.equals(data.name, $scope.dispositoion2[1].name) && data.name !== 'Quote Sent'){
+			if(!vm.lead.isLost){
+				$scope.showMessage("warning","Action Not Allowed.");
+			}
 		}
-			//showMessage = function(msg, msgType){
 		$("#reason").hide();
 		$("#date").hide();
 		if(data.action == 0){
@@ -3393,6 +3406,7 @@ App.controller('FollowUpLeadsCtrl',function($scope,$timeout, $http, DTOptionsBui
 				console.log(data.action);
 				$("#reason").hide();
 				$("#date").show();
+				$scope.dpDate = moment();
 			} 
 		}
 	};
