@@ -2488,7 +2488,7 @@ App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColum
     		$http({method:'POST',url:'/webapp/api/business/updateUser',data:user}).success(function(data) {
     			vm.users = data;
     			$scope.showMessage("success","Successfully Updated.");
-    			}).Error(function(data){
+    			}).error(function(data){
     			$scope.showMessage("error","Fail to  Updated.");
     			});
     		$('#userDetailsTab').click();
@@ -2596,7 +2596,7 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
 			console.log(data);
 			$scope.zoneList = data.zoneList;
 			$scope.stateList = data.stateList;
-			$scope.territoryList = data.territoryList;
+			//$scope.territoryList = data.territoryList;
 			$scope.districtList = data.districtList;
 			$scope.dealerData.products = data.productList;
 			vm.users = data.dealerList;
@@ -2732,7 +2732,7 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     		$scope.isRsm = false;
     		$scope.isTsr = false;
 	    	$scope.dealerData.zone = JSON.parse($scope.dealerData.zone);
-	    	$scope.dealerData.territory = JSON.parse($scope.dealerData.territory);
+	    	//$scope.dealerData.territory = JSON.parse($scope.dealerData.territory);
     		$http({method:'POST',url:'/webapp/api/business/saveDealer',data:$scope.dealerData}).success(function(data) {
 				console.log('success');
 				$scope.showMessage("success","Successfully Saved.");

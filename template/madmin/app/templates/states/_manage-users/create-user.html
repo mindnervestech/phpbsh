@@ -48,7 +48,7 @@
                       <div class="col-md-6">
                         <div class="form-group">
                           	<label for="inputPhone" class="control-label">Contact Number<span class='require'>*</span></label>
-                          	<input id="inputPhone" type="number" name="input" placeholder="" ng-model="userData.phone" class="form-control" required  ng-pattern="/^[0-9]{10,10}$/"/>
+                          	<input id="inputPhone" type="text" name="input" placeholder="" ng-model="userData.phone" class="form-control" required  ng-pattern="/^[0-9]{10,10}$/"/>
          					<span class="error" ng-show="myForm.input.$error.pattern">Please enter 10 digit number!</span>
                         </div>
                       </div>
@@ -93,16 +93,16 @@
                     <div class="row">
                       <div class="col-md-12">
                         <div class="form-group">
-                          <label for="inputStreet" class="control-label">Address <span class='require'>*</span></label>
-                          <input id="inputStreet" type="text" placeholder="" ng-model="userData.address" class="form-control" required/>
+                          <label for="inputStreet" class="control-label">Address</label>
+                          <input id="inputStreet" type="text" placeholder="" ng-model="userData.address" class="form-control"/>
                         </div>
                       </div>
                     </div>
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label for="inputFirstName" class="control-label">State<span class='require'>*</span></label>
-                          <select id="selPSM" ng-model="userData.state" class="form-control" required>
+                          <label for="inputFirstName" class="control-label">State</label>
+                          <select id="selPSM" ng-model="userData.state" class="form-control">
                            <option value="">Select state</option>
                             <option ng-repeat="state in stateList" value="{{state.id}}" >{{state.name}}</option>
                           </select>
@@ -110,8 +110,8 @@
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label for="inputCity" class="control-label">City <span class='require'>*</span></label>
-                          <select id="selPSM" ng-model="userData.district" class="form-control" data-ng-change="getDealearsByDistrict(userData.district)" required>
+                          <label for="inputCity" class="control-label">City </label>
+                          <select id="selPSM" ng-model="userData.district" class="form-control" data-ng-change="getDealearsByDistrict(userData.district)">
                             <option value="">Select District</option>
                             <option ng-repeat="district in districtList" value="{{district.id}}" >{{district.name}}</option>
                           </select>
@@ -122,7 +122,7 @@
                       <div class="col-md-6">
                         <div class="form-group">
                           <label for="inputPostCode" class="control-label">Post Code</label>
-                          <input id="inputPostCode" type="number" placeholder="" ng-model="userData.postCode" class="form-control" required/>
+                          <input id="inputPostCode" type="number" placeholder="" ng-model="userData.postCode" class="form-control"/>
                         </div>
                       </div>
                        <div class="col-md-6" data-ng-if="userRole == 2 || userRole == 4">

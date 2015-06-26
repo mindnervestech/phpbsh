@@ -7,11 +7,19 @@
                   <div class="form-body pal">
                     
                     <div class="row">
-                    <div class="col-md-6">
+                    <!-- <div class="col-md-6">
                         <div class="form-group has-success">
                           <label for="inputFirstName" class="control-label">Dealer Code <span class='require'>*</span></label>
                           <div class="input-icon">
                             <input id="inputFirstName" type="number" placeholder="Dealer Code" ng-model="showCase.dealer.code" value="{{ showCase.dealer.code }}" class="form-control" required/>
+                          </div>
+                        </div>
+                      </div> -->
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="inputEmail" class="control-label">Email <span class='require'>*</span></label>
+                          <div class="input-icon"><i class="fa fa-envelope"></i>
+                            <input type="email" placeholder="Email Address" ng-model="showCase.dealer.email" class="form-control" required/>
                           </div>
                         </div>
                       </div>
@@ -37,7 +45,7 @@
                         <div class="form-group has-success">
                           <label for="inputFirstName" class="control-label">Phone <span class='require'>*</span></label>
                           <div class="input-icon">
-                            <input id="inputFirstName" name="input" type="number" placeholder="Phone" ng-model="showCase.dealer.phone" value="{{ showCase.dealer.phone }}" class="form-control" required ng-pattern="/^[0-9]{10,10}$/" />
+                            <input id="inputFirstName" name="input" type="text" placeholder="Phone" ng-model="showCase.dealer.phone" class="form-control" required ng-pattern="/^[0-9]{10,10}$/" />
                             <span class="error" ng-show="myForm.input.$error.pattern">Please enter 10 digit number!</span>
                           </div>
                           
@@ -45,14 +53,6 @@
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <label for="inputEmail" class="control-label">Email <span class='require'>*</span></label>
-                          <div class="input-icon"><i class="fa fa-envelope"></i>
-                            <input type="email" placeholder="Email Address" ng-model="showCase.dealer.email" class="form-control" required/>
-                          </div>
-                        </div>
-                      </div>
                       <div class="col-md-6">
                         <div class="form-group">
                           <label for="selPSM" class="control-label">Zone <span class='require'>*</span></label>
@@ -63,7 +63,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="row">
+                    <!-- <div class="row">
                       <div class="col-md-6">
                         <div class="form-group">
                           <label for="selPSM" class="control-label">Territory <span class='require'>*</span></label>
@@ -73,7 +73,7 @@
                           </select>
                         </div>
                       </div>
-                    </div>
+                    </div> -->
                     <div class="row">
                       <div class="col-md-12">
                         <div class="form-group">
@@ -89,7 +89,7 @@
                      <div class="row">
                       <div class="col-md-12">
                         <div class="form-group">
-                          <label for="inputPinCodes" class="control-label">RSM <span class='require'>*</span></label>
+                          <label for="inputPinCodes" class="control-label">RSM</label>
                           <tags-input ng-model="showCase.dealer.rsm" display-property="name" add-from-autocomplete-only="true">
 						      <auto-complete source="loadRsm()"  minLength="1"></auto-complete>
 						  </tags-input>
@@ -100,7 +100,7 @@
                     <div class="row">
                       <div class="col-md-12">
                         <div class="form-group">
-                          <label for="inputPinCodes" class="control-label">TSR <span class='require'>*</span></label>
+                          <label for="inputPinCodes" class="control-label">TSR</label>
                           <tags-input ng-model="showCase.dealer.tsr" display-property="name" add-from-autocomplete-only="true">
 						      <auto-complete source="loadTsr()"  minLength="1"></auto-complete>
 						  </tags-input>
@@ -120,8 +120,8 @@
                     <div class="row">
                       <div class="col-md-12">
                         <div class="form-group">
-                          <label for="inputStreet" class="control-label">Address Line <span class='require'>*</span></label>
-                          <textarea rows="1" cols="" ng-model="showCase.dealer.address" class="form-control" required></textarea>
+                          <label for="inputStreet" class="control-label">Address Line</label>
+                          <textarea rows="1" cols="" ng-model="showCase.dealer.address" class="form-control"></textarea>
                         </div>
                       </div>
                     </div>
@@ -164,7 +164,7 @@
                   </div>
                   <div class="form-actions text-right pal">
                     <button type="submit" class="btn btn-primary">Submit</button>&nbsp;
-                    <button type="button" class="btn btn-green">Cancel</button>
+                    <!-- <button type="button" class="btn btn-green">Cancel</button> -->
                   </div>
                 </form>
               </div>
