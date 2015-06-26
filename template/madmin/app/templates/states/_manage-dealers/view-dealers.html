@@ -11,7 +11,7 @@
                         <div class="form-group has-success">
                           <label for="inputFirstName" class="control-label">Dealer Code <span class='require'>*</span></label>
                           <div class="input-icon">
-                            <input id="inputFirstName" type="number" placeholder="Dealer Code" ng-model="showCase.dealer.code" class="form-control" required/>
+                            <input id="inputFirstName" type="number" placeholder="Dealer Code" ng-model="showCase.dealer.code" value="{{ showCase.dealer.code }}" class="form-control" required/>
                           </div>
                         </div>
                       </div>
@@ -37,7 +37,7 @@
                         <div class="form-group has-success">
                           <label for="inputFirstName" class="control-label">Phone <span class='require'>*</span></label>
                           <div class="input-icon">
-                            <input id="inputFirstName" name="input" type="number" placeholder="Phone" ng-model="showCase.dealer.phone" class="form-control" required ng-pattern="/^[0-9]{10,10}$/" />
+                            <input id="inputFirstName" name="input" type="number" placeholder="Phone" ng-model="showCase.dealer.phone" value="{{ showCase.dealer.phone }}" class="form-control" required ng-pattern="/^[0-9]{10,10}$/" />
                             <span class="error" ng-show="myForm.input.$error.pattern">Please enter 10 digit number!</span>
                           </div>
                           

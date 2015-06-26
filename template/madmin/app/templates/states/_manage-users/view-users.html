@@ -25,7 +25,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="col-md-6">
+                      <!-- <div class="col-md-6">
                         <div class="form-group">
                           <label for="selGender" class="control-label">Gender <span class='require'>*</span></label>
                           <select id="selGender" ng-model="showCase.user.gender" class="form-control">
@@ -43,10 +43,10 @@
                           <input id="inputBirthday" type="text" placeholder="dd/mm/yyyy" ng-model="showCase.user.birthday" class="form-control"/>
                         </div>
                       </div>
-                      <div class="col-md-6">
+ -->                      <div class="col-md-6">
                         <div class="form-group">
                           <label for="inputPhone" class="control-label">Contact Number<span class='require'>*</span></label>
-                          <input id="inputPhone" type="number" name="input" placeholder="" ng-model="showCase.user.phone" class="form-control" required ng-pattern="/^[0-9]{10,10}$/"/>
+                          <input id="inputPhone" type="number" name="input" placeholder="" ng-model="showCase.user.phone" value="{{ showCase.user.phone }}" class="form-control" required ng-pattern="/^[0-9]{10,10}$/"/>
                           <span class="error" ng-show="myForm.input.$error.pattern">Please enter 10 digit number!</span>
                         </div>
                       </div>

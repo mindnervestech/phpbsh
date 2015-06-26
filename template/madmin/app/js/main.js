@@ -2205,6 +2205,10 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScop
 		if(($scope.showCase.newLead.contactNo+"").length == 10){
 	    		$scope.invalidPhone = false;
 	    		console.log(vm.newLead);
+	    		if($rootScope.userRole == '9' || $rootScope.userRole == '11'){
+	    			vm.newLead.dealer = $scope.dealerList[0].id;
+	    		}
+	    		console.log(vm.newLead);
 			$http({method:'POST',url:'/webapp/api/business/createLead',data: vm.newLead}).success(function(response) {
 				$scope.showMessage("success","Successfully Updated.");
 			});
@@ -2354,8 +2358,8 @@ App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColum
       } else {
         $scope.selectedAll = true;
       }
-      angular.forEach(vm.orders, function(order) {
-        order.selected = $scope.selectedAll;
+      angular.forEach(vm.users, function(user) {
+        user.selected = $scope.selectedAll;
       });
     };
 
