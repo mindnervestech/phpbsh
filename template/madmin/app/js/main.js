@@ -2636,8 +2636,8 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     	var zone = vm.dealer.zone;
     	if(typeof vm.dealer.zone == 'undefined' || typeof vm.dealer.zone == 'string') {
     		zone = JSON.parse(vm.dealer.zone);
-    	}
-	$scope.setState(dealer.state);
+    	}	
+	$scope.setState(vm.dealer.state);
 		setTimeout(function(){
 			$('#pre-selected-options1').multiSelect();
 		},500);
@@ -2686,7 +2686,6 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     		$scope.isPin = false;
     		$scope.isRsm = false;
     		$scope.isTsr = false;
-    		
 	    	if(typeof dealer.zone == 'string') {
 	    		dealer.zone = JSON.parse(dealer.zone);
 	    	}

@@ -63,6 +63,15 @@
                           </select>
                         </div>
                       </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="selPSM" class="control-label">State <span class='require'>*</span></label>
+                          <select id="selPSM" data-ng-model="dealerData.state" class="form-control"  data-ng-change="setState(dealerData.state)" required>
+                           <option value="">Select state</option>
+                            <option ng-repeat="state in stateList" value="{{state.name}}" >{{state.name}}</option>
+                          </select>
+                        </div>
+                      </div>
                     </div>
                     <!-- <div class="row">
                       <div class="col-md-6">
@@ -124,16 +133,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="row">
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <label for="selPSM" class="control-label">State <span class='require'>*</span></label>
-                          <select id="selPSM" data-ng-model="dealerData.state" class="form-control"  data-ng-change="setState(dealerData.state)" required>
-                           <option value="">Select state</option>
-                            <option ng-repeat="state in stateList" value="{{state.name}}" >{{state.name}}</option>
-                          </select>
-                        </div>
-                      </div>
+                    <div class="row"> 
                       <div class="col-md-6">
                         <div class="form-group">
                           <label for="selPSM" class="control-label">District <span class='require'>*</span></label>
@@ -143,9 +143,7 @@
                           </select>
                         </div>
                       </div>
-                    </div>
-                    <div class="row">
-                    <div class="col-md-6">
+                      <div class="col-md-6">
                         <div class="form-group has-success">
                           <label for="inputFirstName" class="control-label">Sub District <span class='require'>*</span></label>
                           <div class="input-icon">
@@ -153,6 +151,8 @@
                           </div>
                         </div>
                       </div>
+                    </div>
+                    <div class="row">
                       <div class="col-md-6">
                         <div class="form-group">
                           <label for="inputPostCode" class="control-label">Zip Code <span class='require'>*</span></label>

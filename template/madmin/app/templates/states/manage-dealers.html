@@ -3,14 +3,14 @@
     <ul id="manageDealerTab" ng-tab="" class="nav nav-tabs">
       
       <li class="active"><a href="#dealer-details" data-toggle="tab" ng-click="hideDealerTab()" id="dealerDetailsTab"><i class="fa fa-table"></i> Dealers</a></li>
-      <li><a href="#create-dealer" ng-show="userRole == 10 || userRole == 5 || userRole == 6 || userRole == 7 || userRole == 8" data-toggle="tab" ng-click="hideDealerTab()"><i class="fa fa-file-text-o"></i> Create Dealer</a></li>
+      <li><a href="#create-dealer" ng-show="userRole == 10 || userRole == 5 || userRole == 7" data-toggle="tab" ng-click="hideDealerTab()"><i class="fa fa-file-text-o"></i> Create Dealer</a></li>
       <li id="dealerTab" style="display: none;"><a href="#show-dealer" data-toggle="tab" id="viewDealerTab"><i class="fa fa-file-text-o"></i> View Dealer</a></li>
     </ul>
     <div id="manageDealerTabContent" class="tab-content">
       <div id="dealer-details" class="tab-pane fade in active">
         <ng-include src="'templates/states/_manage-dealers/manage-dealers-table.html'" onload="table_advanced_update()"></ng-include>
       </div>
-      <div id="create-dealer" class="tab-pane fade">
+      <div id="create-dealer" class="tab-pane fade" data-ng-if="userRole == 10 || userRole == 5 || userRole == 7">
         <ng-include src="'templates/states/_manage-dealers/create-dealer.html'"></ng-include>
       </div>
        <div id="show-dealer" class="tab-pane fade">
