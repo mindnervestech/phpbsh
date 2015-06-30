@@ -88,7 +88,7 @@
 		                    <td>{{ order.escalatedTo }}</td>
 		                    <td>{{ order.dealerName}}</td>
 		                    <td data-ng-if="userRole == 5 || userRole == 7">
-                      			<a class="btn btn-xs btn-default"  data-ng-click="editLeadTab(order.id)" ><i class="fa fa-eye"></i> Edit</a>
+                      			<a class="btn btn-xs btn-default"  ui-sref="escalated-leads({leadType : 'Edit', editId : order.id })" ><i class="fa fa-eye"></i> Edit</a>
                     		</td>
 		                  </tr>
 		                  </tbody>	        

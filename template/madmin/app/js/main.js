@@ -2566,7 +2566,6 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
                        DTColumnDefBuilder.newColumnDef(4).notSortable(),
                        DTColumnDefBuilder.newColumnDef(5).notSortable(),
                        DTColumnDefBuilder.newColumnDef(6).notSortable(),
-                       DTColumnDefBuilder.newColumnDef(7).notSortable(),
                        ];
 
     vm.selectedAll = false;
@@ -2587,8 +2586,7 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
 	 * vm.users = users; });
 	 */
     
-    $scope.init = function() {
-    	
+    $scope.getDealer = function() {
     	$http({method:'GET',url:'/webapp/api/business/getZones'})
 		.success(function(data) {
 			console.log(data);
@@ -2604,7 +2602,7 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
 		});
     }
     
-    
+    $scope.getDealer();
     $scope.loadPin = function(query) {
     	return $http.get('/webapp/api/business/getPincodes?query='+query);
     };
@@ -2745,7 +2743,7 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     		$http({method:'POST',url:'/webapp/api/business/saveDealer',data:$scope.dealerData}).success(function(data) {
 				console.log('success');
 				$scope.showMessage("success","Successfully Saved.");
-				$scope.init();
+				$scope.getDealer();
 	    	}).error(function(data){
 	    		$scope.showMessage("error","Fail to save.");
 	    	});	
