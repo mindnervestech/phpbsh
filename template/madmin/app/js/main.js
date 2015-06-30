@@ -2063,6 +2063,7 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScop
     	console.log(dealer);
     	if(dealer == undefined){
     		$scope.showMessage("warning","Select Reassign User.");
+    		return;
     	}
     	var ids = [];
     	var tempLeads = vm.orders;
@@ -2075,6 +2076,7 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScop
     	if(ids.length == 0){
     		$scope.showMessage("warning","Select Leads.");
     		$('#reassign-dealer-modal').modal('hide');
+    		return;
     	}
     	vm.orders = tempLeads;
     	var data = {};
@@ -9622,7 +9624,6 @@ App.controller('MainController', function ($scope, $routeParams,$http){
                     endDate: moment()
                 },
                 function(start, end) {
-                	
                 	var startDate =  moment(start).format("MMDDYYYY");
                 	var endDate =  moment(end).format("MMDDYYYY");
                 	$scope.$emit('reportDateChange', { startDate: startDate, endDate: endDate });
@@ -9630,10 +9631,9 @@ App.controller('MainController', function ($scope, $routeParams,$http){
                 }
             );
             $('.reportrange span').html(moment().subtract('days', 7).format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
-            
+            $scope.$emit('reportDateChange', { startDate: moment().subtract('days', 7).format('MMDDYYYY'), endDate:  moment().format('MMDDYYYY') });
         $.fn.Data.checkbox();
-
-    }, 3000);
+    }, 100);
 });
 
 
