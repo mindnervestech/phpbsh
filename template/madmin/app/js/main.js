@@ -602,6 +602,13 @@ App.config(['$stateProvider', '$urlRouterProvider',
                 }]
             }
         })
+        
+        .state('collection-admin', {
+            url: "/collection-admin", 
+            templateUrl: 'templates/states/collection-admin.html',
+            /*controller: 'FormLayoutsController'*/
+        })
+        
         .state('manage-users', {
             url: "/manage-users", 
             templateUrl: 'templates/states/manage-users.html',

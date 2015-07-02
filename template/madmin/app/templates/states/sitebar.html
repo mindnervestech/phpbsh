@@ -17,8 +17,11 @@
 	<li><a ui-sref="index"><i class="fa fa-tachometer fa-fw">
 				<div class="icon-bg bg-orange"></div>
 		</i><span class="menu-title">Dashboard</span></a></li>
-	<li><a data-ng-show="userRole == 10 || userRole == 5 || userRole == 6 || userRole == 7 || userRole == 8  || userRole == 9 || userRole == 11" ui-sref="manage-leads"><i class="fa fa-gift fa-fw">
+	<li><a data-ng-show="userRole == 12" ui-sref="collection-admin"><i class="fa fa-edit">
 				<div class="icon-bg bg-pink"></div>
+		</i><span class="menu-title">Collection Admin</span></a></li>	
+	<li><a data-ng-show="userRole == 10 || userRole == 5 || userRole == 6 || userRole == 7 || userRole == 8  || userRole == 9 || userRole == 11" ui-sref="manage-leads"><i class="fa fa-gift fa-fw">
+				<div class="icon-bg bg-pink"></div>		
 		</i><span class="menu-title">Manage Leads</span></a></li>
 	<li><a data-ng-show="userRole == 10" ui-sref="manage-users"><i class="fa fa-group fa-fw">
 				<div class="icon-bg bg-pink"></div>
@@ -47,7 +50,7 @@
 	<li><a data-ng-show="userRole == 10 || userRole==5||userRole==6||userRole==7||userRole==8||userRole==9||userRole==11" ui-sref="escalated-leads({leadType : 'Follow-up', editId : 'All' })"><i class="fa fa-bell">
 				<div class="icon-bg bg-pink"></div>
 		</i><span class="menu-title">Follow-up Leads</span></a></li>
-	<li><a data-ng-show="userRole == 10 || userRole != 9" ui-sref="reporting"><i class="fa fa-list">
+	<li><a data-ng-show="userRole == 10 || userRole != 9" ng-hide="userRole == 12" ui-sref="reporting"><i class="fa fa-list">
 				<div class="icon-bg bg-pink"></div>
 		</i><span class="menu-title">Reports</span></a></li>	
 		<!-- <li><a href="javascript:void(0);"><i class="fa fa-laptop fa-fw">
