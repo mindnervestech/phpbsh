@@ -62,7 +62,7 @@ var App = angular.module('MAdmin', ['ngRoute', 'ui.bootstrap', 'ui.router', 'oc.
                                     'schemaForm-datepicker', 'schemaForm-timepicker', 'schemaForm-datetimepicker',
                                     'ngTagsInput','ng-bs3-datepicker']);
 App.factory("Auth", ["$http", "$q", "$window","$rootScope","$state" ,
-                     function ($http, $q, $window,$rootScope,$state) {
+                     function ($http, $q, $window,$rootScope,$state,$scope) {
     var userInfo = {};
     userInfo.isLoggedIn= false;
     
@@ -127,12 +127,14 @@ App.factory("Auth", ["$http", "$q", "$window","$rootScope","$state" ,
                 	userInfo = {
                             isLoggedIn: true
                         };
+                	
+                	$rootScope.$broadcast('userError',{});
                     deferred.reject(result.data.error);
                 }
             }, function (error) {
                 deferred.reject(error);
             });
-
+        
         return deferred.promise;
     }
     
@@ -1440,6 +1442,12 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
     
     $scope.$on('userloggedIn',function(event, arg){
     	buildDashboard();
+	});
+    
+    $scope.$on('userError',function(event){	
+    	 
+		$scope.showMessage("error","Incorrect Login and Password.");	
+    	 
     });
     
     function buildDashboard() {
@@ -3286,11 +3294,13 @@ App.controller('FollowUpLeadsCtrl',function($scope,$timeout, $http, DTOptionsBui
       .withColumnFilter();
     
     vm.dtColumnDefs = [
+
                        DTColumnDefBuilder.newColumnDef(2).notSortable(),
                        DTColumnDefBuilder.newColumnDef(3).notSortable(),
-                       DTColumnDefBuilder.newColumnDef(4).notSortable(),
+                       //DTColumnDefBuilder.newColumnDef(4).notSortable(),
                        DTColumnDefBuilder.newColumnDef(5).notSortable(),
                        DTColumnDefBuilder.newColumnDef(6).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(8).notSortable(),
                        ];
     
     vm.dtColumnDefsDashBoard = [
