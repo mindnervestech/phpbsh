@@ -1517,6 +1517,10 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
 	$rootScope.style = 'style1';
     $rootScope.theme = 'pink-blue';
     $scope.$on('reportDateChange', function (event, args) {
+	$scope.zone = 0;
+        $scope.product = 0;
+        $scope.state = 0;
+        $scope.dealer = 0;
     	$scope.startDate = args.startDate;
     	$scope.endDate = args.endDate;
     	if($rootScope.userRole == '1' || $rootScope.userRole == '10' || $rootScope.userRole == '2' || $rootScope.userRole == '3' || $rootScope.userRole == '4'){
@@ -3011,16 +3015,17 @@ App.controller('EscalatedLeadsCtrl',function($stateParams, $scope, $http, $timeo
 	var api = '/webapp/api/business/getEscalatedLeads';
 	switch($stateParams.leadType){
 		case 'Escalated':
-			api = '/webapp/api/business/getEscalatedLeads';
+			if(angular.equals($stateParams.editId,'All'))
+			api = '/webapp/api/business/getEscalatedLeads?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product+'&dealer='+$scope.dealer;
 			break;
 		case 'Open':
-			api = '/webapp/api/business/getOpenLeads';
+			api = '/webapp/api/business/getOpenLeads?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product+'&dealer='+$scope.dealer;
 			break;
 		case 'Won':			
-			api = '/webapp/api/business/getWonLeads';
+			api = '/webapp/api/business/getWonLeads?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product+'&dealer='+$scope.dealer;
 			break;
 		case 'Lost':
-			api = '/webapp/api/business/getLostLeads';
+			api = '/webapp/api/business/getLostLeads?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product+'&dealer='+$scope.dealer;
 			break;
 		case 'Follow-up':
 			api = '/webapp/api/business/getFollowUpLeads';
