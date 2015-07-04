@@ -2225,7 +2225,9 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScop
 		console.log(vm.lead);
 		$http({method:'POST',url:'/webapp/api/business/updateLead',data: vm.lead}).success(function(response) {
 			$scope.showMessage("success","Successfully Updated.");
-		});
+		}).error(function(data){
+    		$scope.showMessage("error","Failed To Update.");
+    	});	
 	}
 	
 	vm.createLead = function(){
@@ -2236,8 +2238,10 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScop
 	    			vm.newLead.dealer = $scope.dealerList[0].id;
 	    		}
 			$http({method:'POST',url:'/webapp/api/business/createLead',data: vm.newLead}).success(function(response) {
-				$scope.showMessage("success","Successfully Updated.");
-			});
+				$scope.showMessage("success","Successfully Created.");
+			}).error(function(data){
+	    		$scope.showMessage("error","Failed To Create.");
+	    	});	
 		}
 		else{
 			$scope.invalidPhone = true;
@@ -2487,9 +2491,9 @@ App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColum
     			$('#pre-selected-options').multiSelect('deselect_all');
     			$('#userDetailsTab').click();
     			$('#userTab').hide();
-        	$scope.showMessage("success","Successfully Saved.");
+        	$scope.showMessage("success","Successfully Create User.");
     		}).error(function(data){
-    		$scope.showMessage("error","Failed to Save.");
+    		$scope.showMessage("error","Failed to Create.");
     		});
     	}
     	else{
@@ -2731,7 +2735,7 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
 				console.log('success');
 				$scope.showMessage("success","Successfully Updated.");
 	    	}).error(function(data){
-	    		$scope.showMessage("success","Failed to updated.");
+	    		$scope.showMessage("success","Failed to update.");
 	    	});	
 	    	$('#dealerDetailsTab').click();
 	    	$('#dealerTab').hide();
@@ -2770,10 +2774,10 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
 	    	//$scope.dealerData.territory = JSON.parse($scope.dealerData.territory);
     		$http({method:'POST',url:'/webapp/api/business/saveDealer',data:$scope.dealerData}).success(function(data) {
 				console.log('success');
-				$scope.showMessage("success","Successfully Saved.");
+				$scope.showMessage("success","Successfully Created.");
 				$scope.getDealer();
 	    	}).error(function(data){
-	    		$scope.showMessage("error","Fail to save.");
+	    		$scope.showMessage("error","Fail to Create.");
 	    	});	
     	}
     	$('#dealerDetailsTab').click();
@@ -2846,7 +2850,7 @@ App.controller('DealerConfigCtrl', function ($scope, $http, $routeParams, $resou
     			console.log("success");
     			var shortCutFunction = "success";
         		var title = '';
-                var msg = "Successfull Saved";
+                var msg = "Successfully Update";
                 toastr.options = {
                     closeButton: true,
                     debug: false,
@@ -2928,7 +2932,7 @@ App.controller('GeneralConfigCtrl', function ($scope, $http){
 		$http({method:'POST',url:'/webapp/api/business/updateGeneralConfig',data: $scope.general}).success(function(response) {
 			var shortCutFunction = "success";
     		var title = '';
-            var msg = "Successfull Saved";
+            var msg = "Successfully Update";
             toastr.options = {
                 closeButton: true,
                 debug: false,
@@ -2979,9 +2983,9 @@ App.controller('ReportFreqTableCtrl', function ($scope, $http, $routeParams, $re
     		console.log(vm.roles);
     		$http({method:'POST',url:'/webapp/api/business/updateReportFrequency',data:vm.roles}).success(function(response) {
     			console.log('success');
-				$scope.showMessage("success","Successfully Saved.");
+				$scope.showMessage("success","Successfully Updated.");
 	    	}).error(function(data){
-	    		$scope.showMessage("error","Fail to save.");
+	    		$scope.showMessage("error","Fail to Update.");
 	    	});	
     
     	}
@@ -3059,6 +3063,10 @@ App.controller('EscalatedLeadsCtrl',function($stateParams, $scope, $http, $timeo
 		$('#leadHistory').hide();
 		$('#myLeadsTab').click();
 	}
+	
+	$('.scroll').slimScroll({
+        "alwaysVisible": true
+    });
 
     vm.dtOptions = DTOptionsBuilder.newOptions()
       .withBootstrap()
@@ -3223,7 +3231,9 @@ App.controller('EscalatedLeadsCtrl',function($stateParams, $scope, $http, $timeo
 		$http({method:'POST',url:'/webapp/api/business/updateLead',data: vm.lead}).success(function(response) {
 			console.log(response);
 			$scope.showMessage("success","Successfully Updated.");
-		});
+		}).error(function(data){
+    		$scope.showMessage("error","Failed To Update.");
+    	});	
 	}
 
 
@@ -3270,7 +3280,12 @@ App.controller('FollowUpLeadsCtrl',function($scope,$timeout, $http, DTOptionsBui
 		$('#leadHistory').hide();
 		$('#myLeadsTab').click();
 	}
-
+	
+	$('.scroll').slimScroll({
+        "alwaysVisible": true
+    });
+	
+	
     vm.dtOptions = DTOptionsBuilder.newOptions()
       .withBootstrap()
       .withOption('order', [[4, 'desc']])
@@ -3442,11 +3457,14 @@ App.controller('FollowUpLeadsCtrl',function($scope,$timeout, $http, DTOptionsBui
 	};
 
 	$scope.updateLead = function(){
+		vm.lead.followUpDate = dpDate;
 		console.log(vm.lead);
 		$http({method:'POST',url:'/webapp/api/business/updateLead',data: vm.lead}).success(function(response) {
 			console.log(response);
 			$scope.showMessage("success","Successfully Updated.");
-		});
+		}).error(function(data){
+    		$scope.showMessage("error","Failed To Update.");
+    	});	
 	}
 
 
