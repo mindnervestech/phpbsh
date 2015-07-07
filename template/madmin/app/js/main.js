@@ -1461,7 +1461,7 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
 				$scope.productList = data.productList;
 			});
         } else {
-        	splineUrl = '/webapp/api/business/getDealerSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&state='+$scope.state;
+        	splineUrl = '/webapp/api/business/getDealerSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product+'&dealer='+$scope.dealer;
         	spline2Url = undefined;
         	spline1Url = undefined;
         }
@@ -1532,7 +1532,7 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
         	}
     	} else {
     		$scope.dashboard.spline.remote = {
-    				url:'/webapp/api/business/getDealerSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&state='+$scope.state
+    				url:'/webapp/api/business/getDealerSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product+'&dealer='+$scope.dealer
     		}
     		if($rootScope.userRole == '6' || $rootScope.userRole == '8' ){
     			$scope.dashboard.spline1.remote = {
@@ -1545,6 +1545,12 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
     			url:'/webapp/api/business/getDashboardProgressbarAll?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product+'&dealer='+$scope.dealer,
     	}
     	
+    	 $scope.getDealearsByState = function(state){
+        	$http.get('/webapp/api/business/getDealearsByState/'+state).success(function(data) {
+    			$scope.dralerList = data;
+        	});	
+        }
+    	
     	$scope.$evalAsync();
     	$scope.$apply();
     });
@@ -1553,15 +1559,17 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
     	$scope.state = state;
     	$scope.product = product;
     	$scope.dealer = dealer;
-    	if($rootScope.userRole == '6' || $rootScope.userRole == '8'){
-    		$scope.dashboard.spline1={
-    				remote:{
-    					url:'/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product,
-    				}
-    		};
+    	if($rootScope.userRole == '6' || $rootScope.userRole == '8' || $rootScope.userRole == '7' || $rootScope.userRole == '9' || $rootScope.userRole == '6' || $rootScope.userRole == '11'){
+    		if($rootScope.userRole == '6' || $rootScope.userRole == '8'){
+    			$scope.dashboard.spline1={
+        				remote:{
+        					url:'/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product,
+        				}
+        		};
+    		}
     		$scope.dashboard.spline={
     				remote : {
-    						url:'/webapp/api/business/getDealerSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&state='+$scope.state
+    						url:'/webapp/api/business/getDealerSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product+'&dealer='+$scope.dealer,
     				}
     		};
     	} else {
