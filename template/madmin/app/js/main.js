@@ -1559,7 +1559,7 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
     	$scope.state = state;
     	$scope.product = product;
     	$scope.dealer = dealer;
-    	if($rootScope.userRole == '6' || $rootScope.userRole == '8' || $rootScope.userRole == '7' || $rootScope.userRole == '5' || $rootScope.userRole == '9' || $rootScope.userRole == '6' || $rootScope.userRole == '11'){
+    	if($rootScope.userRole == '6' || $rootScope.userRole == '8' || $rootScope.userRole == '7' || $rootScope.userRole == '5' || $rootScope.userRole == '9' || $rootScope.userRole == '6' || $rootScope.userRole == '11' || $rootScope.userRole == '13'){
     		if($rootScope.userRole == '6' || $rootScope.userRole == '8'){
     			$scope.dashboard.spline1={
         				remote:{
@@ -1997,7 +1997,7 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScop
 			vm.orders = orders;
 		});
 		
-		if($rootScope.userRole == '9' || $rootScope.userRole == '11' || $rootScope.userRole == '5' || $rootScope.userRole == '7'){
+		if($rootScope.userRole == '9' || $rootScope.userRole == '11' || $rootScope.userRole == '5' || $rootScope.userRole == '7' || $rootScope.userRole == '13'){
 			$http.get('/webapp/api/business/getNewLeadData').success(function(data){
 				$scope.dealerList = data.dealerList;
 				$scope.productList = data.productList;
@@ -2242,7 +2242,7 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScop
 		if(($scope.showCase.newLead.contactNo+"").length == 10){
 	    		$scope.invalidPhone = false;
 	    		console.log(vm.newLead);
-	    		if($rootScope.userRole == '9' || $rootScope.userRole == '11'){
+	    		if($rootScope.userRole == '9' || $rootScope.userRole == '11' || $rootScope.userRole == '13'){
 	    			vm.newLead.dealer = $scope.dealerList[0].id;
 	    		}
 			$http({method:'POST',url:'/webapp/api/business/createLead',data: vm.newLead}).success(function(response) {
