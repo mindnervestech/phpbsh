@@ -1559,7 +1559,7 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
     	$scope.state = state;
     	$scope.product = product;
     	$scope.dealer = dealer;
-    	if($rootScope.userRole == '6' || $rootScope.userRole == '8' || $rootScope.userRole == '7' || $rootScope.userRole == '9' || $rootScope.userRole == '6' || $rootScope.userRole == '11'){
+    	if($rootScope.userRole == '6' || $rootScope.userRole == '8' || $rootScope.userRole == '7' || $rootScope.userRole == '5' || $rootScope.userRole == '9' || $rootScope.userRole == '6' || $rootScope.userRole == '11'){
     		if($rootScope.userRole == '6' || $rootScope.userRole == '8'){
     			$scope.dashboard.spline1={
         				remote:{
