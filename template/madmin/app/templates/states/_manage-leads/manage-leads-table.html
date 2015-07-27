@@ -43,7 +43,7 @@
                     {{ order.email}}</td>
                     <td>{{ order.contactNumber }}</td>
                     <td>{{ order.pincode }}</td>
-                    <td data-ng-if="showCase.tabHeading == 'Follow-up Leads'">{{ order.followUpDate | date:"dd MMM ',' h:mma"}}</td>
+                    <td data-ng-if="showCase.tabHeading == 'Follow-up Leads'">{{ order.followUpDate | date:"yyyy/MM/dd',' h:mma"}}</td>
                     <td>{{ order.product }}</td>
                     <td>{{ order.state }}</td>
                     <td data-ng-if="showCase.tabHeading == 'My Leads' || showCase.tabHeading == 'Escalated Leads' || showCase.tabHeading == 'Open Leads'">{{ order.disposition1 }}</td>

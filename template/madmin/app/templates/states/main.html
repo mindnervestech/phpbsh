@@ -47,7 +47,7 @@
 		                    <td>{{ order.contactName }}</td>
 		                    <td>{{ order.contactNumber }}</td>
 		                    <td>{{ order.pincode }}</td>
-		                    <td>{{ order.followUpDate | date:"dd MMM ',' h:mma"}}</td>
+		                    <td>{{ order.followUpDate | date:"yyyy/MM/dd',' h:mma"}}</td>
 		                    <td>
 		                      <a class="btn btn-xs btn-default" ui-sref="escalated-leads({leadType : 'Edit', editId : order.id })" ><i class="fa fa-eye"></i> Edit</a>
 		                    </td>

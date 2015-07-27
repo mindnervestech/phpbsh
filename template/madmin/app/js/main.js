@@ -14,8 +14,6 @@ dp.directive('ngBs3Datepicker', function($compile,$timeout) {
     	var dp;
     	 $scope.$watch(attr.ngModel, function(value) {
     		 if(value === undefined) return;
-    		 
-    		 
     		  dp = $($(element).find('#datetimepicker11').get(0)).datetimepicker({
     			 inline: true,
                  sideBySide: true,
@@ -134,7 +132,7 @@ App.factory("Auth", ["$http", "$q", "$window","$rootScope","$state" ,
             }, function (error) {
                 deferred.reject(error);
             });
-        
+
         return deferred.promise;
     }
     
@@ -792,8 +790,8 @@ App.config(['$stateProvider', '$urlRouterProvider',
                                 'vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js',
                                 'vendors/DataTables/extensions/Pagination/input.js',
                                 'vendors/DataTables/extensions/ColumnFilter/jquery.dataTables.columnFilter.js',
-					        'vendors/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js',
-					        'vendors/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css',
+                                'vendors/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js',
+                                'vendors/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css',
                                 ]
                      });
                 }]
@@ -816,8 +814,8 @@ App.config(['$stateProvider', '$urlRouterProvider',
                                 'vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js',
                                 'vendors/DataTables/extensions/Pagination/input.js',
                                 'vendors/DataTables/extensions/ColumnFilter/jquery.dataTables.columnFilter.js',
-					        'vendors/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js',
-					        'vendors/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css',
+						        'vendors/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js',
+						        'vendors/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css',
                                 ]
                      });
                 }]
@@ -1517,7 +1515,7 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
 	$rootScope.style = 'style1';
     $rootScope.theme = 'pink-blue';
     $scope.$on('reportDateChange', function (event, args) {
-	$scope.zone = 0;
+    	$scope.zone = 0;
         $scope.product = 0;
         $scope.state = 0;
         $scope.dealer = 0;
@@ -1999,16 +1997,13 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScop
 		
 		if($rootScope.userRole == '9' || $rootScope.userRole == '11' || $rootScope.userRole == '5' || $rootScope.userRole == '7' || $rootScope.userRole == '13'){
 			$http.get('/webapp/api/business/getNewLeadData').success(function(data){
-				$scope.dealerList = data.dealerList;
 				$scope.productList = data.productList;
 				$scope.stateList = data.stateList;
 				$scope.cityList = data.cityList;
 			});
-			if($rootScope.userRole == '5' || $rootScope.userRole == '7'){
-				$http.get('/webapp/api/business/getReassignList').success(function(data){
-					$scope.dealerList = data;
-				});
-			}
+			$http.get('/webapp/api/business/getReassignList').success(function(data){
+				$scope.dealerList = data;
+			});
 		}
 	}, 100);
 
@@ -2033,7 +2028,6 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScop
 	}
 
 	$scope.manageLeadTab = function() {
-		console.log("manageLeadTab");
 		$('#myLeads').show();
 		$('#gotoManage').hide();
 		$('#leadDetails').hide();
@@ -2136,85 +2130,87 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScop
 
 	$scope.dropdown = {};
 	$scope.dispositoion2=[];
-	$scope.dispositoion1=[
-	                      /*{ 
-	            	   id: 1, 
-	            	   name: 'New',
-	            	   dispositoion2:[
-		   	               { 
-		   	            	   id: 1,
-		   	            	   name: 'Nothing' , 
-		   	            	   action: 'Nothing'
-		   	               }
-		   	          ]
-	               },*/{ 
-	            	   id: 2, 
-	            	   name: 'Contacted',
-	            	   dispositoion2:[
-	            	                  { 
-	            	                	  name: 'Call Back' , 
-	            	                	  action: 1
-	            	                  },{ 
-	            	                	  name: 'Quote Sent' , 
-	            	                	  action: 1
-	            	                  },{ 
-	            	                	  name: 'Visiting Store' , 
-	            	                	  action: 1
-	            	                  },{ 
-	            	                	  name: 'Lost' , 
-	            	                	  action: 0
-	            	                  },{ 
-	            	                	  name: 'Won' , 
-	            	                	  action: 0
-	            	                  }
-	            	                  ]
-	               },{ 
-	            	   id: 3, 
-	            	   name: 'Tried Contacted',
-	            	   dispositoion2:[
-	            	                  { 
-	            	                	  name: 'Not Contacted' , 
-	            	                	  action: 0
-	            	                  },{ 
-	            	                	  name: 'Lost' , 
-	            	                	  action: 0
-	            	                  }
-	            	                  ]
-	               }/*,{ 
-	            	   id: 4, 
-	            	   name: 'Escalated',
-	            	   dispositoion2:[
-		   	               { 
-		   	            	   id: 1,
-		   	            	   name: 'Nothing' , 
-		   	            	   action: 'Nothing'
-		   	               }
-		   	          ]
-	               }*/
-	               ];
+	$scope.brands=[];
+	$scope.modalNo=[];
+	$resource('/template/madmin/app/file/get-disposition.json').query().$promise.then(function(disposition) {
+		$scope.dispositoion1 = disposition;
+    });
 
 
 	$scope.selectDropdown1 = function(data){
 		vm.lead.disposition1 = data.name;
 		$('#desposition2').show();
+		$('#desposition3').hide();
 		$("#reason").hide();
 		$("#date").hide();
-		/*if(data.dispositoion2[0].name == 'Nothing'){
-			$('#desposition2').hide();
-		}*/
+		$("#brand").hide();
+		$("#modalNo").hide();
 		$scope.dispositoion2 = data.dispositoion2;
 	};
 
 	$scope.selectDropdown2 = function(data){
+		$scope.dispositoion3 = data.dispositoion3;
+		if(data.dispositoion3 != undefined){
+			$('#desposition3').show();
+		} else {
+			$('#desposition3').hide();
+		}
 		$scope.category = data;
 		vm.lead.disposition2 = data.name;
-		if(angular.equals(data.name, $scope.dispositoion2[1].name) && data.name !== 'Quote Sent'){
-			if(!vm.lead.isLost){
-				$scope.showMessage("warning","Action Not Allowed.");
-			}
-		}
+		$("#brand").hide();
 		$("#reason").hide();
 		$("#date").hide();
+		$("#modalNo").hide();
+		if(data.action == 0){
+			$("#reason").show();
+			$("#date").hide();
+		} else {
+			if(data.action == 1){
+				console.log(data.action);
+				$("#reason").hide();
+				$("#date").show();
+				$scope.dpDate = moment();
+			} 
+		}
+		if(data.action == 2){
+			$("#brand").show();
+			if($scope.brands.length == 0){
+				$http.get('/webapp/api/business/getBrands').success(function(data){
+					$scope.brands = data;
+					console.log(data);
+				});
+			}
+		}
+	};
+	
+	$scope.selectBrand = function(brand){
+		vm.lead.brand = brand.name;
+		if(angular.equals(brand.name,'Bosch') || angular.equals(brand.name,'Siemens')){
+			$http.get('/webapp/api/business/getModalNumbers?brand='+brand.name).success(function(data){
+				$scope.modalNos = data;
+				$("#modalNo").show();
+				console.log(data);
+			});
+			$("#reason").hide();
+		} else {
+			$("#reason").show();
+			$("#modalNo").hide();
+		}
+		
+	}
+	
+	$scope.selectModalNo = function(modalNo){
+		vm.lead.modalNo = modalNo.name;
+	}
+	
+	$scope.selectDropdown3 = function(data){
+		$scope.disposition3 = data;
+		console.log(data.name);
+		vm.lead.disposition3 = data.name;
+		$("#reason").hide();
+		$("#date").hide();
+		$("#brand").hide();
+		$("#modalNo").hide();
 		if(data.action == 0){
 			$("#reason").show();
 			$("#date").hide();
@@ -2227,6 +2223,7 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScop
 			} 
 		}
 	};
+	
 	
 	$scope.updateLead = function() {
 		vm.lead.followUpDate = dpDate;  
@@ -2242,7 +2239,7 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScop
 		if(($scope.showCase.newLead.contactNo+"").length == 10){
 	    		$scope.invalidPhone = false;
 	    		console.log(vm.newLead);
-	    		if($rootScope.userRole == '9' || $rootScope.userRole == '11' || $rootScope.userRole == '13'){
+	    		if($rootScope.userRole == '9' || $rootScope.userRole == '13'){
 	    			vm.newLead.dealer = $scope.dealerList[0].id;
 	    		}
 			$http({method:'POST',url:'/webapp/api/business/createLead',data: vm.newLead}).success(function(response) {
@@ -2477,7 +2474,6 @@ App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColum
     }
     
     $scope.showUserTab = function(user) {
-    	$scope.getDealearsByDistrict(user.district.id);
     	vm.user = user;
     	$('#pre-selected-options1').multiSelect('deselect_all');
     	$('#userTab').removeAttr("style");
@@ -2522,7 +2518,6 @@ App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColum
 		
 		if(($scope.showCase.user.phone+"").length == 10){
     		$scope.invalidPhone = false;
-    	
     		$http({method:'POST',url:'/webapp/api/business/updateUser',data:user}).success(function(data) {
     			vm.users = data;
     			$scope.showMessage("success","Successfully Updated.");
@@ -2674,10 +2669,7 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     $scope.showDealerTab = function(user) {
     	vm.dealer = user;
     	var zone = vm.dealer.zone;
-    	if(typeof vm.dealer.zone == 'undefined' || typeof vm.dealer.zone == 'string') {
-    		zone = JSON.parse(vm.dealer.zone);
-    	}	
-	$scope.setState(vm.dealer.state);
+    	$scope.setState(vm.dealer.state);
 		setTimeout(function(){
 			$('#pre-selected-options1').multiSelect();
 		},500);
@@ -2726,22 +2718,19 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     		$scope.isPin = false;
     		$scope.isRsm = false;
     		$scope.isTsr = false;
-	    	if(typeof dealer.zone == 'string') {
-	    		dealer.zone = JSON.parse(dealer.zone);
-	    	}
 	    	angular.forEach(dealer.products, function(productVM) {
-				if($scope.productlist) {
-					if($scope.productlist.indexOf(""+productVM.id) == -1) {
+				if(dealer.productlist) {
+					if(dealer.productlist.indexOf(""+productVM.id) == -1) {
 						productVM.selected = false;
 					} else {
 						productVM.selected = true;
 					}
 				}
-	         });    	
+	        });    	
 		 
 	    	$http({method:'POST',url:'/webapp/api/business/updateDealer',data:dealer}).success(function(data) {
-				console.log('success');
 				$scope.showMessage("success","Successfully Updated.");
+				$scope.productlist = "";
 	    	}).error(function(data){
 	    		$scope.showMessage("success","Failed to update.");
 	    	});	
@@ -2755,7 +2744,7 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     }
     
     $scope.createDealer = function() {
-    	
+    	console.log("create Dealer");
     	if(($scope.dealerData.phone+"").length == 10){
     		$scope.invalidPhone = false;
     	
@@ -2768,29 +2757,24 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
 				}
 			}
          });
+    	console.log("product list");
     	if($scope.dealerData.pins == "" || angular.isUndefined($scope.dealerData.pins)) {
     		$scope.isPin = true;
-    	} else if($scope.dealerData.rsm == "" || angular.isUndefined($scope.dealerData.rsm)) {
-    		$scope.isRsm = true;
-    	} else if($scope.dealerData.tsr == "" || angular.isUndefined($scope.dealerData.tsr)) {
-    		$scope.isTsr = true;
+    		console.log("pin");
     	} else {
+    		console.log("save call");
     		$scope.isPin = false;
-    		$scope.isRsm = false;
-    		$scope.isTsr = false;
-	    	$scope.dealerData.zone = JSON.parse($scope.dealerData.zone);
 	    	//$scope.dealerData.territory = JSON.parse($scope.dealerData.territory);
     		$http({method:'POST',url:'/webapp/api/business/saveDealer',data:$scope.dealerData}).success(function(data) {
 				console.log('success');
 				$scope.showMessage("success","Successfully Created.");
 				$scope.getDealer();
+				$('#dealerDetailsTab').click();
+		    	$('#dealerTab').hide();
 	    	}).error(function(data){
 	    		$scope.showMessage("error","Fail to Create.");
 	    	});	
     	}
-    	$('#dealerDetailsTab').click();
-    	$('#dealerTab').hide();
-    	
     	}else{
     		$scope.invalidPhone = true;
     	}
@@ -3007,6 +2991,123 @@ App.controller('ReportFreqTableCtrl', function ($scope, $http, $routeParams, $re
 App.controller('EscalatedLeadsCtrl',function($stateParams, $scope, $http, $timeout, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){
 	var vm = this;
 	vm.tabHeading = $stateParams.leadType+" Leads";
+	
+	var search_html;
+	search_html = '<div class="input-group input-group-sm mbs">';
+	search_html += "_INPUT_";
+	search_html += '</div>';
+    vm.dtOptions = DTOptionsBuilder.newOptions()
+    .withBootstrap()
+    .withOption('order', [[0, 'asc']])
+    .withTableTools('/template/madmin/app/vendors/DataTables/extensions/TableTools/swf/copy_csv_xls_pdf.swf')
+    .withTableToolsButtons(
+         [
+            "csv",
+            "xls",
+            'print'
+        ] 
+    )
+    //.withDOM('<"row"<"col-md-8 col-sm-12"<"inline-controls"l>><"col-md-4 col-sm-12"<"pull-right"f>>>t<"row"<"col-md-4 col-sm-12"<"inline-controls"l>><"col-md-4 col-sm-12"<"inline-controls text-center"i>><"col-md-4 col-sm-12"p>>')
+    .withLanguage({
+      "sLengthMenu": 'View _MENU_ records',
+      "sInfo":  'Found _TOTAL_ records',
+      "oPaginate": {
+        "sPage":    "Page",
+        "sPageOf":  "of"
+      },
+      "sSearch": search_html
+    })
+    .withPaginationType('input')
+    .withColumnFilter();
+
+
+
+	 vm.dtColumnDefs = [
+	                       DTColumnDefBuilder.newColumnDef(2).notSortable(),
+	                       DTColumnDefBuilder.newColumnDef(3).notSortable(),
+	                       DTColumnDefBuilder.newColumnDef(4).notSortable(),
+	                       DTColumnDefBuilder.newColumnDef(5).notSortable(),
+	                       DTColumnDefBuilder.newColumnDef(6).notSortable(),
+	                       ];
+
+	applyDataTable = function(){
+		if($scope.userRole == 5 || $scope.userRole == 7){
+	    	vm.dtOptions = DTOptionsBuilder.newOptions()
+	        .withBootstrap()
+	        .withOption('order', [[5, 'desc']])
+	        .withTableTools('/template/madmin/app/vendors/DataTables/extensions/TableTools/swf/copy_csv_xls_pdf.swf')
+	        .withTableToolsButtons(
+	             [
+	                "csv",
+	                "xls",
+	                'print'
+	            ] 
+	        )
+	        //.withDOM('<"row"<"col-md-8 col-sm-12"<"inline-controls"l>><"col-md-4 col-sm-12"<"pull-right"f>>>t<"row"<"col-md-4 col-sm-12"<"inline-controls"l>><"col-md-4 col-sm-12"<"inline-controls text-center"i>><"col-md-4 col-sm-12"p>>')
+	        .withLanguage({
+	          "sLengthMenu": 'View _MENU_ records',
+	          "sInfo":  'Found _TOTAL_ records',
+	          "oPaginate": {
+	            "sPage":    "Page",
+	            "sPageOf":  "of"
+	          },
+	          "sSearch": search_html
+	        })
+	        .withPaginationType('input')
+	        //.withScroller()
+	        //.withOption("sScrollY", false)
+	        //.withOption("sScrollX")
+	        .withColumnFilter();
+	    	   vm.dtColumnDefs = [
+
+	    	                       DTColumnDefBuilder.newColumnDef(2).notSortable(),
+	    	                       DTColumnDefBuilder.newColumnDef(3).notSortable(),
+	    	                       DTColumnDefBuilder.newColumnDef(4).notSortable(),
+	    	                       //DTColumnDefBuilder.newColumnDef(5).notSortable(),
+	    	                       DTColumnDefBuilder.newColumnDef(6).notSortable(),
+	    	                       DTColumnDefBuilder.newColumnDef(8).notSortable(),
+	    	                       ];
+	    } else {
+	    	vm.dtOptions = DTOptionsBuilder.newOptions()
+	        .withBootstrap()
+	        .withOption('order', [[4, 'asc']])
+	        .withTableTools('/template/madmin/app/vendors/DataTables/extensions/TableTools/swf/copy_csv_xls_pdf.swf')
+	        .withTableToolsButtons(
+	             [
+	                "csv",
+	                "xls",
+	                'print'
+	            ] 
+	        )
+	        //.withDOM('<"row"<"col-md-8 col-sm-12"<"inline-controls"l>><"col-md-4 col-sm-12"<"pull-right"f>>>t<"row"<"col-md-4 col-sm-12"<"inline-controls"l>><"col-md-4 col-sm-12"<"inline-controls text-center"i>><"col-md-4 col-sm-12"p>>')
+	        .withLanguage({
+	          "sLengthMenu": 'View _MENU_ records',
+	          "sInfo":  'Found _TOTAL_ records',
+	          "oPaginate": {
+	            "sPage":    "Page",
+	            "sPageOf":  "of"
+	          },
+	          "sSearch": search_html
+	        })
+	        .withPaginationType('input')
+	        //.withScroller()
+	        //.withOption("sScrollY", false)
+	        //.withOption("sScrollX")
+	        .withColumnFilter();
+	    	
+	        vm.dtColumnDefs = [
+
+	                           DTColumnDefBuilder.newColumnDef(2).notSortable(),
+	                           DTColumnDefBuilder.newColumnDef(3).notSortable(),
+	                           //DTColumnDefBuilder.newColumnDef(4).notSortable(),
+	                           DTColumnDefBuilder.newColumnDef(5).notSortable(),
+	                           DTColumnDefBuilder.newColumnDef(6).notSortable(),
+	                           DTColumnDefBuilder.newColumnDef(8).notSortable(),
+	                           ];
+	    }
+
+	}
+	
 	$scope.editLeadTab = function(id) {
 		$http.get('/webapp/api/business/lead/'+id).success(function(data){
 			$http.get('/webapp/api/business/lead/history/'+id).success(function(orders){
@@ -3023,7 +3124,7 @@ App.controller('EscalatedLeadsCtrl',function($stateParams, $scope, $http, $timeo
 			});
 		});
 	}
-
+	
 	var api = '/webapp/api/business/getEscalatedLeads';
 	switch($stateParams.leadType){
 		case 'Escalated':
@@ -3040,6 +3141,7 @@ App.controller('EscalatedLeadsCtrl',function($stateParams, $scope, $http, $timeo
 			api = '/webapp/api/business/getLostLeads?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product+'&dealer='+$scope.dealer;
 			break;
 		case 'Follow-up':
+			applyDataTable();
 			api = '/webapp/api/business/getFollowUpLeads';
 			break;
 		case 'My':
@@ -3056,15 +3158,17 @@ App.controller('EscalatedLeadsCtrl',function($stateParams, $scope, $http, $timeo
 			vm.orders = orders;
 		});
 	}, 100);
+	
+	
 	vm.orders = [];
 	vm.leadHistory = [];
 	vm.lead = {};
-	var search_html;
-	search_html = '<div class="input-group input-group-sm mbs">';
-	search_html += "_INPUT_";
-	search_html += '</div>';
+	
+	
 	$scope.manageLeadTab = function() {
-		console.log("manageLeadTab");
+		$http.get(api).success(function(orders){
+			vm.orders = orders;
+		});
 		$('#myLeads').show();
 		$('#gotoManage').hide();
 		$('#leadDetails').hide();
@@ -3075,39 +3179,6 @@ App.controller('EscalatedLeadsCtrl',function($stateParams, $scope, $http, $timeo
 	$('.scroll').slimScroll({
         "alwaysVisible": true
     });
-
-    vm.dtOptions = DTOptionsBuilder.newOptions()
-      .withBootstrap()
-      .withOption('order', [[0, 'asc']])
-      .withTableTools('/template/madmin/app/vendors/DataTables/extensions/TableTools/swf/copy_csv_xls_pdf.swf')
-      .withTableToolsButtons(
-           [
-              "csv",
-              "xls",
-              'print'
-          ] 
-      )
-      //.withDOM('<"row"<"col-md-8 col-sm-12"<"inline-controls"l>><"col-md-4 col-sm-12"<"pull-right"f>>>t<"row"<"col-md-4 col-sm-12"<"inline-controls"l>><"col-md-4 col-sm-12"<"inline-controls text-center"i>><"col-md-4 col-sm-12"p>>')
-      .withLanguage({
-        "sLengthMenu": 'View _MENU_ records',
-        "sInfo":  'Found _TOTAL_ records',
-        "oPaginate": {
-          "sPage":    "Page",
-          "sPageOf":  "of"
-        },
-        "sSearch": search_html
-      })
-      .withPaginationType('input')
-      .withColumnFilter();
-
-
-    vm.dtColumnDefs = [
-                       DTColumnDefBuilder.newColumnDef(2).notSortable(),
-                       DTColumnDefBuilder.newColumnDef(3).notSortable(),
-                       DTColumnDefBuilder.newColumnDef(4).notSortable(),
-                       DTColumnDefBuilder.newColumnDef(5).notSortable(),
-                       DTColumnDefBuilder.newColumnDef(6).notSortable(),
-                       ];
 
     vm.selectedAll = false;
 
@@ -3144,82 +3215,87 @@ App.controller('EscalatedLeadsCtrl',function($stateParams, $scope, $http, $timeo
 
 	$scope.dropdown = {};
 	$scope.dispositoion2=[];
-	$scope.dispositoion1=[
-	                      /*{ 
-	            	   id: 1, 
-	            	   name: 'New',
-	            	   dispositoion2:[
-		   	               { 
-		   	            	   id: 1,
-		   	            	   name: 'Nothing' , 
-		   	            	   action: 'Nothing'
-		   	               }
-		   	          ]
-	               },*/{ 
-	            	   id: 2, 
-	            	   name: 'Contacted',
-	            	   dispositoion2:[
-	            	                  { 
-	            	                	  name: 'Call Back' , 
-	            	                	  action: 1
-	            	                  },{ 
-	            	                	  name: 'Quote Sent' , 
-	            	                	  action: 1
-	            	                  },{ 
-	            	                	  name: 'Visiting Store' , 
-	            	                	  action: 1
-	            	                  },{ 
-	            	                	  name: 'Lost' , 
-	            	                	  action: 0
-	            	                  },{ 
-	            	                	  name: 'Won' , 
-	            	                	  action: 0
-	            	                  }
-	            	                  ]
-	               },{ 
-	            	   id: 3, 
-	            	   name: 'Tried Contacted',
-	            	   dispositoion2:[
-	            	                  { 
-	            	                	  name: 'Not Contacted' , 
-	            	                	  action: 0
-	            	                  },{ 
-	            	                	  name: 'Lost' , 
-	            	                	  action: 0
-	            	                  }
-	            	                  ]
-	               }/*,{ 
-	            	   id: 4, 
-	            	   name: 'Escalated',
-	            	   dispositoion2:[
-		   	               { 
-		   	            	   id: 1,
-		   	            	   name: 'Nothing' , 
-		   	            	   action: 'Nothing'
-		   	               }
-		   	          ]
-	               }*/
-	               ];
+	$scope.brands=[];
+	$scope.modalNo=[];
+	$resource('/template/madmin/app/file/get-disposition.json').query().$promise.then(function(disposition) {
+		$scope.dispositoion1 = disposition;
+    });
 
 
 	$scope.selectDropdown1 = function(data){
 		vm.lead.disposition1 = data.name;
 		$('#desposition2').show();
+		$('#desposition3').hide();
 		$("#reason").hide();
 		$("#date").hide();
+		$("#brand").hide();
+		$("#modalNo").hide();
 		$scope.dispositoion2 = data.dispositoion2;
 	};
 
 	$scope.selectDropdown2 = function(data){
+		$scope.dispositoion3 = data.dispositoion3;
+		if(data.dispositoion3 != undefined){
+			$('#desposition3').show();
+		} else {
+			$('#desposition3').hide();
+		}
 		$scope.category = data;
 		vm.lead.disposition2 = data.name;
-		if(angular.equals(data.name, $scope.dispositoion2[1].name) && data.name !== 'Quote Sent'){
-			if(!vm.lead.isLost){
-				$scope.showMessage("warning","Action Not Allowed.");
-			}
-		}
+		$("#brand").hide();
 		$("#reason").hide();
 		$("#date").hide();
+		$("#modalNo").hide();
+		if(data.action == 0){
+			$("#reason").show();
+			$("#date").hide();
+		} else {
+			if(data.action == 1){
+				console.log(data.action);
+				$("#reason").hide();
+				$("#date").show();
+				$scope.dpDate = moment();
+			} 
+		}
+		if(data.action == 2){
+			$("#brand").show();
+			if($scope.brands.length == 0){
+				$http.get('/webapp/api/business/getBrands').success(function(data){
+					$scope.brands = data;
+					console.log(data);
+				});
+			}
+		}
+	};
+	
+	$scope.selectBrand = function(brand){
+		vm.lead.brand = brand.name;
+		if(angular.equals(brand.name,'Bosch') || angular.equals(brand.name,'Siemens')){
+			$http.get('/webapp/api/business/getModalNumbers?brand='+brand.name).success(function(data){
+				$scope.modalNos = data;
+				$("#modalNo").show();
+			});
+			$("#reason").hide();
+		} else {
+			$("#reason").show();
+			$("#modalNo").hide();
+		}
+		
+	}
+	
+	$scope.selectModalNo = function(modalNo){
+		console.log(modalNo.name);
+		vm.lead.modalNo = modalNo.name;
+	}
+	
+	$scope.selectDropdown3 = function(data){
+		$scope.disposition3 = data;
+		console.log(data.name);
+		vm.lead.disposition3 = data.name;
+		$("#reason").hide();
+		$("#date").hide();
+		$("#brand").hide();
+		$("#modalNo").hide();
 		if(data.action == 0){
 			$("#reason").show();
 			$("#date").hide();
@@ -3232,6 +3308,7 @@ App.controller('EscalatedLeadsCtrl',function($stateParams, $scope, $http, $timeo
 			} 
 		}
 	};
+	
 
 	$scope.updateLead = function(){
 		vm.lead.followUpDate = dpDate;  
@@ -3281,7 +3358,9 @@ App.controller('FollowUpLeadsCtrl',function($scope,$timeout, $http, DTOptionsBui
 	}
 
 	$scope.manageLeadTab = function() {
-		console.log("manageLeadTab");
+		$http.get('/webapp/api/business/getFollowUpLeads').success(function(orders){
+			vm.orders = orders;
+		});
 		$('#myLeads').show();
 		$('#gotoManage').hide();
 		$('#leadDetails').hide();
@@ -3290,47 +3369,47 @@ App.controller('FollowUpLeadsCtrl',function($scope,$timeout, $http, DTOptionsBui
 	}
 	
 	$('.scroll').slimScroll({
-        "alwaysVisible": true
-    });
-	
-	
-    vm.dtOptions = DTOptionsBuilder.newOptions()
-      .withBootstrap()
-      .withOption('order', [[4, 'desc']])
-      .withTableTools('/template/madmin/app/vendors/DataTables/extensions/TableTools/swf/copy_csv_xls_pdf.swf')
-      .withTableToolsButtons(
-           [
-              "csv",
-              "xls",
-              'print'
-          ] 
-      )
-      //.withDOM('<"row"<"col-md-8 col-sm-12"<"inline-controls"l>><"col-md-4 col-sm-12"<"pull-right"f>>>t<"row"<"col-md-4 col-sm-12"<"inline-controls"l>><"col-md-4 col-sm-12"<"inline-controls text-center"i>><"col-md-4 col-sm-12"p>>')
-      .withLanguage({
-        "sLengthMenu": 'View _MENU_ records',
-        "sInfo":  'Found _TOTAL_ records',
-        "oPaginate": {
-          "sPage":    "Page",
-          "sPageOf":  "of"
-        },
-        "sSearch": search_html
-      })
-      .withPaginationType('input')
-      //.withScroller()
-      //.withOption("sScrollY", false)
-      //.withOption("sScrollX")
-      .withColumnFilter();
-    
-    vm.dtColumnDefs = [
+		"alwaysVisible": true
+	});
 
-                       DTColumnDefBuilder.newColumnDef(2).notSortable(),
-                       DTColumnDefBuilder.newColumnDef(3).notSortable(),
-                       //DTColumnDefBuilder.newColumnDef(4).notSortable(),
-                       DTColumnDefBuilder.newColumnDef(5).notSortable(),
-                       DTColumnDefBuilder.newColumnDef(6).notSortable(),
-                       DTColumnDefBuilder.newColumnDef(8).notSortable(),
-                       ];
-    
+	vm.dtOptions = DTOptionsBuilder.newOptions()
+	.withBootstrap()
+	.withOption('order', [[4, 'asc']])
+	.withTableTools('/template/madmin/app/vendors/DataTables/extensions/TableTools/swf/copy_csv_xls_pdf.swf')
+	.withTableToolsButtons(
+			[
+			 "csv",
+			 "xls",
+			 'print'
+			 ] 
+	)
+	//.withDOM('<"row"<"col-md-8 col-sm-12"<"inline-controls"l>><"col-md-4 col-sm-12"<"pull-right"f>>>t<"row"<"col-md-4 col-sm-12"<"inline-controls"l>><"col-md-4 col-sm-12"<"inline-controls text-center"i>><"col-md-4 col-sm-12"p>>')
+	.withLanguage({
+		"sLengthMenu": 'View _MENU_ records',
+		"sInfo":  'Found _TOTAL_ records',
+		"oPaginate": {
+			"sPage":    "Page",
+			"sPageOf":  "of"
+		},
+		"sSearch": search_html
+	})
+	.withPaginationType('input')
+	//.withScroller()
+	//.withOption("sScrollY", false)
+	//.withOption("sScrollX")
+	.withColumnFilter();
+
+	vm.dtColumnDefs = [
+
+	                   DTColumnDefBuilder.newColumnDef(2).notSortable(),
+	                   DTColumnDefBuilder.newColumnDef(3).notSortable(),
+	                   //DTColumnDefBuilder.newColumnDef(4).notSortable(),
+	                   DTColumnDefBuilder.newColumnDef(5).notSortable(),
+	                   DTColumnDefBuilder.newColumnDef(6).notSortable(),
+	                   DTColumnDefBuilder.newColumnDef(8).notSortable(),
+	                   ];
+
+
     vm.dtColumnDefsDashBoard = [
                        DTColumnDefBuilder.newColumnDef(2).notSortable(),
                        DTColumnDefBuilder.newColumnDef(3).notSortable(),
@@ -3435,13 +3514,11 @@ App.controller('FollowUpLeadsCtrl',function($scope,$timeout, $http, DTOptionsBui
 		$('#desposition2').show();
 		$("#reason").hide();
 		$("#date").hide();
-		/*if(data.dispositoion2[0].name == 'Nothing'){
-			$('#desposition2').hide();
-		}*/
 		$scope.dispositoion2 = data.dispositoion2;
 	};
 
 	$scope.selectDropdown2 = function(data){
+		$('#desposition3').show();
 		$scope.category = data;
 		vm.lead.disposition2 = data.name;
 		if(angular.equals(data.name, $scope.dispositoion2[1].name) && data.name !== 'Quote Sent'){

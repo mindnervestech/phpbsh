@@ -30,7 +30,7 @@
 <div data-ng-if="userRole == 5 || userRole == 7" class="col-md-2" style = "padding: 7px; float: right;">
   <div class="">
     <select data-ng-model="dealer" class="form-control btn-blue"  data-ng-change="getDashBoard(zone, state, product, dealer)"  required>
-    	<option value="0" >All Dealer</option>
+    	<option value="0" >All Area</option>
       <option data-ng-repeat="dealer in dealerList" value="{{dealer.id}}" >{{dealer.name}}</option>
     </select>
   </div>

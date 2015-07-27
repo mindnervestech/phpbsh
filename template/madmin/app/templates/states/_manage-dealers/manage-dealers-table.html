@@ -40,7 +40,7 @@
                     <td>{{ user.phone }}</td>
                     <td data-ng-if="userRole == 9" ><a data-ng-repeat="pin in user.pins" class="label " style="float:left; margin: 2px; background: gray;border-radius: 0px !important;font-size: 11px; font-weight:700;">{{pin.pin}}</a></td>
                     <td data-ng-if="userRole == 9" >{{ user.rsm }}</td>
-                    <td data-ng-if="userRole != 9">{{ user.zone.name }}</td>
+                    <td data-ng-if="userRole != 9">{{ user.zone }}</td>
                     <td data-ng-if="userRole != 9">{{ user.state }}</td>
                     <td data-ng-if="userRole != 9">{{ user.status }}</td>
                     <td data-ng-if="userRole == 5 || userRole == 7 || userRole == 10">
