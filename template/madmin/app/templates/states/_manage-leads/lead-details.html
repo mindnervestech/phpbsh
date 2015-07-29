@@ -8,9 +8,13 @@
                   <div class="row">
 	                  <div data-ng-if="showCase.lead.isCompleated">
 	                   <div class="form-group col-md-12" style="font-size: 23px;margin-bottom: 0px; ">
-	                    	<i data-ng-if="showCase.lead.status == 'Won' " class="icon fa fa-thumbs-up"></i>
-	                    	<i data-ng-if="showCase.lead.status == 'Lost' " class="icon fa fa-thumbs-down"></i>
-	                      <label for="inputUsername" class="control-label">{{showCase.lead.status}}</label>
+	                    	<i data-ng-if="showCase.lead.status == 'Won' " class="icon fa fa-thumbs-up">
+	                    	<label for="inputUsername" class="control-label">{{showCase.lead.status}} Brand : {{showCase.lead.brand}} And ModalNo : {{showCase.lead.modalNo}}</label>
+	                    	</i>
+	                    	<i data-ng-if="showCase.lead.status == 'Lost' " class="icon fa fa-thumbs-down">
+	                    	<label for="inputUsername" class="control-label">{{showCase.lead.status}}</label>
+	                    	</i>
+	                      
 		                 
 	                  	</div>
 	                  	
@@ -138,7 +142,7 @@
                     <div class="form-group">
                       <label for="inputEmail" class="control-label">Contact Name</label>
                       <div class="input-icon"><i class="fa fa-user"></i>
-                        <input type="text" placeholder="Contact Name" value="{{showCase.lead.nam}}" style="cursor: auto;" class="form-control" readonly="readonly"/>
+                        <input type="text" placeholder="Contact Name" value="{{showCase.lead.name}}" style="cursor: auto;" class="form-control" readonly="readonly"/>
                       </div>
                     </div>
                     </div>

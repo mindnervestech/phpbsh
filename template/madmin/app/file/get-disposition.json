@@ -1,0 +1,68 @@
+[
+	{
+	   "id": 2, 
+	   "name": "Contacted",
+	   "dispositoion2":[
+	                  { 
+	                	  "name": "Interested" , 
+	                	  "dispositoion3":[
+	                	  		{
+	                	  			"name": "Visiting Store/dealer"
+	                	  		},{
+	                	  			"name": "Product details shared"
+	                	  		},{
+	                	  			"name": "Quote Sent"
+	                	  		},{
+	                	  			"name": "Called for demo or free inspection"
+	                	  		},{
+	                	  		 	"action": 1,
+	                	  			"name": "Call back-evaluating"
+	                	  		},{
+	                	  		 	"action": 1,
+	                	  			"name": "Call back-want to purchase later"
+	                	  		}
+	                	  ]
+	                  },{ 
+	                	  "name": "Not Interested" , 
+	                	  "dispositoion3":[
+	                	  		{
+	                	  			"name": "Price sensitive"
+	                	  		},{
+	                	  			"name": "Product not good"
+	                	  		},{
+	                	  			"name": "Product not matching the requirement"
+	                	  		},{
+	                	  			"name": "Service/reviews not good"
+	                	  		},{
+	                	  			"name": "Loyal customer of other brand"
+	                	  		},{
+	                	  			"name": "Warranty not good" 
+	                	  		},{
+	                	  			"action": 0,
+	                	  			"name": "Other" 
+	                	  		}
+	                	  ]
+	                  },{ 
+	                	  "name": "Already Purchased" , 
+	                	  "action": 2
+	                  },{ 
+	                	  "name": "Call back/Follow up" , 
+	                	  "action": 1
+	                  }
+	                  ]
+   },{ 
+	   "id": 3, 
+	   "name": "Tried Contacted",
+	   "dispositoion2":[
+	                  { 
+	                	  "name": "Ringing" 
+	                  },{ 
+	                	  "name": "Customer is busy" 
+	                  }, { 
+	                	  "name": "Not reachable" 
+	                  }, { 
+	                	  "name": "Switched off" 
+	                  }
+	                  ]
+   }
+]

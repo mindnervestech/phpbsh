@@ -18,9 +18,9 @@
                       <input type="checkbox" class="checkall" ng-model="showCase.selectedAll" ng-click="showCase.selectAll()"/>
                     </th>
                     <th style="background-color: #dc6767;color:white;" width="6%">#</th>
-                    <th style="background-color: #dc6767;color:white;" width="14%">Contact Name&Email</th>
+                    <th style="background-color: #dc6767;color:white;" width="14%">Contact Name&Contact No</th>
                     <!-- <th style="background-color: #dc6767;color:white;" width="14%">Email</th> -->
-                    <th style="background-color: #dc6767;color:white;" width="8%">Contact No</th>
+                   <!--  <th style="background-color: #dc6767;color:white;" width="8%">Contact No</th> -->
                     <th style="background-color: #dc6767;color:white;" width="2%">PinCode</th>
                     <th data-ng-if="showCase.tabHeading == 'Follow-up Leads'" style="background-color: #dc6767;color:white;" width="4%">FollowUp Time</th>
                     <th style="background-color: #dc6767;color:white;" width="12%">Product</th>
@@ -28,6 +28,7 @@
                     <th data-ng-if="showCase.tabHeading == 'My Leads' || showCase.tabHeading == 'Open Leads'" style="background-color: #dc6767;color:white;" width="4%">Disp1</th>
                     <th data-ng-if="showCase.tabHeading == 'Escalated Leads'" style="background-color: #dc6767;color:white;" width="4%">Status</th>
                     <th data-ng-if="showCase.tabHeading == 'My Leads' || showCase.tabHeading == 'Follow-up Leads' || showCase.tabHeading == 'Open Leads'" style="background-color: #dc6767;color:white;" width="4%">Disp2</th>
+                     <th style="background-color: #dc6767;color:white;" width="2%">Status</th>
                     <th data-ng-if="showCase.tabHeading == 'Escalated Leads'" style="background-color: #dc6767;color:white;" width="4%">Escalated To</th>
                     <th data-ng-if="userRole != 9 && userRole != 5 && userRole != 11 && userRole != 13 && userRole != 7"style="background-color: #dc6767;color:white;" width="4%">Dealer</th>
                     <th data-ng-if="userRole == 9 || userRole == 5 || userRole == 11 || userRole == 13 || userRole == 7"style="background-color: #dc6767;color:white;" width="4%">Actions</th>
@@ -40,14 +41,14 @@
                     <input type="checkbox" data-ng-model="order.selected"><i></i></label></td>
                     <td>{{ order.leadNumber }}</td>
                     <td>{{ order.contactName }}<br>
-                    {{ order.email}}</td>
-                    <td>{{ order.contactNumber }}</td>
+                    {{ order.contactNumber }}</td>
                     <td>{{ order.pincode }}</td>
                     <td data-ng-if="showCase.tabHeading == 'Follow-up Leads'">{{ order.followUpDate | date:"yyyy/MM/dd',' h:mma"}}</td>
                     <td>{{ order.product }}</td>
                     <td>{{ order.state }}</td>
                     <td data-ng-if="showCase.tabHeading == 'My Leads' || showCase.tabHeading == 'Escalated Leads' || showCase.tabHeading == 'Open Leads'">{{ order.disposition1 }}</td>
                     <td data-ng-if="showCase.tabHeading == 'My Leads' || showCase.tabHeading == 'Follow-up Leads' || showCase.tabHeading == 'Open Leads'">{{ order.disposition2 }}</td>
+                    <td>{{ order.status }}</td>
                     <td data-ng-if="showCase.tabHeading == 'Escalated Leads'">{{ order.escalatedTo }}</td>
                     <td data-ng-if="userRole != 9 && userRole != 5 && userRole != 11 && userRole != 13 && userRole != 7">{{ order.dealerName}}</td>
                     <td data-ng-if="userRole == 9 || userRole == 5 || userRole == 11 || userRole == 13 || userRole == 7">

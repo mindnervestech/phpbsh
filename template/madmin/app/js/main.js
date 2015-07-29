@@ -1554,10 +1554,11 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
     });
     
     $scope.getDashBoard = function(zone, state, product, dealer){
+    	$scope.state = 0;
     	$scope.state = state;
     	$scope.product = product;
     	$scope.dealer = dealer;
-    	if($rootScope.userRole == '6' || $rootScope.userRole == '8' || $rootScope.userRole == '7' || $rootScope.userRole == '5' || $rootScope.userRole == '9' || $rootScope.userRole == '6' || $rootScope.userRole == '11' || $rootScope.userRole == '13'){
+    	if($rootScope.userRole == '6' || $rootScope.userRole == '8' || $rootScope.userRole == '7' || $rootScope.userRole == '5' || $rootScope.userRole == '9' || $rootScope.userRole == '11' || $rootScope.userRole == '13'){
     		if($rootScope.userRole == '6' || $rootScope.userRole == '8'){
     			$scope.dashboard.spline1={
         				remote:{
@@ -1573,8 +1574,6 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
     	} else {
     		if(zone == '0'){
     			$scope.zone = zone;
-        		$scope.state = 0;
-        		$scope.stateList = [];
         		$scope.dashboard.spline1={
         				remote:{
         					url:'/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product,
@@ -1583,10 +1582,14 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
         	} else {
         		if(!angular.equals($scope.zone, zone)){
         			$scope.zone = zone;
+        			$scope.state = 0;
+        			console.log($scope.state);
+        			console.log($scope.zone);
         			$http.get('/webapp/api/business/getStateByZone/'+zone).success(function(data){
             			$scope.stateList = data;
             		});
         		}
+        		console.log($scope.state);
         		$scope.dashboard.spline1={
         				remote:{
         					url:'/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product,
@@ -1601,7 +1604,8 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
     	}
     	$scope.dashboard.progressBar.remote = {
     		url:'/webapp/api/business/getDashboardProgressbarAll?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product+'&dealer='+$scope.dealer,
-    	}
+    	};
+    	
     	$scope.$evalAsync();
     }
 
@@ -2028,6 +2032,9 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScop
 	}
 
 	$scope.manageLeadTab = function() {
+		$http.get('/webapp/api/business/getLeads').success(function(orders){
+			vm.orders = orders;
+		});
 		$('#myLeads').show();
 		$('#gotoManage').hide();
 		$('#leadDetails').hide();
@@ -2121,8 +2128,8 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScop
 	getDisposition1 = function(name){
 		angular.forEach( $scope.dispositoion1, function(dispo) {
 			if(dispo.name == name){
-				$scope.dropdown = dispo;
 				$scope.selectDropdown1(dispo);
+				$scope.dropdown = dispo;
 			}
 		});
 	}
@@ -2207,7 +2214,7 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScop
 		$scope.disposition3 = data;
 		console.log(data.name);
 		vm.lead.disposition3 = data.name;
-		$("#reason").hide();
+		$("#reason").show();
 		$("#date").hide();
 		$("#brand").hide();
 		$("#modalNo").hide();
@@ -2223,7 +2230,6 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScop
 			} 
 		}
 	};
-	
 	
 	$scope.updateLead = function() {
 		vm.lead.followUpDate = dpDate;  
@@ -2757,7 +2763,6 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
 				}
 			}
          });
-    	console.log("product list");
     	if($scope.dealerData.pins == "" || angular.isUndefined($scope.dealerData.pins)) {
     		$scope.isPin = true;
     		console.log("pin");
@@ -3198,8 +3203,8 @@ App.controller('EscalatedLeadsCtrl',function($stateParams, $scope, $http, $timeo
 	getDisposition1 = function(name){
 		angular.forEach( $scope.dispositoion1, function(dispo) {
 			if(dispo.name == name){
-				$scope.dropdown = dispo;
 				$scope.selectDropdown1(dispo);
+				$scope.dropdown = dispo;
 			}
 		});
 	}
@@ -3292,7 +3297,7 @@ App.controller('EscalatedLeadsCtrl',function($stateParams, $scope, $http, $timeo
 		$scope.disposition3 = data;
 		console.log(data.name);
 		vm.lead.disposition3 = data.name;
-		$("#reason").hide();
+		$("#reason").show();
 		$("#date").hide();
 		$("#brand").hide();
 		$("#modalNo").hide();
@@ -3433,9 +3438,9 @@ App.controller('FollowUpLeadsCtrl',function($scope,$timeout, $http, DTOptionsBui
 
 	getDisposition1 = function(name){
 		angular.forEach( $scope.dispositoion1, function(dispo) {
-			if(dispo.name == name){
-				$scope.dropdown = dispo;
+			if(dispo.name == name){				
 				$scope.selectDropdown1(dispo);
+				$scope.dropdown = dispo;
 			}
 		});
 	}
