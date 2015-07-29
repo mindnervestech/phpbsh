@@ -1554,7 +1554,6 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
     });
     
     $scope.getDashBoard = function(zone, state, product, dealer){
-    	$scope.state = 0;
     	$scope.state = state;
     	$scope.product = product;
     	$scope.dealer = dealer;
@@ -1583,13 +1582,10 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
         		if(!angular.equals($scope.zone, zone)){
         			$scope.zone = zone;
         			$scope.state = 0;
-        			console.log($scope.state);
-        			console.log($scope.zone);
         			$http.get('/webapp/api/business/getStateByZone/'+zone).success(function(data){
             			$scope.stateList = data;
             		});
         		}
-        		console.log($scope.state);
         		$scope.dashboard.spline1={
         				remote:{
         					url:'/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product,
@@ -2830,7 +2826,7 @@ App.controller('DealerConfigCtrl', function ($scope, $http, $routeParams, $resou
     	$scope.zipcode.length = 0 ;
     	$scope.zipcode.push(newTag);
     	console.log($scope.zipcode);
-    	$http.get('/webapp/api/business/getDealersByZipCode/'+$scope.zipcode[0].pin).success(function(data){
+    	$http.get('/webapp/api/business/getDealersByZipCode/'+$scope.zipcode[0].id).success(function(data){
     		console.log(data);
     		$scope.dealerConfig = data;
     	});
