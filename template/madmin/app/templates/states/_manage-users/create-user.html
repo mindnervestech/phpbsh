@@ -74,7 +74,7 @@
                           <label for="inputPhone" class="control-label">Zone<span class='require'>*</span></label>
                           <select id="selPSM" ng-model="userData.zone" class="form-control" required>
                           	<option value="">Select Zone</option>
-                            <option ng-repeat="zone in zoneList" value="{{zone.id}}" >{{zone.name}}</option>
+                            <option ng-repeat="zone in zoneList" value="{{zone.name}}" >{{zone.name}}</option>
                           </select>
                         </div>
                       </div>
@@ -104,7 +104,7 @@
                           <label for="inputFirstName" class="control-label">State</label>
                           <select id="selPSM" ng-model="userData.state" class="form-control">
                            <option value="">Select state</option>
-                            <option ng-repeat="state in stateList" value="{{state.id}}" >{{state.name}}</option>
+                            <option ng-repeat="state in stateList" value="{{state.name}}" >{{state.name}}</option>
                           </select>
                         </div>
                       </div>
@@ -113,7 +113,7 @@
                           <label for="inputCity" class="control-label">City </label>
                           <select id="selPSM" ng-model="userData.district" class="form-control" data-ng-change="getDealearsByDistrict(userData.district)">
                             <option value="">Select District</option>
-                            <option ng-repeat="district in districtList" value="{{district.id}}" >{{district.name}}</option>
+                            <option ng-repeat="district in districtList" value="{{district.name}}" >{{district.name}}</option>
                           </select>
                         </div>
                       </div>

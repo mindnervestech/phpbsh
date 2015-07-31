@@ -2495,9 +2495,10 @@ App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColum
     			$scope.userData = {};// Empty form
     			//$scope.userData.$setPristine();
     			$('#pre-selected-options').multiSelect('deselect_all');
-    			$('#userDetailsTab').click();
-    			$('#userTab').hide();
+    			
         	$scope.showMessage("success","Successfully Create User.");
+        	$('#userDetailsTab').click();
+			$('#userTab').hide();
     		}).error(function(data){
     		$scope.showMessage("error","Failed to Create.");
     		});
@@ -2540,9 +2541,9 @@ App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColum
     
     $scope.getDealearsByDistrict = function(district){
     	vm.user.dealer = "";
-    	$http.get('/webapp/api/business/getDealersByDistrict/'+district).success(function(data) {
-			$scope.dralerList = data;
-    	});	
+    	/*$http.get('/webapp/api/business/getDealersByDistrict/'+district).success(function(data) {
+			//$scope.dralerList = data;
+    	});	*/
     }
     
     
@@ -2641,6 +2642,10 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     
     $scope.getDealer();
     $scope.loadPin = function(query) {
+    	if($scope.state == 0 ){
+    		$scope.showMessage("warning","Please Select State First.");
+    		return;
+    	} 
     	return $http.get('/webapp/api/business/getPincodes?query='+query);
     };
     
@@ -2759,7 +2764,7 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
 				}
 			}
          });
-    	if($scope.dealerData.pins == "" || angular.isUndefined($scope.dealerData.pins)) {
+    	if($scope.dealerData.id == "" || angular.isUndefined($scope.dealerData.id)) {
     		$scope.isPin = true;
     		console.log("pin");
     	} else {
