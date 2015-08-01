@@ -2764,7 +2764,7 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
 				}
 			}
          });
-    	if($scope.dealerData.id == "" || angular.isUndefined($scope.dealerData.id)) {
+    	if($scope.dealerData.ids == "" || angular.isUndefined($scope.dealerData.ids)) {
     		$scope.isPin = true;
     		console.log("pin");
     	} else {
