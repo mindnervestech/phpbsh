@@ -2016,6 +2016,7 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScop
 			vm.lead = data;
 			$scope.dpDate = moment();
 			getDisposition1(data.disposition1);
+			getDisposition2(data.disposition2);
 			$('#myLeads').hide();
 			$('#gotoManage').show();
 			$('#leadDetails').show();
@@ -2122,10 +2123,19 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScop
     }
 
 	getDisposition1 = function(name){
-		angular.forEach( $scope.dispositoion1, function(dispo) {
+		angular.forEach( $scope.dispositoion1, function(dispo) {		
 			if(dispo.name == name){
-				$scope.selectDropdown1(dispo);
 				$scope.dropdown = dispo;
+				$scope.selectDropdown1(dispo);
+			}
+		});
+	}
+	
+	getDisposition2 = function(name){
+		angular.forEach( $scope.dispositoion2, function(dispo) {
+			if(dispo.name == name){
+				$scope.category = dispo;
+				$scope.selectDropdown2(dispo);
 			}
 		});
 	}
@@ -2407,6 +2417,7 @@ App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColum
     $scope.init = function() {
     	$http({method:'GET',url:'/webapp/api/business/getDetailsForUser'})
 		.success(function(data) {
+			$scope.dralerList = data.dealerList;
 			$scope.zoneList = data.zoneList;
 			$scope.stateList = data.stateList;
 			$scope.districtList = data.districtList;
@@ -2418,6 +2429,11 @@ App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColum
 			   $('#pre-selected-options').multiSelect();
 			},500);
 			vm.users = data.userList;
+			
+			/*$http.get('/webapp/api/business/getDealerList').success(function(data){
+				console.log(data);
+				$scope.dralerList = data;
+			});*/
 			
 		});
     }
@@ -3211,10 +3227,11 @@ App.controller('EscalatedLeadsCtrl',function($stateParams, $scope, $http, $timeo
 	}
 
 	getDisposition2 = function(name){
-		angular.forEach( $scope.dropdown, function(dispo) {
+		angular.forEach( $scope.dispositoion1, function(dispo) {
 			if(dispo.name == name){
-				$scope.selectDropdown2(dispo);
 				$scope.category = dispo;
+				$scope.selectDropdown2(dispo);
+				
 			}
 		});
 	}
@@ -3439,18 +3456,18 @@ App.controller('FollowUpLeadsCtrl',function($scope,$timeout, $http, DTOptionsBui
 
 	getDisposition1 = function(name){
 		angular.forEach( $scope.dispositoion1, function(dispo) {
-			if(dispo.name == name){				
-				$scope.selectDropdown1(dispo);
+			if(dispo.name == name){		
 				$scope.dropdown = dispo;
+				$scope.selectDropdown1(dispo);	
 			}
 		});
 	}
 
 	getDisposition2 = function(name){
-		angular.forEach( $scope.dropdown, function(dispo) {
+		angular.forEach( $scope.dispositoion1, function(dispo) {
 			if(dispo.name == name){
-				$scope.selectDropdown2(dispo);
 				$scope.category = dispo;
+				$scope.selectDropdown2(dispo);
 			}
 		});
 	}

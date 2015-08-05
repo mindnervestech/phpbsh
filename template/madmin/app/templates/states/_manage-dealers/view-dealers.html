@@ -87,13 +87,23 @@
                       <div class="col-md-12">
                         <div class="form-group">
                           <label for="inputPinCodes" class="control-label">Pin-Codes</label>
-                          <tags-input ng-model="showCase.dealer.ids" display-property="ids" add-from-autocomplete-only="true">
-						      <auto-complete source="loadPin($query)"></auto-complete>
+                          <tags-input ng-model="showCase.dealer.ids" display-property="id" add-from-autocomplete-only="true" template="tag-template">
+						      <auto-complete source="loadPin($query)" display-property="name"></auto-complete>
 						  </tags-input>
 						  <p style="color: red;" ng-show="isPin"><b>*Please enter pins</b></p> 
                         </div>
                       </div>
                     </div>
+                    <script type="text/ng-template" id="tag-template">
+      <div class="tag-template">
+       
+        <div class="right-panel">
+          <span>{{$getDisplayText()}}</span>
+          <a class="remove-button" ng-click="$removeTag()">&#10006;</a>
+        </div>
+      </div>
+    </script>
+                    
                     
                     <!--  <div class="row">
                       <div class="col-md-12">

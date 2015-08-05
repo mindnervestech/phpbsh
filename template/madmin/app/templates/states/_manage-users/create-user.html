@@ -128,9 +128,9 @@
                        <div class="col-md-6" data-ng-if="userRole == 2 || userRole == 4">
                         <div class="form-group">
                           <label for="inputCity" class="control-label">Dealer <span class='require'>*</span></label>
-                          <select id="selPSM" ng-model="userData.dealer" class="form-control" required>
+                          <select id="selPSM" ng-model="userData.user" class="form-control" required>
                             <option value="">Select Dealer</option>
-                            <option ng-repeat="dealer in dralerList" value="{{dealer.name}}" >{{dealer.name}}</option>
+                            <option ng-repeat="dealer in dralerList" value="{{dealer.id}}" >{{dealer.name}}</option>
                           </select>
                         </div>
                       </div>

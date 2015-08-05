@@ -9,7 +9,7 @@
 	                  <div data-ng-if="showCase.lead.isCompleated">
 	                   <div class="form-group col-md-12" style="font-size: 23px;margin-bottom: 0px; ">
 	                    	<i data-ng-if="showCase.lead.status == 'Won' " class="icon fa fa-thumbs-up">
-	                    	<label for="inputUsername" class="control-label">{{showCase.lead.status}} Brand : {{showCase.lead.brand}} And ModalNo : {{showCase.lead.modalNo}}</label>
+	                    	<label for="inputUsername" class="control-label">{{showCase.lead.status}} Brand: {{showCase.lead.brand}} And Model No: {{showCase.lead.modalNo}}</label>
 	                    	</i>
 	                    	<i data-ng-if="showCase.lead.status == 'Lost' " class="icon fa fa-thumbs-down">
 	                    	<label for="inputUsername" class="control-label">{{showCase.lead.status}}</label>
@@ -29,7 +29,7 @@
 									<div class="form-group col-md-4">
 										<label class="control-label">Disposition 1<span class='require'>*</span></label>
 										<div class="">
-											<select data-style="btn-white" ng-model="dropdown"
+											<select data-ng-disabled="dropdown == dispositoion1[0]" data-style="btn-white" ng-model="dropdown"
 												class="selectpicker form-control"
 												ng-change="selectDropdown1(dropdown)"
 												ng-options="b.name for b in dispositoion1" class="form-control" required>
@@ -131,7 +131,7 @@
                     <div class="form-group">
                       <label for="inputEmail" class="control-label">Product Name</label>
                       <div class="input-icon"><!-- <span class="input-group-addon"><i class="fa fa-envelope"></i> --></span>
-                        <input type="text" placeholder="Product Name" value="{{showCase.lead.name}}" style="cursor: auto;" class="form-control" readonly="readonly"/>
+                        <input type="text" placeholder="Product Name" value="{{showCase.lead.product}}" style="cursor: auto;" class="form-control" readonly="readonly"/>
                       </div>
                     </div>
                     </div>
