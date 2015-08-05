@@ -46,7 +46,7 @@
 		$scope.reportMDs = [];
 		
 		$scope.loadReportsMd = function () {
-			$http.get('/webapp/reports/md').success(function(resp){
+			$http.get('/api/reports/md').success(function(resp){
 				console.log(resp);
 				$scope.reportMDs = resp;
 				$('#saved-report-tab a').click();
@@ -91,7 +91,7 @@
              
 		$scope.runReport = function () {
 			$scope.isAnyActiveReport = false;
-			$http.get('/webapp/report/run',{params:{filter:$scope.reportTemplate.model}}).success(function(data){
+			$http.get('/api/report/run',{params:{filter:$scope.reportTemplate.model}}).success(function(data){
 				console.log(data);
 				$scope.reportData = data.data;
 				$scope.dtColumns = data.columns;
