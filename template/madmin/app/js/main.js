@@ -2140,7 +2140,6 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScop
 		});
 	}
 
-
 	$scope.dropdown = {};
 	$scope.dispositoion2=[];
 	$scope.brands=[];
@@ -2417,6 +2416,7 @@ App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColum
     $scope.init = function() {
     	$http({method:'GET',url:'/webapp/api/business/getDetailsForUser'})
 		.success(function(data) {
+			console.log(data);
 			$scope.dralerList = data.dealerList;
 			$scope.zoneList = data.zoneList;
 			$scope.stateList = data.stateList;
@@ -2503,10 +2503,12 @@ App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColum
     
     
     $scope.createUser = function() {
-    	
+    	console.log("create user");
+    	console.log($scope.userData);
     	if(($scope.userData.phone+"").length == 10){
     		$scope.invalidPhone = false;
     		$http({method:'POST',url:'/webapp/api/business/saveUser',data:$scope.userData}).success(function(data) {
+    			console.log(data);
     			vm.users = data;
     			$scope.userData = {};// Empty form
     			//$scope.userData.$setPristine();
@@ -2643,12 +2645,14 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     $scope.getDealer = function() {
     	$http({method:'GET',url:'/webapp/api/business/getZones'})
 		.success(function(data) {
+			console.log("a");
 			console.log(data);
 			$scope.zoneList = data.zoneList;
 			$scope.stateList = data.stateList;
 			//$scope.territoryList = data.territoryList;
 			$scope.districtList = data.districtList;
 			$scope.dealerData.products = data.productList;
+			$scope.dealerData = data.dealerList;
 			vm.users = data.dealerList;
 			setTimeout(function(){
 				$('#pre-selected-options').multiSelect();
@@ -2690,6 +2694,7 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     }
     
     $scope.showDealerTab = function(user) {
+    	console.log(user);
     	vm.dealer = user;
     	var zone = vm.dealer.zone;
     	$scope.setState(vm.dealer.state);
@@ -2702,6 +2707,40 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     }
     
     vm.changeStatusActive = function() {
+    	var userIds = []
+    	var tempUsers = vm.users;
+    	angular.forEach(tempUsers, function(user) {
+    		if(user.selected){
+    			userIds.push(user.id);
+    			user.status = "Active";
+    		}
+    	});
+    	changeStatus(userIds, 1, tempUsers);
+    }
+    
+    vm.changeStatusInActive = function() {
+    	var userIds = []
+    	var tempUsers = vm.users;
+    	angular.forEach(tempUsers, function(user) {
+    		if(user.selected){
+    			userIds.push(user.id);
+    			user.status = "Inactive";
+    		}
+    	});
+    	changeStatus(userIds, 0, tempUsers);
+    }
+    
+    changeStatus = function(userIds, status, tempUsers){
+    	$http({method:'POST',url:'/webapp/api/business/changeUserStatus/'+status,data:userIds}).success(function(data) {
+    		vm.users = tempUsers;
+			$scope.showMessage("success","Successfully status changed.");
+    	}).error(function(data){
+    		$scope.showMessage("success","Failed to change status.");
+    	});	
+    }
+
+    
+/*    vm.changeStatusActive = function() {
     	var dealerIds = []
     	var tempUsers = vm.users;
     	angular.forEach(tempUsers, function(dealer) {
@@ -2733,6 +2772,8 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     		$scope.showMessage("success","Failed to change status.");
     	});	
     }
+*/
+    
     $scope.updateDealer = function(dealer) {
     	
     	if(($scope.showCase.dealer.phone+"").length == 10){

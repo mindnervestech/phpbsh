@@ -73,10 +73,10 @@
                       <div class="col-md-6">
                         <div class="form-group">
                           <label for="inputPhone" class="control-label">Zone<span class='require'>*</span></label>
-                          <select id="selPSM" ng-model="showCase.user.zone.id" class="form-control" required>
+                          <select id="selPSM" ng-model="showCase.user.zone" class="form-control" required>
                           	<option value="">Select Zone</option>
-                            <option data-ng-selected="showCase.user.zone.id == zone.id" ng-repeat="zone in zoneList" 
-                            value="{{zone.id}}" >{{zone.name}}</option>
+                            <option data-ng-selected="showCase.user.zone == zone" ng-repeat="zone in zoneList" 
+                            value="{{zone.name}}" >{{zone.name}}</option>
                           </select>
                         </div>
                       </div>
@@ -107,10 +107,10 @@
                       <div class="col-md-6">
                         <div class="form-group">
                           <label for="inputFirstName" class="control-label">State</label>
-                          <select id="selPSM" ng-model="showCase.user.state.id" class="form-control">
+                          <select id="selPSM" ng-model="showCase.user.state" class="form-control">
                            <option value="">Select state</option>
-                            <option data-ng-selected="showCase.user.state.id == state.id" ng-repeat="state in stateList" 
-                            value="{{state.id}}" >{{state.name}}</option>
+                            <option data-ng-selected="showCase.user.state == state" ng-repeat="state in stateList" 
+                            value="{{state.name}}" >{{state.name}}</option>
                           </select>
                         </div>
                       </div>
