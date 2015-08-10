@@ -437,8 +437,6 @@
 		        });
 		      }
 		    });
-
-		    
 		  }
 		  return {
 		    link: link

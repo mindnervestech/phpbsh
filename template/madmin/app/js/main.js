@@ -1355,6 +1355,7 @@ App.run(function($rootScope, $state, $location, Auth) {
 			if(report.pivotConfig!=null) {
 				$scope.pivotConfig = report.pivotConfig;
 				$scope.searchConfig = JSON.parse(report.searchCriteria);
+				$scope.name = report.name;
 				console.log($scope.reportTemplate.model);
 				$scope.isSavedTemplate = true;
 				$scope.runReport(2);
@@ -1362,6 +1363,7 @@ App.run(function($rootScope, $state, $location, Auth) {
 			} else if(report.searchCriteria!=null) {
 				$scope.searchConfig = JSON.parse(report.searchCriteria);
 				$scope.isSavedTemplateTable = true;
+				$scope.name = report.name;
 				$scope.runReport(2);
 				$scope.expanded = true;
 			} else {
@@ -1420,6 +1422,7 @@ App.run(function($rootScope, $state, $location, Auth) {
 					console.log(":insaved template");
 					var parent = $("#pivot-table-output").parent();
 					$("#pivot-table-output").remove();
+					parent.append("<div style='margin-left: 20px;'><h3>Report Name:"+ $scope.name + "<h3></div>");
 					parent.append("<div id='pivot-table-output' style='margin: 10px;'></div>");
 					$("#pivot-table-output").pivotUI(data.data, {
 						renderers: renderers,
@@ -1677,8 +1680,6 @@ App.run(function($rootScope, $state, $location, Auth) {
 		        });
 		      }
 		    });
-
-		    
 		  }
 		  return {
 		    link: link
@@ -1694,7 +1695,6 @@ App.run(function($rootScope, $state, $location, Auth) {
 		      link: link
 		    };
 		  });
-	
 	
 
 App.controller('LoginController',function ($scope, $rootScope, $location, $http, Auth) {
