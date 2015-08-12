@@ -2577,6 +2577,11 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScop
 	    		}
 			$http({method:'POST',url:'/webapp/api/business/createLead',data: vm.newLead}).success(function(response) {
 				$scope.showMessage("success","Successfully Created.");
+				$('#myLeads').show();
+				$('#gotoManage').hide();
+				$('#leadDetails').hide();
+				$('#leadHistory').hide();
+				$('#myLeadsTab').click();
 			}).error(function(data){
 	    		$scope.showMessage("error","Failed To Create.");
 	    	});	
@@ -2967,14 +2972,12 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     $scope.getDealer = function() {
     	$http({method:'GET',url:'/webapp/api/business/getZones'})
 		.success(function(data) {
-			console.log("a");
 			console.log(data);
 			$scope.zoneList = data.zoneList;
 			$scope.stateList = data.stateList;
 			//$scope.territoryList = data.territoryList;
 			$scope.districtList = data.districtList;
 			$scope.dealerData.products = data.productList;
-			$scope.dealerData = data.dealerList;
 			vm.users = data.dealerList;
 			setTimeout(function(){
 				$('#pre-selected-options').multiSelect();
@@ -3062,40 +3065,6 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     }
 
     
-/*    vm.changeStatusActive = function() {
-    	var dealerIds = []
-    	var tempUsers = vm.users;
-    	angular.forEach(tempUsers, function(dealer) {
-    		if(dealer.selected){
-    			dealerIds.push(dealer.id);
-    			dealer.status = "Active";
-    		}
-    	});
-    	changeStatus(dealerIds, 1, tempUsers);
-    }
-    
-    vm.changeStatusInActive = function() {
-    	var dealerIds = []
-    	var tempUsers = vm.users;
-    	angular.forEach(tempUsers, function(dealer) {
-    		if(dealer.selected){
-    			dealerIds.push(dealer.id);
-    			dealer.status = "Inactive";
-    		}
-    	});
-    	changeStatus(dealerIds, 0, tempUsers);
-    }
-    
-    changeStatus = function(dealerIds, status, tempUsers){
-    	$http({method:'POST',url:'/webapp/api/business/changeDealerStatus/'+status,data:dealerIds}).success(function(data) {
-			vm.users = tempUsers;
-			$scope.showMessage("success","Successfully status changed.");
-    	}).error(function(data){
-    		$scope.showMessage("success","Failed to change status.");
-    	});	
-    }
-*/
-    
     $scope.updateDealer = function(dealer) {
     	
     	if(($scope.showCase.dealer.phone+"").length == 10){
@@ -3118,7 +3087,7 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
 				$scope.showMessage("success","Successfully Updated.");
 				$scope.productlist = "";
 	    	}).error(function(data){
-	    		$scope.showMessage("success","Failed to update.");
+	    		$scope.showMessage("error","Failed to update.");
 	    	});	
 	    	$('#dealerDetailsTab').click();
 	    	$('#dealerTab').hide();
@@ -3134,37 +3103,37 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     	if(($scope.dealerData.phone+"").length == 10){
     		$scope.invalidPhone = false;
     	
-    	angular.forEach($scope.dealerData.products, function(productVM) {
-			if($scope.dealerData.productlist) {
-				if($scope.dealerData.productlist.indexOf(""+productVM.id) == -1) {
-					productVM.selected = false;
-				} else {
-					productVM.selected = true;
-				}
-			}
-         });
-    	if($scope.dealerData.ids == "" || angular.isUndefined($scope.dealerData.ids)) {
-    		$scope.isPin = true;
-    		console.log("pin");
-    	} else {
-    		console.log("save call");
-    		$scope.isPin = false;
-	    	//$scope.dealerData.territory = JSON.parse($scope.dealerData.territory);
-    		$http({method:'POST',url:'/webapp/api/business/saveDealer',data:$scope.dealerData}).success(function(data) {
-				console.log('success');
-				$scope.showMessage("success","Successfully Created.");
-				$scope.getDealer();
-				$('#dealerDetailsTab').click();
-		    	$('#dealerTab').hide();
-	    	}).error(function(data){
-	    		$scope.showMessage("error","Fail to Create.");
-	    	});	
-    	}
+    		angular.forEach($scope.dealerData.products, function(productVM) {
+    			if($scope.dealerData.productlist) {
+    				if($scope.dealerData.productlist.indexOf(""+productVM.id) == -1) {
+    					productVM.selected = false;
+    				} else {
+    					productVM.selected = true;
+    				}
+    			}
+    		});
+    		if($scope.dealerData.ids == "" || angular.isUndefined($scope.dealerData.ids)) {
+    			$scope.isPin = true;
+    			console.log("pin");
+    		} else {
+    			console.log("save call");
+    			$scope.isPin = false;
+    			//$scope.dealerData.territory = JSON.parse($scope.dealerData.territory);
+    			$http({method:'POST',url:'/webapp/api/business/saveDealer',data:$scope.dealerData}).success(function(data) {
+    				console.log('success');
+    				$scope.showMessage("success","Successfully Created.");
+    				$scope.getDealer();
+    				$('#dealerDetailsTab').click();
+    				$('#dealerTab').hide();
+    			}).error(function(data){
+    				$scope.showMessage("error","Fail to Create.");
+    			});	
+    		}
     	}else{
     		$scope.invalidPhone = true;
     	}
     }
-    
+  
 });
 
 App.controller('ProductMappingCtrl', function ($scope, $routeParams, $resource){
@@ -3590,7 +3559,7 @@ App.controller('EscalatedLeadsCtrl',function($stateParams, $scope, $http, $timeo
 	}
 
 	getDisposition2 = function(name){
-		angular.forEach( $scope.dispositoion1, function(dispo) {
+		angular.forEach( $scope.dispositoion2, function(dispo) {
 			if(dispo.name == name){
 				$scope.category = dispo;
 				$scope.selectDropdown2(dispo);
@@ -3827,7 +3796,7 @@ App.controller('FollowUpLeadsCtrl',function($scope,$timeout, $http, DTOptionsBui
 	}
 
 	getDisposition2 = function(name){
-		angular.forEach( $scope.dispositoion1, function(dispo) {
+		angular.forEach( $scope.dispositoion2, function(dispo) {
 			if(dispo.name == name){
 				$scope.category = dispo;
 				$scope.selectDropdown2(dispo);

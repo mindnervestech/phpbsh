@@ -150,16 +150,18 @@ tags-input .autocomplete .suggestion-item {
                       </div>
                     </div>
                     
- -->                    <div class="form-group" id="product-list">
-		              <label class="control-label col-md-3">Select Products</label>
-		              <div class="col-md-6">
-			                <select id="pre-selected-options" multiple="multiple" data-ng-model="dealerData.productlist">
-			                 <option ng-repeat="product in dealerData.products" value="{{product.id}}">{{product.name}}</option>
-			                </select>
-	            		</div>   
-	            	</div>
-                   
-                    <div class="row">
+ -->            
+ 
+ 					<div class="form-group" id="product-list">
+             <label class="control-label col-md-3">Select Products</label>
+             <div class="col-md-6">
+               <select id="pre-selected-options" multiple="multiple" data-ng-model="dealerData.productlist">
+			           <option ng-repeat="product in dealerData.products" value="{{product.id}}">{{product.name}}</option>
+               </select>
+           	</div>   
+           	</div>
+         	
+ 				  <div class="row">
                       <div class="col-md-12">
                         <div class="form-group">
                           <label for="inputStreet" class="control-label">Address Line</label>
