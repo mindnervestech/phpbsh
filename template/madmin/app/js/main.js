@@ -232,6 +232,7 @@ App.config(['$stateProvider', '$urlRouterProvider',
                 loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
                      return $ocLazyLoad.load({
                         files: [
+                                "vendors/jquery.fileDownload.js"
 								/*"reports/vendor/pivottable/dist/pivot.js",
 								"reports/vendor/pivottable/dist/gchart_renderers.js",
 								"reports/vendor/pivottable/dist/d3_renderers.js",
@@ -1519,6 +1520,21 @@ App.run(function($rootScope, $state, $location, Auth) {
 			$("#img-enlarge").attr("src",url);
 			$("#enlarge-image-modal").modal({backdrop:"static"});
 		};
+		
+		$scope.generateCSV = function(){
+			var obj = $scope.reportTemplate.model;
+			console.log(obj);
+			$.fileDownload('/webapp/api/report/generateCSV?filter='+JSON.stringify(obj), {
+				preparingMessageHtml: "Please wait...",
+				failMessageHtml: "There was a problem generating your report, please try again.",
+				httpMethod: "GET",
+				successCallback: function(url) {
+					//$window.location.href = 'http://localhost:9000/fb-home'
+					console.log("Sussess");
+				}
+
+			})
+		}
 		
 		$scope.saveTemplate = function() {
 			
