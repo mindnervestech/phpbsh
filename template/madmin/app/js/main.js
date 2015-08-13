@@ -1897,6 +1897,7 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
     	} else {
     		if(zone == '0'){
     			$scope.filter.zone = zone;
+    			$scope.filter.state = 0;
         		$scope.dashboard.spline1={
         				remote:{
         					url:'/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.filter.zone+'&state='+$scope.filter.state+'&product='+$scope.filter.product,
