@@ -1744,10 +1744,11 @@ App.controller('LoginController',function ($scope, $rootScope, $location, $http,
 });
 
 App.controller('AppController', function ($scope, $http, $rootScope, $routeParams, $location, Auth, $window){
-	$scope.zone = 0;
-    $scope.product = 0;
-    $scope.state = 0;
-    $scope.dealer = 0;
+	$scope.filter = {};
+	$scope.filter.zone = 0;
+    $scope.filter.product = 0;
+    $scope.filter.state = 0;
+    $scope.filter.dealer = 0;
     $scope.startDate = moment().subtract('days', 7).format("MMDDYYYY");;
     $scope.endDate = moment().add('days', 1).format("MMDDYYYY");
     $scope.stateList = [];
@@ -1773,15 +1774,15 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
     function buildDashboard() {
     	var spline1Url,spline2Url,splineUrl; 
         if($rootScope.userRole == '1' || $rootScope.userRole == '10' || $rootScope.userRole == '2' || $rootScope.userRole == '3' || $rootScope.userRole == '4'){
-        	spline1Url = '/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product;
-        	spline2Url = '/webapp/api/business/getProductSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product;
+        	spline1Url = '/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.filter.zone+'&state='+$scope.filter.state+'&product='+$scope.filter.product;
+        	spline2Url = '/webapp/api/business/getProductSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.filter.zone+'&state='+$scope.filter.state+'&product='+$scope.filter.product;
         	splineUrl = undefined;
         	$http.get('/webapp/api/business/getZoneStateProduct').success(function(data){
 				$scope.zoneList = data.zoneList;
 				$scope.productList = data.productList;
 			});
         } else {
-        	splineUrl = '/webapp/api/business/getDealerSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product+'&dealer='+$scope.dealer;
+        	splineUrl = '/webapp/api/business/getDealerSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.filter.zone+'&state='+$scope.filter.state+'&product='+$scope.filter.product+'&dealer='+$scope.filter.dealer;
         	spline2Url = undefined;
         	spline1Url = undefined;
         }
@@ -1795,13 +1796,13 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
         	$http.get('/webapp/api/business/getStateByZone/user').success(function(data){
     			$scope.stateList = data;
     		});
-        	spline1Url = '/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product;
+        	spline1Url = '/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.filter.zone+'&state='+$scope.filter.state+'&product='+$scope.filter.product;
         }
         
         $scope.dashboard = {
         		progressBar:{
         			remote:{
-       				 url:'/webapp/api/business/getDashboardProgressbarAll?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product+'&dealer='+$scope.dealer
+       				 url:'/webapp/api/business/getDashboardProgressbarAll?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.filter.zone+'&state='+$scope.filter.state+'&product='+$scope.filter.product+'&dealer='+$scope.filter.dealer
         			}
         		}
         }
@@ -1837,32 +1838,32 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
 	$rootScope.style = 'style1';
     $rootScope.theme = 'pink-blue';
     $scope.$on('reportDateChange', function (event, args) {
-    	$scope.zone = 0;
-        $scope.product = 0;
-        $scope.state = 0;
-        $scope.dealer = 0;
+    	//$scope.zone = 0;
+        //$scope.product = 0;
+        //$scope.state = 0;
+        //$scope.dealer = 0;
     	$scope.startDate = args.startDate;
     	$scope.endDate = args.endDate;
     	if($rootScope.userRole == '1' || $rootScope.userRole == '10' || $rootScope.userRole == '2' || $rootScope.userRole == '3' || $rootScope.userRole == '4'){
     		$scope.dashboard.spline1.remote = {
-        			url:'/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product,
+        			url:'/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.filter.zone+'&state='+$scope.filter.state+'&product='+$scope.filter.product,
         	}
         	$scope.dashboard.spline2.remote = {
-        			url:'/webapp/api/business/getProductSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product,
+        			url:'/webapp/api/business/getProductSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.filter.zone+'&state='+$scope.filter.state+'&product='+$scope.filter.product,
         	}
     	} else {
     		$scope.dashboard.spline.remote = {
-    				url:'/webapp/api/business/getDealerSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product+'&dealer='+$scope.dealer
+    				url:'/webapp/api/business/getDealerSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.filter.zone+'&state='+$scope.filter.state+'&product='+$scope.filter.product+'&dealer='+$scope.filter.dealer
     		}
     		if($rootScope.userRole == '6' || $rootScope.userRole == '8' ){
     			$scope.dashboard.spline1.remote = {
-    					url:'/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product,
+    					url:'/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.filter.zone+'&state='+$scope.filter.state+'&product='+$scope.filter.product,
     			}
     		}
     	}
     	
     	$scope.dashboard.progressBar.remote = {
-    			url:'/webapp/api/business/getDashboardProgressbarAll?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product+'&dealer='+$scope.dealer,
+    			url:'/webapp/api/business/getDashboardProgressbarAll?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.filter.zone+'&state='+$scope.filter.state+'&product='+$scope.filter.product+'&dealer='+$scope.filter.dealer,
     	}
     	
     	 $scope.getDealearsByState = function(state){
@@ -1874,57 +1875,59 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
     	$scope.$evalAsync();
     	$scope.$apply();
     });
-    
+    $scope.prevzone = '0' ;
     $scope.getDashBoard = function(zone, state, product, dealer){
-    	$scope.state = state;
-    	$scope.product = product;
-    	$scope.dealer = dealer;
+    	
+    	$scope.filter.state = state;
+    	$scope.filter.product = product;
+    	$scope.filter.dealer = dealer;
     	if($rootScope.userRole == '6' || $rootScope.userRole == '8' || $rootScope.userRole == '7' || $rootScope.userRole == '5' || $rootScope.userRole == '9' || $rootScope.userRole == '11' || $rootScope.userRole == '13'){
     		if($rootScope.userRole == '6' || $rootScope.userRole == '8'){
     			$scope.dashboard.spline1={
         				remote:{
-        					url:'/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product,
+        					url:'/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.filter.zone+'&state='+$scope.filter.state+'&product='+$scope.filter.product,
         				}
         		};
     		}
     		$scope.dashboard.spline={
     				remote : {
-    						url:'/webapp/api/business/getDealerSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product+'&dealer='+$scope.dealer,
+    						url:'/webapp/api/business/getDealerSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.filter.zone+'&state='+$scope.filter.state+'&product='+$scope.filter.product+'&dealer='+$scope.filter.dealer,
     				}
     		};
     	} else {
     		if(zone == '0'){
-    			$scope.zone = zone;
+    			$scope.filter.zone = zone;
         		$scope.dashboard.spline1={
         				remote:{
-        					url:'/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product,
+        					url:'/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.filter.zone+'&state='+$scope.filter.state+'&product='+$scope.filter.product,
         				}
         		};
         	} else {
-        		if(!angular.equals($scope.zone, zone)){
-        			$scope.zone = zone;
-        			$scope.state = 0;
+        		if(!angular.equals($scope.prevzone, zone)){
+        			$scope.filter.zone = zone;
+        			$scope.filter.state = 0;
         			$http.get('/webapp/api/business/getStateByZone/'+zone).success(function(data){
             			$scope.stateList = data;
             		});
         		}
         		$scope.dashboard.spline1={
         				remote:{
-        					url:'/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product,
+        					url:'/webapp/api/business/getZoneSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.filter.zone+'&state='+$scope.filter.state+'&product='+$scope.filter.product,
         				}
         		};
         	}
     		$scope.dashboard.spline2={
     				remote:{
-    					url:'/webapp/api/business/getProductSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product,
+    					url:'/webapp/api/business/getProductSplineBetweenDates?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.filter.zone+'&state='+$scope.filter.state+'&product='+$scope.filter.product,
     				}
     		};
     	}
     	$scope.dashboard.progressBar.remote = {
-    		url:'/webapp/api/business/getDashboardProgressbarAll?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product+'&dealer='+$scope.dealer,
+    		url:'/webapp/api/business/getDashboardProgressbarAll?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.filter.zone+'&state='+$scope.filter.state+'&product='+$scope.filter.product+'&dealer='+$scope.filter.dealer,
     	};
     	
     	$scope.$evalAsync();
+    	$scope.prevzone = zone;
     }
 
     $scope.showMessage = function(msgType, msg){
@@ -10120,7 +10123,7 @@ App.controller('MainController', function ($scope, $routeParams,$http){
             $('.reportrange span').html(moment().subtract('days', 7).format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
             $scope.$emit('reportDateChange', { startDate: moment().subtract('days', 7).format('MMDDYYYY'), endDate:  moment().format('MMDDYYYY') });
         $.fn.Data.checkbox();
-    }, 500);
+    }, 2000);
 });
 
 

@@ -61,7 +61,7 @@
 				} else {
 					lastQueryCriteria = $scope.searchConfig;
 				}
-				$http({method:'post',url:'/webapp/reports/drildownreport',data:{searchCriteria:lastQueryCriteria,filters:dataFiler}}).success(function(data) {
+				$http({method:'post',url:'/webapp/api/report/reports/drildownreport',data:{searchCriteria:lastQueryCriteria,filters:dataFiler}}).success(function(data) {
 					console.log(data);
 					$scope.detailsData = data.data;
 					$scope.detailColumns = data.columns;
@@ -341,7 +341,7 @@
 		          sDom: '<"clear">TlfCrtip',
 		          pageLength: 10,
 		          //sScrollY: "500px",
-		          tableTools: {
+		          /*tableTools: {
 		        	  "sSwfPath": "/template/madmin/app/vendors/DataTables/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
 			            
 		              "aButtons": [
@@ -353,7 +353,7 @@
 		                      "aButtons":    [ "csv", "xls", "pdf" ]
 		                  }
 		              ]
-		          },
+		          },*/
 		          
 		          columns: decorateColumns(attrs.aaColumns) ,
 		          data:scope.$eval(attrs.aaData)
