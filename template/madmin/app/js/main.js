@@ -2449,12 +2449,16 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScop
     }
 
 	getDisposition1 = function(name){
-		angular.forEach( $scope.dispositoion1, function(dispo) {		
+		angular.forEach( $scope.dispositoion1, function(dispo) {	
 			if(dispo.name == name){
 				$scope.dropdown = dispo;
 				$scope.selectDropdown1(dispo);
 			}
 		});
+		if(name == "New"){
+			$scope.dropdown = 0;
+			$scope.selectDropdown1(0);
+		}
 	}
 	
 	getDisposition2 = function(name){
@@ -3487,16 +3491,16 @@ App.controller('EscalatedLeadsCtrl',function($stateParams, $scope, $http, $timeo
 	switch($stateParams.leadType){
 		case 'Escalated':
 			if(angular.equals($stateParams.editId,'All'))
-			api = '/webapp/api/business/getEscalatedLeads?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product+'&dealer='+$scope.dealer;
+			api = '/webapp/api/business/getEscalatedLeads?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.filter.zone+'&state='+$scope.filter.state+'&product='+$scope.filter.product+'&dealer='+$scope.filter.dealer;
 			break;
 		case 'Open':
-			api = '/webapp/api/business/getOpenLeads?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product+'&dealer='+$scope.dealer;
+			api = '/webapp/api/business/getOpenLeads?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.filter.zone+'&state='+$scope.filter.state+'&product='+$scope.filter.product+'&dealer='+$scope.filter.dealer;
 			break;
 		case 'Won':			
-			api = '/webapp/api/business/getWonLeads?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product+'&dealer='+$scope.dealer;
+			api = '/webapp/api/business/getWonLeads?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.filter.zone+'&state='+$scope.filter.state+'&product='+$scope.filter.product+'&dealer='+$scope.filter.dealer;
 			break;
 		case 'Lost':
-			api = '/webapp/api/business/getLostLeads?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.zone+'&state='+$scope.state+'&product='+$scope.product+'&dealer='+$scope.dealer;
+			api = '/webapp/api/business/getLostLeads?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.filter.zone+'&state='+$scope.filter.state+'&product='+$scope.filter.product+'&dealer='+$scope.filter.dealer;
 			break;
 		case 'Follow-up':
 			applyDataTable();
@@ -3560,6 +3564,10 @@ App.controller('EscalatedLeadsCtrl',function($stateParams, $scope, $http, $timeo
 				$scope.dropdown = dispo;
 			}
 		});
+		if(name == "New"){
+			$scope.dropdown = 0;
+			$scope.selectDropdown1(0);
+		}
 	}
 
 	getDisposition2 = function(name){
@@ -3797,6 +3805,10 @@ App.controller('FollowUpLeadsCtrl',function($scope,$timeout, $http, DTOptionsBui
 				$scope.selectDropdown1(dispo);	
 			}
 		});
+		if(name == "New"){
+			$scope.dropdown = 0;
+			$scope.selectDropdown1(0);
+		}
 	}
 
 	getDisposition2 = function(name){
