@@ -1423,7 +1423,8 @@ App.run(function($rootScope, $state, $location, Auth) {
 					console.log(":insaved template");
 					var parent = $("#pivot-table-output").parent();
 					$("#pivot-table-output").remove();
-					parent.append("<div style='margin-left: 20px;'><h3>Report Name:"+ $scope.name + "<h3></div>");
+					$("#report-name").remove();
+					parent.append("<div id='report-name' style='margin-left: 20px;'><h3>Report Name:"+ $scope.name + "<h3></div>");
 					parent.append("<div id='pivot-table-output' style='margin: 10px;'></div>");
 					$("#pivot-table-output").pivotUI(data.data, {
 						renderers: renderers,

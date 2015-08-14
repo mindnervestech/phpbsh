@@ -20,12 +20,12 @@
 	                  	
 	                  </div>
 							<div ng-if="!showCase.lead.isCompleated">
-								<div class="col-md-2">
+								<div class="col-md-2" data-ng-if="userRole != 10">
 									<button type="submit" class="btn btn-primary">Save</button>
 									&nbsp;
 								</div>
 
-								<div class="col-md-10">
+								<div class="col-md-10" data-ng-if="userRole != 10">
 									<div class="form-group col-md-4">
 										<label class="control-label">Disposition 1<span class='require'>*</span></label>
 										<div class="">
