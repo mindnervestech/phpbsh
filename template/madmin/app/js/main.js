@@ -2345,6 +2345,9 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScop
 			getDisposition1(data.disposition1);
 			getDisposition2(data.disposition2);
 			$('#myLeads').hide();
+			if($rootScope.userRole == '10'){
+				$("#date").hide();
+			}
 			$('#gotoManage').show();
 			$('#leadDetails').show();
 			$('#leadHistory').show();

@@ -31,7 +31,7 @@
                      <th style="background-color: #dc6767;color:white;" width="2%">Status</th>
                     <th data-ng-if="showCase.tabHeading == 'Escalated Leads'" style="background-color: #dc6767;color:white;" width="4%">Escalated To</th>
                     <th data-ng-if="userRole != 9 && userRole != 5 && userRole != 11 && userRole != 13 && userRole != 7"style="background-color: #dc6767;color:white;" width="4%">Dealer</th>
-                    <th data-ng-if="userRole == 9 || userRole == 5 || userRole == 11 || userRole == 13 || userRole == 7 || userRole == 10"style="background-color: #dc6767;color:white;" width="4%">Actions</th>
+                    <th data-ng-if="userRole == 9 || userRole == 5 || userRole == 11 || userRole == 13 || userRole == 7 || userRole == 10 || userRole == 6"style="background-color: #dc6767;color:white;" width="4%">Actions</th>
                   </tr>
                   </thead>
                   
@@ -51,7 +51,7 @@
                     <td>{{ order.status }}</td>
                     <td data-ng-if="showCase.tabHeading == 'Escalated Leads'">{{ order.escalatedTo }}</td>
                     <td data-ng-if="userRole != 9 && userRole != 5 && userRole != 11 && userRole != 13 && userRole != 7">{{ order.dealerName}}</td>
-                    <td data-ng-if="userRole == 9 || userRole == 5 || userRole == 11 || userRole == 13 || userRole == 7 ||  userRole == 10">
+                    <td data-ng-if="userRole == 9 || userRole == 5 || userRole == 11 || userRole == 13 || userRole == 7 ||  userRole == 10 || userRole == 6">
                       <a class="btn btn-xs btn-default"  data-ng-click="editLeadTab(order.id)" ><i class="fa fa-eye"></i> Edit</a>
                     </td>
                   </tr>
