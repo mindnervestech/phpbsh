@@ -152,8 +152,7 @@ li.active>a {
     
   </ul>
   <div class="tab-content" style="padding: 10px;">
-    
-    <div class="btn-group pull-right" >
+    <div class="btn-group pull-right"  data-ng-show="userRole == 10 || userRole == 3 || userRole == 2">
 			<button ng-if="!isSavedTemplateTable" class="btn btn-primary" ng-click="openTemplateModal(1)" style="margin-right: 2px;font-size: 12px;">Save as template</button>
 			<button class="btn btn-warning btn-sm dropdown-toggle" data-toggle="dropdown">
 			<i class="fa fa-bars"></i> Export</button>

@@ -1514,6 +1514,7 @@ App.run(function($rootScope, $state, $location, Auth) {
 			$scope.currenttab = 'report';
 			$("a[href='#saved-report']").trigger("click");
 			$scope.backBtn = false;
+			location.reload();
 		};
 		
 		$scope.showLargeImage = function(url) {
@@ -1878,7 +1879,6 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
     });
     $scope.prevzone = '0' ;
     $scope.getDashBoard = function(zone, state, product, dealer){
-    	$scope.stateList = [];
     	$scope.filter.state = state;
     	$scope.filter.product = product;
     	$scope.filter.dealer = dealer;
@@ -2339,6 +2339,7 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScop
 	search_html += "_INPUT_";
 	search_html += '</div>';
 	$scope.editLeadTab = function(id) {
+		$scope.leadId = id;
 		$http.get('/webapp/api/business/lead/'+id).success(function(data){
 			vm.lead = data;
 			$scope.dpDate = moment();
@@ -2350,7 +2351,11 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScop
 			$('#leadHistory').show();
 			$('#leadDetailsTab').click();
 		});
-		$http.get('/webapp/api/business/lead/history/'+id).success(function(orders){
+	}
+	
+	$scope.leadHistory = function(){
+		console.log("here");
+		$http.get('/webapp/api/business/lead/history/'+$scope.leadId).success(function(orders){
 			vm.leadHistory = orders;
 		});
 	}
@@ -3472,19 +3477,23 @@ App.controller('EscalatedLeadsCtrl',function($stateParams, $scope, $http, $timeo
 	}
 	
 	$scope.editLeadTab = function(id) {
+		$scope.leadId = id;
 		$http.get('/webapp/api/business/lead/'+id).success(function(data){
-			$http.get('/webapp/api/business/lead/history/'+id).success(function(orders){
-				vm.lead = data;
-				$scope.dpDate = moment();
-				getDisposition1(data.disposition1);
-				getDisposition2(data.disposition2);
-				vm.leadHistory = orders;
-				$('#myLeads').hide();
-				$('#gotoManage').show();
-				$('#leadDetails').show();
-				$('#leadHistory').show();
-				$('#leadDetailsTab').click();
-			});
+			vm.lead = data;
+			$scope.dpDate = moment();
+			getDisposition1(data.disposition1);
+			getDisposition2(data.disposition2);
+			$('#myLeads').hide();
+			$('#gotoManage').show();
+			$('#leadDetails').show();
+			$('#leadHistory').show();
+			$('#leadDetailsTab').click();
+		});
+	}
+	
+	$scope.leadHistory = function(){
+		$http.get('/webapp/api/business/lead/history/'+$scope.leadId).success(function(orders){
+			vm.leadHistory = orders;
 		});
 	}
 	
@@ -3713,7 +3722,7 @@ App.controller('FollowUpLeadsCtrl',function($scope,$timeout, $http, DTOptionsBui
 	search_html += "_INPUT_";
 	search_html += '</div>';
 	$scope.editLeadTab = function(id) {
-
+		$scope.leadId = id;
 		$http.get('/webapp/api/business/lead/'+id).success(function(data){
 			vm.lead = data;
 			getDisposition1(data.disposition1);
@@ -3724,8 +3733,12 @@ App.controller('FollowUpLeadsCtrl',function($scope,$timeout, $http, DTOptionsBui
 			$('#leadHistory').show();
 			$('#leadDetailsTab').click();
 		});
-		
-
+	}
+	
+	$scope.leadHistory = function(){
+		$http.get('/webapp/api/business/lead/history/'+$scope.leadId).success(function(orders){
+			vm.leadHistory = orders;
+		});
 	}
 
 	$scope.manageLeadTab = function() {
