@@ -1,4 +1,4 @@
-<div ng-repeat="dashboardProgressBar in dashboardProgressBars" class="col-sm-6 col-md-3">
+<div ng-repeat="dashboardProgressBar in dashboardProgressBars" data-ng-class="dashboardProgressBars.length > 4 ? 'col-sm-6 custom-col-md-2' : 'col-sm-6 col-md-3'">
       <div class="panel db mbm">
         	<dashboardprogressbar  
              value='dashboardProgressBar.initValue'

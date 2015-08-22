@@ -20,12 +20,12 @@
 	                  	
 	                  </div>
 							<div ng-if="!showCase.lead.isCompleated">
-								<div class="col-md-2" data-ng-if="userRole != 10">
+								<div class="col-md-2">
 									<button type="submit" class="btn btn-primary">Save</button>
 									&nbsp;
 								</div>
 
-								<div class="col-md-10" data-ng-if="userRole != 10">
+								<div class="col-md-10">
 									<div class="form-group col-md-4">
 										<label class="control-label">Disposition 1<span class='require'>*</span></label>
 										<div class="">
@@ -38,7 +38,7 @@
 										</div>
 									</div>
 									<div class="form-group col-md-4" id="desposition2"
-										style="display: none" data-ng-if="userRole != 10">
+										style="display: none">
 										<label class="control-label ">Disposition 2<span class='require'>*</span></label>
 										<div class="">
 											<select data-style="btn-white" ng-model="category"
@@ -50,7 +50,7 @@
 										</div>
 									</div>
 									<div class="form-group col-md-4" id="desposition3"
-										style="display: none" data-ng-if="userRole != 10">
+										style="display: none">
 										<label class="control-label ">Disposition 3<span class='require'>*</span></label>
 										<div class="">
 											<select data-style="btn-white" ng-model="reason"
@@ -62,7 +62,7 @@
 										</div>
 									</div>
 									<div class="form-group col-md-4" id="brand"
-										style="display: none" data-ng-if="userRole != 10">
+										style="display: none">
 										<label class="control-label ">Brand<span class='require'>*</span></label>
 										<div class="">
 											<select data-style="btn-white" ng-model="brand"
@@ -75,7 +75,7 @@
 									</div>
 								</div>
 								<div class="form-group col-md-3" id="modalNo"
-										style="display: none" data-ng-if="userRole != 10">
+										style="display: none">
 										<label class="control-label ">Modal Number<span class='require'>*</span></label>
 										<div class="">
 											<select data-style="btn-white" ng-model="modalNo"
@@ -86,7 +86,7 @@
 											</select>
 										</div>
 									</div>
-								<div class="col-md-9" data-ng-if="userRole != 10">
+								<div class="col-md-9">
 									<div class="form-group mbn" style="display: none" id="reason">
 										<label for="inputContent" class="control-label">Reason</label>
 										<textarea id="inputContent"

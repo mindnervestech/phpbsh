@@ -1678,20 +1678,20 @@ App.run(function($rootScope, $state, $location, Auth) {
 		          sDom: '<"clear">TlfCrtip',
 		          pageLength: 10,
 		          //sScrollY: "500px",
-		          tableTools: {
-		        	  "sSwfPath": "/webapp/report/app/swf/copy_csv_xls_pdf.swf",
-			            
-		              "aButtons": [
-		                  "copy",
-		                  "print",
-		                  {
-		                      "sExtends":    "collection",
-		                      "sButtonText": "Save",
-		                      "aButtons":    [ "csv", "xls", "pdf" ]
-		                  }
-		              ]
-		          },
-		          
+/*//		          tableTools: {
+//		        	  "sSwfPath": "/webapp/report/app/swf/copy_csv_xls_pdf.swf",
+//			            
+//		              "aButtons": [
+//		                  "copy",
+//		                  "print",
+//		                  {
+//		                      "sExtends":    "collection",
+//		                      "sButtonText": "Save",
+//		                      "aButtons":    [ "csv", "xls", "pdf" ]
+//		                  }
+//		              ]
+//		          },
+*/		          
 		          columns: decorateColumns(attrs.aaColumns) ,
 		          data:scope.$eval(attrs.aaData)
 		        });
@@ -1878,7 +1878,7 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
     });
     $scope.prevzone = '0' ;
     $scope.getDashBoard = function(zone, state, product, dealer){
-    	
+    	$scope.stateList = [];
     	$scope.filter.state = state;
     	$scope.filter.product = product;
     	$scope.filter.dealer = dealer;
@@ -2322,7 +2322,7 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScop
 			vm.orders = orders;
 		});
 		
-		if($rootScope.userRole == '9' || $rootScope.userRole == '11' || $rootScope.userRole == '5' || $rootScope.userRole == '7' || $rootScope.userRole == '13'){
+		if($rootScope.userRole == '9' || $rootScope.userRole == '11' || $rootScope.userRole == '5' || $rootScope.userRole == '6' || $rootScope.userRole == '7' || $rootScope.userRole == '13'){
 			$http.get('/webapp/api/business/getNewLeadData').success(function(data){
 				$scope.productList = data.productList;
 				$scope.stateList = data.stateList;
@@ -2345,9 +2345,6 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScop
 			getDisposition1(data.disposition1);
 			getDisposition2(data.disposition2);
 			$('#myLeads').hide();
-			if($rootScope.userRole == '10'){
-				$("#date").hide();
-			}
 			$('#gotoManage').show();
 			$('#leadDetails').show();
 			$('#leadHistory').show();
@@ -3516,6 +3513,9 @@ App.controller('EscalatedLeadsCtrl',function($stateParams, $scope, $http, $timeo
 		case "Edit":
 			api = '/webapp/api/business/getFollowUpLeads';
 			$scope.editLeadTab($stateParams.editId);
+			break;
+		case "Overview":
+			api = '/webapp/api/business/getOverviewLeads?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.filter.zone+'&state='+$scope.filter.state+'&product='+$scope.filter.product+'&dealer='+$scope.filter.dealer;
 			break;
 			
 	}

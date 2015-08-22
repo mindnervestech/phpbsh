@@ -62,6 +62,15 @@ li.active>a {
 .rowTotal {
 	cursor:pointer; 
 }
+
+#pivot-table-output{
+	overflow-x: auto;
+}
+#rpt_table_wrapper{
+	overflow-x: auto;
+}
+
+
 </style>
 </head>
 
@@ -110,8 +119,8 @@ li.active>a {
                 <td>
                   <a href="" data-ng-click="showReport(rpt)">Show</a> &nbsp;
                 </td>
-                <td ng-if="rpt.pivotConfig!=null || rpt.searchCriteria!=null">
-                  <a href="" data-ng-click="deleteReport(rpt.id)">Delete</a> &nbsp;
+                <td >
+                  <a ng-if="rpt.pivotConfig!=null || rpt.searchCriteria!=null" href="" data-ng-click="deleteReport(rpt.id)">Delete</a> &nbsp;
                 </td>
             </tr>
             
@@ -143,9 +152,8 @@ li.active>a {
     
   </ul>
   <div class="tab-content" style="padding: 10px;">
-    <div role="tabpanel" class="tab-pane active" id="table-view">
-			
-		<div class="btn-group pull-right">
+    
+    <div class="btn-group pull-right" >
 			<button ng-if="!isSavedTemplateTable" class="btn btn-primary" ng-click="openTemplateModal(1)" style="margin-right: 2px;font-size: 12px;">Save as template</button>
 			<button class="btn btn-warning btn-sm dropdown-toggle" data-toggle="dropdown">
 			<i class="fa fa-bars"></i> Export</button>
@@ -158,6 +166,9 @@ li.active>a {
 				<li class="divider"></li>
 			</ul>
 		</div>
+    <div role="tabpanel" class="tab-pane active" id="table-view">
+			
+		
 	
 		<!-- DataTable Container -->
 		<table id="rpt_table"
