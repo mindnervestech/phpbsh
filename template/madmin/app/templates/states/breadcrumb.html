@@ -7,7 +7,7 @@
   <div class="">
     <select  data-ng-disabled="stateList.length == 0" data-ng-model="filter.state" class="form-control btn-blue"  data-ng-change="getDashBoard(filter.zone, filter.state, filter.product, filter.dealer)"  required>
     	<option value="0">All States</option>
-      <option data-ng-repeat="state in stateList" value="{{state.name}}" >{{state.name}}</option>
+      <option data-ng-selected="filter.state == state.name" data-ng-repeat="state in stateList" value="{{state.name}}" >{{state.name}}</option>
     </select>
   </div>
 </div>
@@ -15,7 +15,7 @@
   <div class="">
     <select data-ng-model="filter.zone" class="form-control btn-blue"  data-ng-change="getDashBoard(filter.zone, filter.state, filter.product, filter.dealer)"  required>
     	<option value="0">All Zones</option>
-      <option data-ng-repeat="zone in zoneList" value="{{zone.name}}" >{{zone.name}}</option>
+      <option data-ng-selected="filter.zone == zone.name" data-ng-repeat="zone in zoneList" value="{{zone.name}}" >{{zone.name}}</option>
     </select>
   </div>
 </div>
@@ -23,7 +23,7 @@
   <div class="">
     <select data-ng-model="filter.product" class="form-control btn-blue"  data-ng-change="getDashBoard(filter.zone, filter.state, filter.product, filter.dealer)"  required>
     	<option value="0" >All Products</option>
-      <option data-ng-repeat="product in productList" value="{{product.id}}" >{{product.name}}</option>
+      <option data-ng-selected="filter.product == product.id" data-ng-repeat="product in productList" value="{{product.id}}" >{{product.name}}</option>
     </select>
   </div>
 </div>
@@ -31,7 +31,7 @@
   <div class="">
     <select data-ng-model="filter.dealer" class="form-control btn-blue"  data-ng-change="getDashBoard(filter.zone, filter.state, filter.product, filter.dealer)"  required>
     	<option value="0" >All Area</option>
-      <option data-ng-repeat="dealer in dealerList" value="{{dealer.id}}" >{{dealer.name}}</option>
+      <option data-ng-selected="filter.dealer == dealer.id" data-ng-repeat="dealer in dealerList" value="{{dealer.id}}" >{{dealer.name}}</option>
     </select>
   </div>
 </div>

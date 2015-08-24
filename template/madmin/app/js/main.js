@@ -1790,6 +1790,10 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
 	}
     
     $scope.$on('userloggedIn',function(event, arg){
+    	$scope.filter.zone = 0;
+        $scope.filter.product = 0;
+        $scope.filter.state = 0;
+        $scope.filter.dealer = 0;
     	buildDashboard();
 	});
     
