@@ -1352,7 +1352,7 @@ App.run(function($rootScope, $state, $location, Auth) {
 			$scope.showExcButton = true;
 			$scope.currenttab = 'search';
 			$('#custom-search-tab a').click();
-			console.log(report.pivotConfig);
+			//console.log(report.pivotConfig);
 			if(report.pivotConfig!=null) {
 				$scope.pivotConfig = report.pivotConfig;
 				$scope.searchConfig = JSON.parse(report.searchCriteria);
@@ -1389,7 +1389,7 @@ App.run(function($rootScope, $state, $location, Auth) {
         $scope.lastQueryExecuted = 1;
 		$scope.runReport = function (option) {
 			$scope.isAnyActiveReport = false;
-			console.log($scope.reportTemplate.model);
+			//console.log($scope.reportTemplate.model);
 			$scope.lastQueryExecuted = option;
 			var obj;
 			if(option==2) {
@@ -1401,14 +1401,14 @@ App.run(function($rootScope, $state, $location, Auth) {
 				obj.id = $scope.searchConfig.id;
 			
 			$http.get('/webapp/api/report/run',{params:{filter:obj}}).success(function(data){
-				console.log(data);
+				//console.log(data);
 				//$scope.finishedHeader = false;
 				
 				
 				//console.log(PivotData);
-				console.log(renderers);
-				console.log($.pivotUtilities.aggregators);
-				console.log($scope.isSavedTemplate);
+				//console.log(renderers);
+				//console.log($.pivotUtilities.aggregators);
+				//console.log($scope.isSavedTemplate);
 				if($scope.isSavedTemplateTable) {
 					$scope.reportData = data.data;
 					$scope.dtColumns = data.columns;
@@ -1420,7 +1420,7 @@ App.run(function($rootScope, $state, $location, Auth) {
 				} else if($scope.isSavedTemplate) {
 					$('a[href="#pivot-view"]').parent().show();
 					$('a[href="#table-view"]').parent().hide();
-					console.log(":insaved template");
+					//console.log(":insaved template");
 					var parent = $("#pivot-table-output").parent();
 					$("#pivot-table-output").remove();
 					$("#report-name").remove();
@@ -1454,7 +1454,7 @@ App.run(function($rootScope, $state, $location, Auth) {
 					$('a[href="#table-view"]').parent().show();
 					$scope.reportData = data.data;
 					$scope.dtColumns = data.columns;
-					console.log(":in original");
+					//console.log(":in original");
 					$('a[href="#table-view"]').click();
 					var parent = $("#pivot-table-output").parent();
 					$("#pivot-table-output").remove();
@@ -1490,8 +1490,8 @@ App.run(function($rootScope, $state, $location, Auth) {
 			$scope.config.aggregatorName = config.aggregatorName;
 			$scope.config.cols = config.cols;
 			$scope.config.rows = config.rows;
-			console.log($scope.config);
-			console.log(config);
+			//console.log($scope.config);
+			//console.log(config);
 		};
 		
 		$scope.openTemplateModal = function(option) {
@@ -1549,7 +1549,7 @@ App.run(function($rootScope, $state, $location, Auth) {
 						templateName:$scope.templateName,
 						searchCriteria:JSON.stringify($scope.reportTemplate.model)
 					};
-					$http({url:"/api/report/saveTemplate",data:data,method:"post"}).success(function(data) {
+					$http({url:"/webapp/api/report/saveTemplate",data:data,method:"post"}).success(function(data) {
 						$scope.loadReportsMd();
 						$("#template-save-modal").modal('hide');
 					});
@@ -1560,7 +1560,7 @@ App.run(function($rootScope, $state, $location, Auth) {
 						data:JSON.stringify($scope.config),
 						searchCriteria:JSON.stringify($scope.reportTemplate.model)
 					};
-					$http({url:"/api/report/saveTemplate",data:data,method:"post"}).success(function(data) {
+					$http({url:"/webapp/api/report/saveTemplate",data:data,method:"post"}).success(function(data) {
 						$scope.loadReportsMd();
 						$("#template-save-modal").modal('hide');
 					});
@@ -1590,17 +1590,24 @@ App.run(function($rootScope, $state, $location, Auth) {
 		    scope.$watch('finishedHeader', function(val) {
 		      if (val) {
 		    	if(window.oTable) {  
-		    		window.oTable.fnDestroy();
+		    		try{
+		    		    window.oTable.fnDestroy();
+		    		}catch(e) {
+		    			window.oTable.fnClearTable();
+		    		}
+		    		window.oTable.empty();
 		    		window.oTable = null;
 		    	}
 		    	
 		    	existingHead = $(element).find('thead');
 		    	existingHead.remove();
+		    	$(element).empty();
 		    	$(element).append($("#tableHeaderTmp").find('thead').clone());  
 		        
 		    	window.oTable = $(element).dataTable({
 		          sDom: '<"clear">TlfCrtip',
-		          pageLength: 10,
+		          pageLength: 50,
+		          bDestroy: true,
 		          //sScrollY: "500px",
 		          /*tableTools: {
 		        	  "sSwfPath": "/template/madmin/app/vendors/DataTables/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
@@ -1645,9 +1652,9 @@ App.run(function($rootScope, $state, $location, Auth) {
 				$.each(columns, function(i,e){
 					if(e.link) {
 						e.render = function(cellData, type, rowData) {
-							console.log(cellData);
-							console.log(type);
-							console.log(rowData);
+							//console.log(cellData);
+							//console.log(type);
+							//console.log(rowData);
 							return "<a href='#'>" + cellData + "</a>";
 						};
 					} 
@@ -1666,10 +1673,15 @@ App.run(function($rootScope, $state, $location, Auth) {
 			
 		    scope.$watch('finishedHeader1', function(val) {
 		      if (val) {
-		    	if(window.oTable1) {  
-		    		window.oTable1.fnDestroy();
-		    		window.oTable1 = null;
-		    	}
+		    	  if(window.oTable1) {  
+			    		try{
+			    		    window.oTable1.fnDestroy();
+			    		}catch(e) {
+			    			window.oTable1.fnClearTable();
+			    		}
+			    		window.oTable1.empty();
+			    		window.oTable1 = null;
+			    	}
 		    	
 		    	existingHead = $(element).find('thead');
 		    	existingHead.remove();
