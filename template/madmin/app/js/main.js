@@ -1608,6 +1608,7 @@ App.run(function($rootScope, $state, $location, Auth) {
 		          sDom: '<"clear">TlfCrtip',
 		          pageLength: 50,
 		          bDestroy: true,
+		          sScrollX: true,
 		          //sScrollY: "500px",
 		          /*tableTools: {
 		        	  "sSwfPath": "/template/madmin/app/vendors/DataTables/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
@@ -1690,6 +1691,7 @@ App.run(function($rootScope, $state, $location, Auth) {
 		    	window.oTable1 = $(element).dataTable({
 		          sDom: '<"clear">TlfCrtip',
 		          pageLength: 10,
+		          sScrollX: true,
 		          //sScrollY: "500px",
 /*//		          tableTools: {
 //		        	  "sSwfPath": "/webapp/report/app/swf/copy_csv_xls_pdf.swf",
