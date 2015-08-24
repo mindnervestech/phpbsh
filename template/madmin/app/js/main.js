@@ -1624,6 +1624,13 @@ App.run(function($rootScope, $state, $location, Auth) {
 		              ]
 		          },*/
 		          
+		          tableTools: {
+	        	  "sSwfPath": "/template/madmin/app/vendors/DataTables/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
+		            
+	              "aButtons": []
+		          },
+		          
+		          
 		          columns: decorateColumns(attrs.aaColumns) ,
 		          data:scope.$eval(attrs.aaData)
 		        });
@@ -1692,6 +1699,11 @@ App.run(function($rootScope, $state, $location, Auth) {
 		          sDom: '<"clear">TlfCrtip',
 		          pageLength: 10,
 		          sScrollX: true,
+		          tableTools: {
+		        	  "sSwfPath": "/template/madmin/app/vendors/DataTables/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
+			            
+		              "aButtons": []
+			          },
 		          //sScrollY: "500px",
 /*//		          tableTools: {
 //		        	  "sSwfPath": "/webapp/report/app/swf/copy_csv_xls_pdf.swf",
