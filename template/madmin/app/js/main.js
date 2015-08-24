@@ -1514,7 +1514,7 @@ App.run(function($rootScope, $state, $location, Auth) {
 			$scope.currenttab = 'report';
 			$("a[href='#saved-report']").trigger("click");
 			$scope.backBtn = false;
-			location.reload();
+			//location.reload();
 		};
 		
 		$scope.showLargeImage = function(url) {
