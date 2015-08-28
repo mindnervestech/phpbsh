@@ -29,9 +29,9 @@
 									<div class="form-group col-md-4">
 										<label class="control-label">Disposition 1<span class='require'>*</span></label>
 										<div class="">
-											<select data-ng-disabled="dropdown == dispositoion1[0]" data-style="btn-white" ng-model="dropdown"
+											<select data-ng-disabled="isContacted" data-style="btn-white" ng-model="showCase.dispo1"
 												class="selectpicker form-control"
-												ng-change="selectDropdown1(dropdown)"
+												ng-change="selectDropdown1(showCase.dispo1)"
 												ng-options="b.name for b in dispositoion1" class="form-control" required>
 												<option value="">Select</option>
 											</select>
@@ -194,28 +194,26 @@
                     <div class="row">
                     <div class="col-md-4">
                     <div class="form-group">
-                      <label for="inputEmail" class="control-label">Type</label>
+                    <label for="inputEmail" class="control-label">Brand</label>
                       <div class="input-icon"><!-- <span class="input-group-addon"><i class="fa fa-envelope"></i> --></span>
-                        <input type="text" placeholder="Type" value="{{showCase.lead.type}}" style="cursor: auto;" class="form-control" readonly="readonly"/>
+                        <input type="text" style="cursor: auto;" value="{{showCase.lead.lms}}" class="form-control" readonly="readonly"/>
                       </div>
                     </div>
                     </div>
                    <div class="col-md-4">
                     <div class="form-group">
-                      <label for="inputUsername" class="control-label">Campaign Name</label>
-                      <div class="input-icon"><!-- <i class="fa fa-user"></i> -->
-                        <input id="inputUsername" type="text" value="{{showCase.lead.campaignName}}" style="cursor: auto;" placeholder="Campaign Name" class="form-control" readonly="readonly"/>
+                     <label for="inputEmail" class="control-label">Type</label>
+                      <div class="input-icon"><!-- <span class="input-group-addon"><i class="fa fa-envelope"></i> --></span>
+                        <input type="text" placeholder="Type" value="{{showCase.lead.type}}" style="cursor: auto;" class="form-control" readonly="readonly"/>
                       </div>
                     </div>
                    </div> 
                    <div class="col-md-4">
 	                    <div class="form-group">
-	                      <label for="inputUsername" class="control-label">Categorization</label>
-	                      <div class="input-icon">
-	                        <select class="form-control" disabled="disabled" style="cursor: auto;">
-	                        	<option value="{{showCase.lead.categorization}}">{{showCase.lead.categorization}}</option>
-	                        </select>
-	                      </div>
+	                     <label for="inputUsername" class="control-label">Campaign Name</label>
+                      <div class="input-icon"><!-- <i class="fa fa-user"></i> -->
+                        <input id="inputUsername" type="text" value="{{showCase.lead.campaignName}}" style="cursor: auto;" placeholder="Campaign Name" class="form-control" readonly="readonly"/>
+                      </div>
 	                    </div>
                     </div>
                    
@@ -224,20 +222,32 @@
                     <div class="row">
                    <div class="col-md-4">
                     <div class="form-group">
-                      <label for="inputEmail" class="control-label">Area of Interest 1</label>
-                      <div class="input-icon"><!-- <span class="input-group-addon"><i class="fa fa-envelope"></i> --></span>
-                        <input type="text" placeholder="Area of Interest 1" style="cursor: auto;" value="{{showCase.lead.areaofInterest1}}" class="form-control" readonly="readonly"/>
-                      </div>
+                    <label for="inputUsername" class="control-label">Categorization</label>
+	                      <div class="input-icon">
+	                        <select class="form-control" disabled="disabled" style="cursor: auto;">
+	                        	<option value="{{showCase.lead.categorization}}">{{showCase.lead.categorization}}</option>
+	                        </select>
+	                      </div>
                     </div>
                     </div>
                     <div class="col-md-4">
                     <div class="form-group">
-                      <label for="inputEmail" class="control-label">Area of Interest 2</label>
+                     <label for="inputEmail" class="control-label">Area of Interest 1</label>
+                      <div class="input-icon"><!-- <span class="input-group-addon"><i class="fa fa-envelope"></i> --></span>
+                        <input type="text" placeholder="Area of Interest 1" style="cursor: auto;" value="{{showCase.lead.areaofInterest1}}" class="form-control" readonly="readonly"/>
+                      </div>
+                    </div>
+                    </div> 
+                   <div class="col-md-4">
+                    <div class="form-group">
+                     <label for="inputEmail" class="control-label">Area of Interest 2</label>
                       <div class="input-icon"><!-- <span class="input-group-addon"><i class="fa fa-envelope"></i> --></span>
                         <input type="text" placeholder="Area of Interest 2" style="cursor: auto;" value="{{showCase.lead.areaofInterest2}}" class="form-control" readonly="readonly"/>
                       </div>
                     </div>
-                    </div> 
+                    </div>
+                    </div>
+                    <div class="row">
                    <div class="col-md-4">
                     <div class="form-group">
                       <label for="inputEmail" class="control-label">Remarks</label>
