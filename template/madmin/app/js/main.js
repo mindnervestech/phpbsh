@@ -2881,6 +2881,14 @@ App.controller('UsersTableCtrl',function($scope,$http, DTOptionsBuilder, DTColum
         },500);
     }
     
+    $scope.loadPin = function(query) {
+    	/*if($scope.state == 0 ){
+    		$scope.showMessage("warning","Please Select State First.");
+    		return;
+    	} */
+    	return $http.get('/webapp/api/business/getPincodes?query='+query);
+    };
+    
     
     $scope.createUser = function() {
     	console.log("create user");
