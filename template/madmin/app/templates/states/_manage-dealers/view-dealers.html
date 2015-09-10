@@ -181,6 +181,23 @@ tags-input .autocomplete .suggestion-item {
                       </div>
                     </div>
                     </div>
+                    
+                    <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="selPSM" class="control-label">Brand <span class='require'>*</span></label>
+                          <select id="selPSM" ng-model="showCase.dealer.brand" class="form-control" required>
+                           <!-- <option value="">Select brand</option>
+                            <option ng-repeat="state in stateList" value="{{state.name}}" >{{state.name}}</option> -->
+                            <option value="">Select Brand</option>
+							<option value="Bosch">Bosch</option>
+							<option value="Siemens">Siemens</option>
+							<option value="Both">Both</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    
                    <!--  <div class="row">
                       <div class="col-md-6">
                         <div class="form-group">
