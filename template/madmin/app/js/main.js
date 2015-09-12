@@ -2565,6 +2565,9 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScop
 				});
 			}
 		}
+		if(angular.equals(vm.lead.disposition1, 'Tried Contacted')){
+			$("#date").show();
+		}
 	};
 	
 	$scope.selectBrand = function(brand){
@@ -3544,7 +3547,7 @@ App.controller('EscalatedLeadsCtrl',function($stateParams, $scope, $http, $timeo
 		});
 	}
 	
-	var api = '/webapp/api/business/getEscalatedLeads';
+	var api = '/webapp/api/business/getEscalatedLeads?start='+$scope.startDate+'&end='+$scope.endDate+'&zone='+$scope.filter.zone+'&state='+$scope.filter.state+'&product='+$scope.filter.product+'&dealer='+$scope.filter.dealer+'&brand='+$scope.filter.brand;
 	switch($stateParams.leadType){
 		case 'Escalated':
 			if(angular.equals($stateParams.editId,'All'))
@@ -3696,6 +3699,9 @@ App.controller('EscalatedLeadsCtrl',function($stateParams, $scope, $http, $timeo
 					console.log(data);
 				});
 			}
+		}
+		if(angular.equals(vm.lead.disposition1, 'Tried Contacted')){
+			$("#date").show();
 		}
 	};
 	
