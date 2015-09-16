@@ -10210,7 +10210,7 @@ App.controller('MainController', function ($scope, $routeParams,$http){
                     $('.reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
                 }
             );
-            $('.reportrange span').html(moment().subtract('days', 7).format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+            $('.reportrange span').html(moment().subtract('days', 7).format('MMM D, YYYY') + ' - ' + moment().format('MMM D, YYYY'));
             $scope.$emit('reportDateChange', { startDate: moment().subtract('days', 7).format('MMDDYYYY'), endDate:  moment().format('MMDDYYYY') });
         $.fn.Data.checkbox();
     }, 2000);
