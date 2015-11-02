@@ -20,6 +20,8 @@
 	                	  		},{
 	                	  		 	"action": 1,
 	                	  			"name": "Call back-want to purchase later"
+	                	  		},{
+	                	  			"name": "PO collected from dealer"
 	                	  		}
 	                	  ]
 	                  },{ 
@@ -43,7 +45,7 @@
 	                	  		}
 	                	  ]
 	                  },{ 
-	                	  "name": "Already Purchased" , 
+	                	  "name": "Purchased" , 
 	                	  "action": 2
 	                  },{ 
 	                	  "name": "Call back/Follow up" , 

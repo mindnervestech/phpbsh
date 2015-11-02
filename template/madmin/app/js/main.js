@@ -118,6 +118,7 @@ App.factory("Auth", ["$http", "$q", "$window","$rootScope","$state" ,
                     deferred.resolve(userInfo);
                     $state.go(stateBeforeLogin);
                     $rootScope.userRole = userInfo.permissions["role"];
+                    $rootScope.type = userInfo.permissions["type"]
                     $rootScope.userName = userInfo.userName;
                     $rootScope.$broadcast('userloggedIn',{});
                 }
@@ -232,12 +233,28 @@ App.config(['$stateProvider', '$urlRouterProvider',
                 loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
                      return $ocLazyLoad.load({
                         files: [
-                                "vendors/jquery.fileDownload.js"
+                                "vendors/jquery.fileDownload.js",
+                                
 								/*"reports/vendor/pivottable/dist/pivot.js",
 								"reports/vendor/pivottable/dist/gchart_renderers.js",
 								"reports/vendor/pivottable/dist/d3_renderers.js",
 								"reports/vendor/pivottable/dist/c3_renderers.js"*/
-
+                                
+                                'reports/vendor/export/tableExport.js',
+                                'reports/vendor/export/jquery.base64.js',
+                                'reports/vendor/export/html2canvas.js',
+                                'reports/vendor/jspdf/libs/sprintf.js',
+                                'reports/vendor/jspdf/jspdf.js',
+                                'reports/vendor/jspdf/libs/base64.js',
+                                'reports/vendor/libs/mustache.js',
+                                //'reports/vendor/tv4/tv4.js',
+                                //'reports/vendor/angular-schema-form/angular-schema-form-dynamic-select/angular-schema-form-dynamic-select.js',
+                                //'reports/vendor/pivottable/dist/pivot.js',
+                                //'reports/vendor/pivottable/dist/gchart_renderers.js',
+                                //'reports/vendor/pivottable/dist/d3_renderers.js',
+                                //'reports/vendor/pivottable/dist/c3_renderers.js',
+                                //'reports/vendor/nrecopivot/nrecopivot.js',
+                                //'reports/vendor/bootbox/bootbox.min.js'
                                 ]
                      });
                 }]
@@ -604,6 +621,35 @@ App.config(['$stateProvider', '$urlRouterProvider',
             }
         })
         
+        .state('manage-buildin', {
+            url: "/manage-buildin", 
+            templateUrl: 'templates/states/manage-buildin.html',
+            controller: 'ManageBuildinLeadsTableCtrl as showCase', 
+            data : {},
+            resolve: {
+                loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+                     return $ocLazyLoad.load({
+                        files: [
+								'vendors/select2/select2-madmin.css',
+								'vendors/bootstrap-select/bootstrap-select.min.css',
+								'vendors/multi-select/css/multi-select-madmin.css',
+								'vendors/select2/select2.min.js',
+								'vendors/bootstrap-select/bootstrap-select.min.js',
+								'vendors/multi-select/js/jquery.multi-select.js',
+								'vendors/DataTables/media/css/jquery.dataTables.css',
+								'vendors/DataTables/extensions/TableTools/css/dataTables.tableTools.min.css',
+								'vendors/DataTables/media/css/dataTables.bootstrap.css',
+								'vendors/DataTables/media/js/jquery.dataTables.js',
+								'vendors/DataTables/media/js/dataTables.bootstrap.js',
+								'vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js',
+								'vendors/DataTables/extensions/Pagination/input.js',
+								'vendors/DataTables/extensions/ColumnFilter/jquery.dataTables.columnFilter.js',
+                                ]
+                     });
+                }]
+            }
+        })
+        
         .state('collection-admin', {
             url: "/collection-admin", 
             templateUrl: 'templates/states/collection-admin.html',
@@ -778,6 +824,31 @@ App.config(['$stateProvider', '$urlRouterProvider',
             url: "/escalated-leads/:leadType?editId", 
             templateUrl: 'templates/states/manage-leads.html',
             controller: 'EscalatedLeadsCtrl  as showCase', 
+            data : {},
+            resolve: { 
+                loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+                     return $ocLazyLoad.load({
+                        files: [
+                                'vendors/DataTables/media/css/jquery.dataTables.css',
+                                'vendors/DataTables/extensions/TableTools/css/dataTables.tableTools.min.css',
+                                'vendors/DataTables/media/css/dataTables.bootstrap.css',
+                                'vendors/DataTables/media/js/jquery.dataTables.js',
+                                'vendors/DataTables/media/js/dataTables.bootstrap.js',
+                                'vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js',
+                                'vendors/DataTables/extensions/Pagination/input.js',
+                                'vendors/DataTables/extensions/ColumnFilter/jquery.dataTables.columnFilter.js',
+                                'vendors/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js',
+                                'vendors/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css',
+                                ]
+                     });
+                }]
+            }
+        })
+        
+        .state('built-in-leads', {
+            url: "/built-in-leads/:leadType?editId", 
+            templateUrl: 'templates/states/manage-buildin.html',
+            controller: 'BuiltinLeadsCtrl  as showCase', 
             data : {},
             resolve: { 
                 loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
@@ -1781,7 +1852,11 @@ App.controller('AppController', function ($scope, $http, $rootScope, $routeParam
 	if($window.sessionStorage["userInfo"]) {
 		var userInfo = JSON.parse($window.sessionStorage["userInfo"]);
 		if(userInfo.isLoggedIn){
-		if(userInfo.permissions) $rootScope.userRole = userInfo.permissions["role"];
+		if(userInfo.permissions){ 
+			$rootScope.userRole = userInfo.permissions["role"];
+			$rootScope.type = userInfo.permissions["type"]
+			console.log($rootScope.type);
+		}
 			$rootScope.userName = userInfo.userName;
 			buildDashboard();
 		}
@@ -2353,7 +2428,7 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScop
 			vm.orders = orders;
 		});
 		
-		if($rootScope.userRole == '9' || $rootScope.userRole == '11' || $rootScope.userRole == '5' || $rootScope.userRole == '6' || $rootScope.userRole == '7' || $rootScope.userRole == '13'){
+		if($rootScope.userRole == '9' || $rootScope.userRole == '11' || $rootScope.userRole == '4' || $rootScope.userRole == '5' || $rootScope.userRole == '6' || $rootScope.userRole == '7' || $rootScope.userRole == '13'){
 			$http.get('/webapp/api/business/getNewLeadData').success(function(data){
 				$scope.productList = data.productList;
 				$scope.stateList = data.stateList;
@@ -2405,14 +2480,14 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScop
     vm.dtOptions = DTOptionsBuilder.newOptions()
       .withBootstrap()
       .withOption('order', [[0, 'asc']])
-      .withTableTools('/template/madmin/app/vendors/DataTables/extensions/TableTools/swf/copy_csv_xls_pdf.swf')
-      .withTableToolsButtons(
+      //.withTableTools('/template/madmin/app/vendors/DataTables/extensions/TableTools/swf/copy_csv_xls_pdf.swf')
+      /*.withTableToolsButtons(
            [
               "csv",
               "xls",
               'print'
           ] 
-      )
+      )*/
       //.withDOM('<"row"<"col-md-8 col-sm-12"<"inline-controls"l>><"col-md-4 col-sm-12"<"pull-right"f>>>t<"row"<"col-md-4 col-sm-12"<"inline-controls"l>><"col-md-4 col-sm-12"<"inline-controls text-center"i>><"col-md-4 col-sm-12"p>>')
       .withLanguage({
         "sLengthMenu": 'View _MENU_ records',
@@ -2649,6 +2724,295 @@ App.controller('ManageLeadsTableCtrl',function($scope,$timeout, $http, $rootScop
 
 
 });
+
+App.controller('ManageBuildinLeadsTableCtrl',function($scope,$timeout, $http, $rootScope, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){
+	var vm = this;
+	vm.tabHeading = "My Built-In Leads";
+	$scope.invalidPhone = false;
+	vm.orders = [];
+	vm.leadHistory = [];
+	vm.lead = {};
+	vm.newLead = {};
+	$scope.isContacted = false;
+	$scope.dealerList = {};
+	$scope.productList = {};
+	$scope.stateList = {};
+	$scope.cityList = {};
+	$scope.saleName = $rootScope.userName;
+	
+	$timeout(function(){
+		$http.get('/webapp/api/business/getBuildinLeads').success(function(orders){
+			vm.orders = orders;
+		});
+		$http.get('/webapp/api/business/getNewLeadData').success(function(data){
+			$scope.productList = data.productList;
+			$scope.stateList = data.stateList;
+			$scope.cityList = data.cityList;
+		});
+			
+	}, 100);
+
+	var search_html;
+	search_html = '<div class="input-group input-group-sm mbs">';
+	search_html += "_INPUT_";
+	search_html += '</div>';
+	$scope.editBuildinLeadTab = function(id) {
+		$scope.leadId = id;
+		$http.get('/webapp/api/business/buildinlead/'+id).success(function(data){
+			vm.lead = data;
+			
+			$scope.dpDate = moment();
+			getDisposition1(data.disposition1);
+			getDisposition2(data.disposition2);
+			$('#myLeads').hide();
+			$('#gotoManage').show();
+			$('#leadDetails').show();
+			$('#leadHistory').show();
+			$('#leadDetailsTab').click();
+		});
+	}
+	
+	$scope.leadHistory = function(){
+		console.log("here");
+		$http.get('/webapp/api/business/lead/history/'+$scope.leadId).success(function(orders){
+			vm.leadHistory = orders;
+		});
+	}
+	
+
+	$scope.manageLeadTab = function() {
+		$http.get('/webapp/api/business/getBuildinLeads').success(function(orders){
+			vm.orders = orders;
+		});
+		$('#myLeads').show();
+		$('#gotoManage').hide();
+		$('#leadDetails').hide();
+		$('#leadHistory').hide();
+		$('#myLeadsTab').click();
+	}
+
+    vm.dtOptions = DTOptionsBuilder.newOptions()
+      .withBootstrap()
+      .withOption('order', [[0, 'asc']])
+      //.withTableTools('/template/madmin/app/vendors/DataTables/extensions/TableTools/swf/copy_csv_xls_pdf.swf')
+      /*.withTableToolsButtons(
+           [
+              "csv",
+              "xls",
+              'print'
+          ] 
+      )*/
+      //.withDOM('<"row"<"col-md-8 col-sm-12"<"inline-controls"l>><"col-md-4 col-sm-12"<"pull-right"f>>>t<"row"<"col-md-4 col-sm-12"<"inline-controls"l>><"col-md-4 col-sm-12"<"inline-controls text-center"i>><"col-md-4 col-sm-12"p>>')
+      .withLanguage({
+        "sLengthMenu": 'View _MENU_ records',
+        "sInfo":  'Found _TOTAL_ records',
+        "oPaginate": {
+          "sPage":    "Page",
+          "sPageOf":  "of"
+        },
+        "sSearch": search_html
+      })
+      
+      .withPaginationType('input')
+      
+      .withColumnFilter();
+
+
+    vm.dtColumnDefs = [
+                       // DTColumnDefBuilder.newColumnDef(0).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(2).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(3).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(4).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(5).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(6).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(7).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(8).notSortable(),
+                       ];
+
+    vm.selectedAll = false;
+
+    vm.selectAll = function () {
+
+      if ($scope.selectedAll) {
+        $scope.selectedAll = false;
+      } else {
+        $scope.selectedAll = true;
+      }
+
+      angular.forEach(vm.orders, function(order) {
+        order.selected = $scope.selectedAll;
+      });
+    };
+    
+    getDisposition1 = function(name){
+		$scope.isContacted = false;
+		angular.forEach( $scope.dispositoion1, function(dispo) {		
+			if(dispo.name == name){
+				if(angular.equals(dispo.name, "Contacted")){
+					$scope.isContacted = true;
+				}
+				vm.dispo1 = dispo;
+			}
+		});
+		
+		console.log(name);
+		if(angular.equals(name ,"New") || angular.equals(name ,"Escalated")){
+			vm.dispo1 = 0;
+		}
+		$scope.selectDropdown1(vm.dispo1);
+	}
+	
+	getDisposition2 = function(name){
+		angular.forEach( $scope.dispositoion2, function(dispo) {
+			if(dispo.name == name){
+				$scope.category = dispo;
+				$scope.selectDropdown2(dispo);
+			}
+		});
+	}
+
+	$scope.dropdown = {};
+	$scope.dispositoion2=[];
+	$scope.brands=[];
+	$scope.modalNo=[];
+	$resource('/template/madmin/app/file/get-disposition.json').query().$promise.then(function(disposition) {
+		$scope.dispositoion1 = disposition;
+    });
+
+
+	$scope.selectDropdown1 = function(data){
+		vm.lead.disposition1 = data.name;
+		$('#desposition2').show();
+		$('#desposition3').hide();
+		$("#reason").hide();
+		$("#date").hide();
+		$("#brand").hide();
+		$("#modalNo").hide();
+		$scope.dispositoion2 = data.dispositoion2;
+	};
+
+	$scope.selectDropdown2 = function(data){
+		$scope.dispositoion3 = data.dispositoion3;
+		if(data.dispositoion3 != undefined){
+			$('#desposition3').show();
+		} else {
+			$('#desposition3').hide();
+		}
+		$scope.category = data;
+		vm.lead.disposition2 = data.name;
+		$("#brand").hide();
+		$("#reason").hide();
+		$("#date").hide();
+		$("#modalNo").hide();
+		if(data.action == 0){
+			$("#reason").show();
+			$("#date").hide();
+		} else {
+			if(data.action == 1){
+				console.log(data.action);
+				$("#reason").hide();
+				$("#date").show();
+				$scope.dpDate = moment();
+			} 
+		}
+		if(data.action == 2){
+			$("#brand").show();
+			if($scope.brands.length == 0){
+				$http.get('/webapp/api/business/getBrands').success(function(data){
+					$scope.brands = data;
+					console.log(data);
+				});
+			}
+		}
+		if(angular.equals(vm.lead.disposition1, 'Tried Contacted')){
+			$("#date").show();
+		}
+	};
+	
+	$scope.selectBrand = function(brand){
+		vm.lead.brand = brand.name;
+		if(angular.equals(brand.name,'Bosch') || angular.equals(brand.name,'Siemens')){
+			$http.get('/webapp/api/business/getModalNumbers?brand='+brand.name).success(function(data){
+				$scope.modalNos = data;
+				$("#modalNo").show();
+				console.log(data);
+			});
+			$("#reason").hide();
+		} else {
+			$("#reason").show();
+			$("#modalNo").hide();
+		}
+		
+	}
+	
+	$scope.selectModalNo = function(modalNo){
+		vm.lead.modalNo = modalNo.name;
+	}
+	
+	$scope.selectDropdown3 = function(data){
+		$scope.disposition3 = data;
+		console.log(data.name);
+		vm.lead.disposition3 = data.name;
+		$("#reason").show();
+		$("#date").hide();
+		$("#brand").hide();
+		$("#modalNo").hide();
+		if(data.action == 0){
+			$("#reason").show();
+			$("#date").hide();
+		} else {
+			if(data.action == 1){
+				console.log(data.action);
+				$("#reason").hide();
+				$("#date").show();
+				$scope.dpDate = moment();
+			} 
+		}
+	};
+    
+    
+    vm.createBuildinLead = function(){
+    	if(($scope.showCase.newLead.contactNo+"").length == 10){
+    		$scope.invalidPhone = false;
+    		console.log(vm.newLead);
+    		
+    		
+    		
+		$http({method:'POST',url:'/webapp/api/business/createBuildinLead',data: vm.newLead}).success(function(response) {
+			console.log(response);
+			$scope.showMessage("success","Successfully Created.");
+			$('#myLeads').show();
+			$('#gotoManage').hide();
+			$('#leadDetails').hide();
+			$('#leadHistory').hide();
+			$('#myLeadsTab').click();
+		}).error(function(data){
+    		$scope.showMessage("error","Failed To Create.");
+    	});	
+	}
+	else{
+		$scope.invalidPhone = true;
+		}
+
+    }
+    
+    $scope.updateLead = function() {
+		vm.lead.followUpDate = dpDate;  
+		console.log(vm.lead);
+		if(angular.equals(vm.lead.disposition1, "Contacted")){
+			$scope.isContacted = true;
+		}
+		$http({method:'POST',url:'/webapp/api/business/updateBuildinLead',data: vm.lead}).success(function(response) {
+			$scope.showMessage("success","Successfully Updated.");
+		}).error(function(data){
+    		$scope.showMessage("error","Failed To Update.");
+    	});	
+	}
+
+});
+
+
+
 
 App.controller('ManageRolesTableCtrl',function($scope, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){
 	var vm = this;
@@ -3062,7 +3426,23 @@ App.controller('DealersTableCtrl',function($scope,$http, DTOptionsBuilder, DTCol
     $scope.setState = function(state){
     	$scope.state = state;
     	console.log($scope.state);
+    	
+    	$http.get('/webapp/api/business/getDistrictByState/'+$scope.state).success(function(data){
+    		console.log(data);
+    		$scope.districtList = data;
+		});
     }
+    
+    $scope.zone;
+    $scope.selectState = function(zone){
+    	$scope.zone = zone;
+    	console.log($scope.zone);
+    	$http.get('/webapp/api/business/getZonesByState/'+$scope.zone).success(function(data){
+    		console.log(data);
+    		$scope.stateList = data;
+		});
+    }
+    
     
     $scope.load = function(query, user){
     	if($scope.state == 0 ){
@@ -3764,6 +4144,268 @@ App.controller('EscalatedLeadsCtrl',function($stateParams, $scope, $http, $timeo
 
 });
 
+
+App.controller('BuiltinLeadsCtrl',function($stateParams,$scope,$rootScope,$timeout, $http, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){
+	var vm = this;
+	vm.tabHeading = $stateParams.leadType+" Leads";
+	$scope.invalidPhone = false;
+	vm.orders = [];
+	vm.leadHistory = [];
+	vm.lead = {};
+	vm.newLead = {};
+	$scope.isContacted = false;
+	$scope.dealerList = {};
+	$scope.productList = {};
+	$scope.stateList = {};
+	$scope.cityList = {};
+	$scope.saleName = $rootScope.userName;
+	
+	$timeout(function(){
+		$http.get('/webapp/api/business/getBuiltinFollowUpLeads').success(function(orders){
+			vm.orders = orders;
+		});
+		$http.get('/webapp/api/business/getNewLeadData').success(function(data){
+			$scope.productList = data.productList;
+			$scope.stateList = data.stateList;
+			$scope.cityList = data.cityList;
+		});
+			
+	}, 100);
+
+	var search_html;
+	search_html = '<div class="input-group input-group-sm mbs">';
+	search_html += "_INPUT_";
+	search_html += '</div>';
+	$scope.editBuildinLeadTab = function(id) {
+		$scope.leadId = id;
+		$http.get('/webapp/api/business/buildinlead/'+id).success(function(data){
+			vm.lead = data;
+			
+			$scope.dpDate = moment();
+			getDisposition1(data.disposition1);
+			getDisposition2(data.disposition2);
+			$('#myLeads').hide();
+			$('#gotoManage').show();
+			$('#leadDetails').show();
+			$('#leadHistory').show();
+			$('#leadDetailsTab').click();
+		});
+	}
+	
+	$scope.leadHistory = function(){
+		console.log("here");
+		$http.get('/webapp/api/business/lead/history/'+$scope.leadId).success(function(orders){
+			vm.leadHistory = orders;
+		});
+	}
+	
+
+	$scope.manageLeadTab = function() {
+		$http.get('/webapp/api/business/getBuiltinFollowUpLeads').success(function(orders){
+			vm.orders = orders;
+		});
+		$('#myLeads').show();
+		$('#gotoManage').hide();
+		$('#leadDetails').hide();
+		$('#leadHistory').hide();
+		$('#myLeadsTab').click();
+	}
+
+    vm.dtOptions = DTOptionsBuilder.newOptions()
+      .withBootstrap()
+      .withOption('order', [[0, 'asc']])
+      //.withTableTools('/template/madmin/app/vendors/DataTables/extensions/TableTools/swf/copy_csv_xls_pdf.swf')
+      /*.withTableToolsButtons(
+           [
+              "csv",
+              "xls",
+              'print'
+          ] 
+      )*/
+      //.withDOM('<"row"<"col-md-8 col-sm-12"<"inline-controls"l>><"col-md-4 col-sm-12"<"pull-right"f>>>t<"row"<"col-md-4 col-sm-12"<"inline-controls"l>><"col-md-4 col-sm-12"<"inline-controls text-center"i>><"col-md-4 col-sm-12"p>>')
+      .withLanguage({
+        "sLengthMenu": 'View _MENU_ records',
+        "sInfo":  'Found _TOTAL_ records',
+        "oPaginate": {
+          "sPage":    "Page",
+          "sPageOf":  "of"
+        },
+        "sSearch": search_html
+      })
+      
+      .withPaginationType('input')
+      
+      .withColumnFilter();
+
+
+    vm.dtColumnDefs = [
+                       // DTColumnDefBuilder.newColumnDef(0).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(2).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(3).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(4).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(5).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(6).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(7).notSortable(),
+                       DTColumnDefBuilder.newColumnDef(8).notSortable(),
+                       ];
+
+    vm.selectedAll = false;
+
+    vm.selectAll = function () {
+
+      if ($scope.selectedAll) {
+        $scope.selectedAll = false;
+      } else {
+        $scope.selectedAll = true;
+      }
+
+      angular.forEach(vm.orders, function(order) {
+        order.selected = $scope.selectedAll;
+      });
+    };
+    
+    getDisposition1 = function(name){
+		$scope.isContacted = false;
+		angular.forEach( $scope.dispositoion1, function(dispo) {		
+			if(dispo.name == name){
+				if(angular.equals(dispo.name, "Contacted")){
+					$scope.isContacted = true;
+				}
+				vm.dispo1 = dispo;
+			}
+		});
+		
+		console.log(name);
+		if(angular.equals(name ,"New") || angular.equals(name ,"Escalated")){
+			vm.dispo1 = 0;
+		}
+		$scope.selectDropdown1(vm.dispo1);
+	}
+	
+	getDisposition2 = function(name){
+		angular.forEach( $scope.dispositoion2, function(dispo) {
+			if(dispo.name == name){
+				$scope.category = dispo;
+				$scope.selectDropdown2(dispo);
+			}
+		});
+	}
+
+	$scope.dropdown = {};
+	$scope.dispositoion2=[];
+	$scope.brands=[];
+	$scope.modalNo=[];
+	$resource('/template/madmin/app/file/get-disposition.json').query().$promise.then(function(disposition) {
+		$scope.dispositoion1 = disposition;
+    });
+
+
+	$scope.selectDropdown1 = function(data){
+		vm.lead.disposition1 = data.name;
+		$('#desposition2').show();
+		$('#desposition3').hide();
+		$("#reason").hide();
+		$("#date").hide();
+		$("#brand").hide();
+		$("#modalNo").hide();
+		$scope.dispositoion2 = data.dispositoion2;
+	};
+
+	$scope.selectDropdown2 = function(data){
+		$scope.dispositoion3 = data.dispositoion3;
+		if(data.dispositoion3 != undefined){
+			$('#desposition3').show();
+		} else {
+			$('#desposition3').hide();
+		}
+		$scope.category = data;
+		vm.lead.disposition2 = data.name;
+		$("#brand").hide();
+		$("#reason").hide();
+		$("#date").hide();
+		$("#modalNo").hide();
+		if(data.action == 0){
+			$("#reason").show();
+			$("#date").hide();
+		} else {
+			if(data.action == 1){
+				console.log(data.action);
+				$("#reason").hide();
+				$("#date").show();
+				$scope.dpDate = moment();
+			} 
+		}
+		if(data.action == 2){
+			$("#brand").show();
+			if($scope.brands.length == 0){
+				$http.get('/webapp/api/business/getBrands').success(function(data){
+					$scope.brands = data;
+					console.log(data);
+				});
+			}
+		}
+		if(angular.equals(vm.lead.disposition1, 'Tried Contacted')){
+			$("#date").show();
+		}
+	};
+	
+	$scope.selectBrand = function(brand){
+		vm.lead.brand = brand.name;
+		if(angular.equals(brand.name,'Bosch') || angular.equals(brand.name,'Siemens')){
+			$http.get('/webapp/api/business/getModalNumbers?brand='+brand.name).success(function(data){
+				$scope.modalNos = data;
+				$("#modalNo").show();
+				console.log(data);
+			});
+			$("#reason").hide();
+		} else {
+			$("#reason").show();
+			$("#modalNo").hide();
+		}
+		
+	}
+	
+	$scope.selectModalNo = function(modalNo){
+		vm.lead.modalNo = modalNo.name;
+	}
+	
+	$scope.selectDropdown3 = function(data){
+		$scope.disposition3 = data;
+		console.log(data.name);
+		vm.lead.disposition3 = data.name;
+		$("#reason").show();
+		$("#date").hide();
+		$("#brand").hide();
+		$("#modalNo").hide();
+		if(data.action == 0){
+			$("#reason").show();
+			$("#date").hide();
+		} else {
+			if(data.action == 1){
+				console.log(data.action);
+				$("#reason").hide();
+				$("#date").show();
+				$scope.dpDate = moment();
+			} 
+		}
+	};
+    
+    
+    $scope.updateLead = function() {
+		vm.lead.followUpDate = dpDate;  
+		console.log(vm.lead);
+		if(angular.equals(vm.lead.disposition1, "Contacted")){
+			$scope.isContacted = true;
+		}
+		$http({method:'POST',url:'/webapp/api/business/updateBuildinLead',data: vm.lead}).success(function(response) {
+			$scope.showMessage("success","Successfully Updated.");
+		}).error(function(data){
+    		$scope.showMessage("error","Failed To Update.");
+    	});	
+	}
+
+
+});
 
 App.controller('FollowUpLeadsCtrl',function($scope,$timeout, $http, DTOptionsBuilder, DTColumnDefBuilder, DTColumnBuilder,$resource){
 	var vm = this;
@@ -10207,7 +10849,7 @@ App.controller('MainController', function ($scope, $routeParams,$http){
                 	var startDate =  moment(start).format("MMDDYYYY");
                 	var endDate =  moment(end).format("MMDDYYYY");
                 	$scope.$emit('reportDateChange', { startDate: startDate, endDate: endDate });
-                    $('.reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                    $('.reportrange span').html(start.format('MMM D, YYYY') + ' - ' + end.format('MMM D, YYYY'));
                 }
             );
             $('.reportrange span').html(moment().subtract('days', 7).format('MMM D, YYYY') + ' - ' + moment().format('MMM D, YYYY'));

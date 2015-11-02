@@ -165,7 +165,21 @@ tags-input .autocomplete .suggestion-item {
                           <input id="inputPostCode" type="text" placeholder="" ng-model="showCase.user.postCode" class="form-control"/>
                         </div>
                       </div>
-                      <div class="col-md-6" data-ng-if="userRole == 2 || userRole == 4">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="inputType" class="control-label">Type <span class='require'>*</span></label>
+                          <select id="selPSM" ng-model="showCase.user.type" class="form-control" required>
+									<option value="">Select Type</option>
+									<option value="Built-In">Built-In</option>
+									<option value="Free-Standing">Free-Standing</option>
+									<option value="Both">Both</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+					
+					<div class="row">
+                      <div class="col-md-6" data-ng-if="userRole == 6 || userRole == 4">
                         <div class="form-group">
                           <label for="inputCity" class="control-label">Dealer <span class='require'>*</span></label>
                           <select id="selPSM" ng-model="showCase.user.user" class="form-control" required>

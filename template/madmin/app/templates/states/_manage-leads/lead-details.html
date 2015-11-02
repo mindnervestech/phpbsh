@@ -103,7 +103,7 @@
 		                          </div>
 		                        </div>
 		                    </div> -->
-									<ng-bs3-datepicker style="display:none; height:230px"
+									<ng-bs3-datepicker style="display:none;"
 										language="ca" ng-model="dpDate" id="date"></ng-bs3-datepicker>
 								</div>
 							</div>
@@ -123,7 +123,7 @@
                     <div class="form-group">
                       <label for="inputEmail" class="control-label">Assigned Date</label>
                       <div class="input-icon"><!-- <span class="input-group-addon"><i class="fa fa-envelope"></i> --></span>
-                        <input type="text" placeholder="Assigned Date" value="11 May 2015" style="cursor: auto;" class="form-control" readonly="readonly"/>
+                        <input type="text" placeholder="Assigned Date" value="{{showCase.lead.assignDate | date: 'yyyy/MM/dd h:mma'}}" style="cursor: auto;" class="form-control" readonly="readonly"/>
                       </div>
                     </div>
                     </div>

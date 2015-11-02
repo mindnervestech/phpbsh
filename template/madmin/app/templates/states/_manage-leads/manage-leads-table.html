@@ -25,8 +25,7 @@
                     <th data-ng-if="showCase.tabHeading == 'Follow-up Leads'" style="background-color: #dc6767;color:white;" width="4%">FollowUp Time</th>
                     <th style="background-color: #dc6767;color:white;" width="12%">Product</th>
                     <th style="background-color: #dc6767;color:white;" width="12%">State</th>
-                    <th data-ng-if="showCase.tabHeading == 'My Leads' || showCase.tabHeading == 'Open Leads'" style="background-color: #dc6767;color:white;" width="4%">Disp1</th>
-                    <th data-ng-if="showCase.tabHeading == 'Escalated Leads'" style="background-color: #dc6767;color:white;" width="4%">Status</th>
+                    <th data-ng-if="showCase.tabHeading == 'My Leads' || showCase.tabHeading == 'Open Leads' || showCase.tabHeading == 'Follow-up Leads'" style="background-color: #dc6767;color:white;" width="4%">Disp1</th>
                     <th data-ng-if="showCase.tabHeading == 'My Leads' || showCase.tabHeading == 'Follow-up Leads' || showCase.tabHeading == 'Open Leads'" style="background-color: #dc6767;color:white;" width="4%">Disp2</th>
                      <th style="background-color: #dc6767;color:white;" width="2%">Status</th>
                      <th style="background-color: #dc6767;color:white;" width="2%">Brand</th>
@@ -47,7 +46,7 @@
                     <td data-ng-if="showCase.tabHeading == 'Follow-up Leads'">{{ order.followUpDate | date:"yyyy/MM/dd',' h:mma"}}</td>
                     <td>{{ order.product }}</td>
                     <td>{{ order.state }}</td>
-                    <td data-ng-if="showCase.tabHeading == 'My Leads' || showCase.tabHeading == 'Escalated Leads' || showCase.tabHeading == 'Open Leads'">{{ order.disposition1 }}</td>
+                    <td data-ng-if="showCase.tabHeading == 'My Leads' || showCase.tabHeading == 'Follow-up Leads' || showCase.tabHeading == 'Open Leads'">{{ order.disposition1 }}</td>
                     <td data-ng-if="showCase.tabHeading == 'My Leads' || showCase.tabHeading == 'Follow-up Leads' || showCase.tabHeading == 'Open Leads'">{{ order.disposition2 }}</td>
                     <td>{{ order.status }}</td>
                     <td>{{ order.lms}}</td>

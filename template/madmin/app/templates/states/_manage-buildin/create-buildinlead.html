@@ -1,0 +1,243 @@
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-red">
+			<div class="panel-heading">Create New BuildinLead</div> 
+			<div class="panel-body pan">
+				<form data-ng-submit="showCase.createBuildinLead()" name="myForm">
+					<div class="form-body pal">
+						<div class="row">
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="inputUsername" class="control-label">Lead
+										Number <span class='require'>*</span></label>
+									<div class="input-icon">
+										<input id="inputUsername" type="number"
+											placeholder="Lead Number"
+											data-ng-model="showCase.newLead.leadNumber" style="cursor: auto;"
+											class="form-control" required />
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="inputEmail" class="control-label">Sales Person Name <span class='require'>*</span></label>
+									<div class="input-icon">
+										<i class="fa fa-user"></i> <input type="text" data-ng-model="saleName" placeholder="" value="{{saleName}}" style="cursor: auto;" class="form-control" readonly="readonly"/>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="inputEmail" class="control-label">Brand <span class='require'>*</span></label>
+									<div class="input-icon">
+										<select class="form-control" data-ng-model="showCase.newLead.lms"
+											style="cursor: auto;" required>
+											<option value="">Select Brand</option>
+											<option value="Bosch">Bosch</option>
+											<option value="Siemens">Siemens</option>
+										</select>
+									</div>
+									
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-4">
+								
+								<label for="inputEmail" class="control-label">Product
+										Name <span class='require'>*</span></label>
+									<div class="input-icon">
+										<select class="form-control" data-ng-model="showCase.newLead.product"
+											style="cursor: auto;" required>
+											<option value="">Select Product</option>
+											<option data-ng-repeat="product in productList" value="{{product.id}}">{{product.name}}</option>
+										</select>
+									</div>
+							</div>
+							
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="inputEmail" class="control-label">Lead Name <span class='require'>*</span></label>
+									<div class="input-icon">
+										<i class="fa fa-user"></i> <input type="text"
+											placeholder="Lead Name" data-ng-model="showCase.newLead.name"
+											style="cursor: auto;" class="form-control" required/>
+									</div>
+								</div>
+							</div>
+							
+							
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="inputUsername" class="control-label">Email <span class='require'>*</span></label>
+									<div class="input-icon">
+										<i class="fa fa-envelope"></i> <input id="inputUsername"
+											type="text" placeholder="email" style="cursor: auto;"
+											data-ng-model="showCase.newLead.email" class="form-control" required/>
+									</div>
+								</div>
+							</div>
+							
+						</div>
+
+						<div class="row">
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="inputEmail" class="control-label">Contact
+										Number <span class='require'>*</span></label>
+									<div class="input-icon">
+										 <input type="text" name="input" placeholder="Contact Number"
+											data-ng-model="showCase.newLead.contactNo" style="cursor: auto;"
+											class="form-control" required ng-pattern="/^[0-9]{10,10}$/" />
+											<span class="error" ng-show="myForm.input.$error.pattern">Please enter 10 digit number!</span>
+									</div>
+								</div>
+							</div>
+						
+						
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="inputEmail" class="control-label">State <span class='require'>*</span></label>
+									<div class="input-icon">
+										<select class="form-control" data-ng-model="showCase.newLead.state"
+											style="cursor: auto;" required>
+											<option value="">Select State</option>
+											<option data-ng-repeat="state in stateList" value="{{state.name}}">{{state.name}}</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="inputUsername" class="control-label">City <span class='require'>*</span></label>
+									<div class="input-icon">
+										<select class="form-control" data-ng-model="showCase.newLead.city"
+											style="cursor: auto;" required>
+											<option value="">Select City</option>
+											<option data-ng-repeat="city in cityList" value="{{city.name}}">{{city.name}}</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<!-- <div class="col-md-4">
+								<div class="form-group">
+									<label for="inputEmail" class="control-label">Pincode <span class='require'>*</span></label>
+									<div class="input-icon">
+										<input type="number" placeholder="Pincode"
+											data-ng-model="showCase.newLead.pinCode" style="cursor: auto;"
+											class="form-control" required />
+									</div>
+								</div>
+							</div -->
+						</div>
+
+						<div class="row">
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="inputEmail" class="control-label">Area</label>
+									<div class="input-icon">
+										<input type="text" placeholder="Area"
+											style="cursor: auto;"
+											data-ng-model="showCase.newLead.area"
+											class="form-control" />
+									</div>
+								</div>
+							</div>
+						
+						
+						
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="inputEmail" class="control-label">Kitchen Make </label>
+									<div class="input-icon">
+										<select class="form-control" data-ng-model="showCase.newLead.kitchenmake"
+											style="cursor: auto;">
+											<option value="">Select Type</option>
+											<!-- <option value="Free Standing">Free Standing</option>
+											<option value="Build In">Build In</option> -->
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="inputUsername" class="control-label">Budget</label>
+									<div class="input-icon">
+										<!-- <i class="fa fa-user"></i> -->
+										<input id="inputUsername" type="number"
+											data-ng-model="showCase.newLead.budget" style="cursor: auto;"
+											placeholder="Budget" class="form-control"/>
+									</div>
+								</div>
+							</div>
+							<!-- <div class="col-md-4">
+								<div class="form-group">
+									<label for="inputUsername" class="control-label">Categorization<span class='require'>*</span></label>
+									<div class="input-icon">
+										<select class="form-control" data-ng-model="showCase.newLead.categorization"
+											style="cursor: auto;" required>
+											<option value="">Select Categorization</option>
+											<option value="Hot">Hot</option>
+											<option value="Warm">Warm</option>
+										</select>
+									</div>
+								</div>
+							</div> -->
+
+						</div>
+
+						<div class="row">
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="inputEmail" class="control-label">Source</label>
+									<div class="input-icon">
+										<input type="text" placeholder="Source"
+											style="cursor: auto;"
+											data-ng-model="showCase.newLead.source"
+											class="form-control" />
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="inputEmail" class="control-label">Assigned to Dealer </label>
+									<div class="input-icon">
+										 <select class="form-control" data-ng-model="showCase.newLead.dealer"
+											style="cursor: auto;">
+											<option value="">Select Dealer</option>
+											<option data-ng-repeat="dealer in dealerList" value="{{dealer.id}}">{{dealer.name}}</option>
+										</select>
+
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="inputEmail" class="control-label">Tentative Period of Purchase </label>
+									<div class="input-icon">
+										<select class="form-control" data-ng-model="showCase.newLead.purchase"
+											style="cursor: auto;">
+											<option value="">Select Period</option>
+											<option data-ng-repeat="dealer in dealerList" value="{{dealer.id}}">{{dealer.name}}</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="form-actions text-right pal">
+					<!-- <div class="col-md-4" style="float: right;">
+						<div class="form-group" style="float: right;"> -->
+							<button type="submit" class="btn btn-primary" style="float: right;">Save</button>
+							
+						 </div>
+					
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+

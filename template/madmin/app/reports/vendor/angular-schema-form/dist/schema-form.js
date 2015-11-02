@@ -1378,6 +1378,14 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
           // a list of values. This is here to fix that.
           if (form.titleMap && form.titleMap.length > 0) {
             scope.titleMapValues = [];
+            
+
+            form.titleMap.forEach(function(item,index) {
+                       	if(typeof item.checked == 'undefined' || item.checked) {
+                        scope.modelArray.push(item.value);
+                            scope.titleMapValues[index]=true;
+                       	}
+                       });
 
             // We watch the model for changes and the titleMapValues to reflect
             // the modelArray
@@ -1391,7 +1399,7 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
 
             };
             //Catch default values
-            updateTitleMapValues(scope.modelArray);
+            //updateTitleMapValues(scope.modelArray);
             scope.$watchCollection('modelArray', updateTitleMapValues);
 
             //To get two way binding we also watch our titleMapValues

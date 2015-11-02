@@ -20,22 +20,25 @@
 	<li><a data-ng-show="userRole == 12" ui-sref="collection-admin"><i class="fa fa-edit">
 				<div class="icon-bg bg-pink"></div>
 		</i><span class="menu-title">Collection Admin</span></a></li>	
-	<li><a data-ng-show="userRole == 10 || userRole == 5 || userRole == 6 || userRole == 7 || userRole == 8  || userRole == 9 || userRole == 11 || userRole == 13" ui-sref="manage-leads"><i class="fa fa-gift fa-fw">
+	<li><a data-ng-show="userRole == 10 || userRole == 4 || userRole == 5 || userRole == 6 || userRole == 7 || userRole == 8  || userRole == 9 || userRole == 11 || userRole == 13" ui-sref="manage-leads"><i class="fa fa-gift fa-fw">
 				<div class="icon-bg bg-pink"></div>		
 		</i><span class="menu-title">Manage Leads</span></a></li>
+	<li><a data-ng-show="type == 1" ui-sref="manage-buildin"><i class="fa fa-gift fa-fw">
+				<div class="icon-bg bg-pink"></div>		
+		</i><span class="menu-title">Manage Built-In</span></a></li>	
 	<li><a data-ng-show="userRole == 10" ui-sref="manage-users"><i class="fa fa-group fa-fw">
 				<div class="icon-bg bg-pink"></div>
 		</i><span class="menu-title">Manage Users</span></a></li>
-	<li><a data-ng-show="userRole == 2 || userRole == 4 " ui-sref="manage-users"><i class="fa fa-group fa-fw">
+	<li><a data-ng-show="userRole == 4 || userRole == 6 " ui-sref="manage-users"><i class="fa fa-group fa-fw">
 				<div class="icon-bg bg-pink"></div>
 		</i><span class="menu-title">Manage Sales Consultant</span></a></li>
-	<li><a data-ng-show="userRole == 10 || userRole == 5 || userRole == 6 || userRole == 7 || userRole == 8" ui-sref="manage-dealers"><i class="fa fa-group fa-fw">
+	<li><a data-ng-show="userRole == 10 || userRole == 4 || userRole == 5 || userRole == 6 || userRole == 7 || userRole == 8" ui-sref="manage-dealers"><i class="fa fa-group fa-fw">
 				<div class="icon-bg bg-pink"></div>
 		</i><span class="menu-title">Manage Dealers</span></a></li>
 	<!-- <li><a data-ng-show="userRole == 10" ui-sref="product-mapping"><i class="glyphicon glyphicon-transfer">
 				<div class="icon-bg bg-pink"></div>
 		</i><span class="menu-title">Product Mapping</span></a></li> -->
-	<li><a data-ng-show="userRole == 10" ui-sref="dealer-config"><i class="fa fa-bitbucket">
+	<li><a data-ng-show="userRole == 10 || userRole == 6 || userRole == 7 || userRole == 8" ui-sref="dealer-config"><i class="fa fa-bitbucket">
 				<div class="icon-bg bg-pink"></div>
 		</i><span class="menu-title">Dealer Bucket Configuration</span></a></li>
 	<!-- <li><a data-ng-show="userRole == 10" ui-sref="general-config"><i class="fa fa-gear">
@@ -44,13 +47,16 @@
 	<li><a data-ng-show="userRole == 10" ui-sref="report-freq"><i class="fa fa-list">
 				<div class="icon-bg bg-pink"></div>
 		</i><span class="menu-title">Report Frequency</span></a></li>
-	<li><a data-ng-show="userRole == 10 || userRole==5 || userRole==6 || userRole==7 || userRole==8 || userRole==9 || userRole==11 || userRole == 13" ui-sref="escalated-leads({leadType : 'Escalated', editId : 'tab' })"><i class="fa fa-caret-square-o-up">
+	<li><a data-ng-show="userRole == 10 || userRole == 4 || userRole==5 || userRole==6 || userRole==7 || userRole==8 || userRole==9 || userRole==11 || userRole == 13" ui-sref="escalated-leads({leadType : 'Escalated', editId : 'tab' })"><i class="fa fa-caret-square-o-up">
 				<div class="icon-bg bg-pink"></div>
 		</i><span class="menu-title">Escalated Leads</span></a></li>
-	<li><a data-ng-show="userRole == 10 || userRole==5 || userRole==6 || userRole==7 || userRole==8 || userRole==9 || userRole==11 || userRole == 13" ui-sref="escalated-leads({leadType : 'Follow-up', editId : 'tab' })"><i class="fa fa-bell">
+	<li><a data-ng-show="userRole == 10 || userRole == 4 || userRole==5 || userRole==6 || userRole==7 || userRole==8 || userRole==9 || userRole==11 || userRole == 13" ui-sref="escalated-leads({leadType : 'Follow-up', editId : 'tab' })"><i class="fa fa-bell">
 				<div class="icon-bg bg-pink"></div>
 		</i><span class="menu-title">Follow-up Leads</span></a></li>
-	<li><a  data-ng-show="userRole == 10 || userRole==1 || userRole==6 || userRole==2 || userRole==8 || userRole==3 || userRole==4" ui-sref="reporting"><i class="fa fa-list">
+	<li><a data-ng-show="type == 1" ui-sref="built-in-leads({leadType : 'Built-In Follow-up', editId : 'tab' })"><i class="fa fa-bell">
+				<div class="icon-bg bg-pink"></div>
+		</i><span class="menu-title">Built-In Follow-up Leads</span></a></li>
+	<li><a  data-ng-show="userRole == 10 || userRole==1 || userRole==6 || userRole==2 || userRole==8 || userRole==3 || userRole==4 || userRole==7" ui-sref="reporting"><i class="fa fa-list">
 				<div class="icon-bg bg-pink"></div>
 		</i><span class="menu-title">Reports</span></a></li>	
 		<!-- <li><a href="javascript:void(0);"><i class="fa fa-laptop fa-fw">

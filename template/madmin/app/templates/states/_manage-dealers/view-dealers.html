@@ -43,14 +43,14 @@ tags-input .autocomplete .suggestion-item {
                       </div>
                     </div>
                     <div class="row">
-                    <div class="col-md-6">
+                    <!-- <div class="col-md-6">
                         <div class="form-group has-success">
                           <label for="inputFirstName" class="control-label">Customer Group <span class='require'>*</span></label>
                           <div class="input-icon">
                             <input id="inputFirstName" type="text" placeholder="Customer Group" ng-model="showCase.dealer.customerGroup" class="form-control" required/>
                           </div>
                         </div>
-                      </div>
+                      </div> -->
                       <div class="col-md-6">
                         <div class="form-group has-success">
                           <label for="inputFirstName" class="control-label">Phone <span class='require'>*</span></label>
@@ -66,7 +66,7 @@ tags-input .autocomplete .suggestion-item {
                       <div class="col-md-6">
                         <div class="form-group">
                           <label for="selPSM" class="control-label">Zone <span class='require'>*</span></label>
-                          <select id="selPSM" ng-model="showCase.dealer.zone" data-ng-change="getRSM(showCase.dealer.zone)" class="form-control" required>
+                          <select id="selPSM" ng-model="showCase.dealer.zone" data-ng-change="selectState(showCase.dealer.zone)" class="form-control" required>
                           	<option value="">Select Zone</option>
                             <option ng-repeat="zone in zoneList" value="{{zone.name}}" >{{zone.name}}</option>
                           </select>
